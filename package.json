@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "version": "1.0.3",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "buildcss": "npx tailwindcss -i ./assets/css/input.css -o ./assets/css/output.css --minify",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "format": "prettier --write \"**/*.{js,ts,vue}\"",
+    "refresh": "rm -rf node_modules && rm package-lock.json && npm i && npm run format"
+  },
+  "devDependencies": {
+    "@nuxtjs/apollo": "^5.0.0-alpha.5",
+    "@pinia-plugin-persistedstate/nuxt": "^1.0.0",
+    "autoprefixer": "^10.4.13",
+    "nuxt": "^3.2.0",
+    "nuxt-icon": "^0.2.11",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.4",
+    "tailwindcss": "^3.2.6"
+  },
+  "overrides": {
+    "vue": "latest"
+  },
+  "dependencies": {
+    "@formkit/nuxt": "^1.0.0-beta.15",
+    "@mdi/font": "^7.1.96",
+    "@mdi/js": "^7.1.96",
+    "@pinia/nuxt": "^0.4.6",
+    "pinia": "^2.0.30",
+    "sass": "^1.58.0",
+    "uid": "^2.0.1",
+    "vee-validate": "^4.7.4",
+    "vuetify": "^3.1.5",
+    "yup": "^1.0.0"
+  }
+}
