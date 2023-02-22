@@ -1,7 +1,6 @@
 <template>
     <header
       role="banner"
-      class=""
     >
       <v-row>
         <!-- <v-col cols="1"></v-col> -->
@@ -67,8 +66,27 @@
                 </ul>
               </nav>
             </div>
-            <nav id="nav-content" :class="fixedNavBar ? 'sticky' : ''" class="tw-h-24 tw-bg-violet-900">
-              test
+            <nav id="nav-content" :class="fixedNavBar ? 'sticky' : ''" class="tw-h-24 tw-pt-4 tw-bg-violet-900 tw-shadow-2xl">
+              <v-row>
+                <v-col cols="4"></v-col>
+                <v-col>
+                  <div class="tw-flex tw-justify-center">
+                    <v-text-field 
+                      density="comfortable"
+                      variant="solo"
+                      bg-color="rgb(26, 6, 58)"
+                      color="rgb(250, 245, 255)"
+                    >
+                    </v-text-field>
+                    <v-btn variant="text" icon="mdi-magnify" ></v-btn>
+                  </div>
+                </v-col>
+                <v-col cols="4">
+                  <div class="tw-flex tw-justify-end">
+                    <v-btn variant="text" icon="mdi-account" ></v-btn>
+                  </div>
+                </v-col>
+              </v-row>
             </nav>
             <div :class="fixedNavBar ? 'computedScroll' : ''"></div>
         </v-col>
@@ -77,6 +95,7 @@
     </header>
 </template>
 <script>
+import { mdiMagnify  } from '@mdi/js'
 export default {
   name: 'LayoutNavbar',
   beforeCreate() {
@@ -92,7 +111,8 @@ export default {
   },
   data() {
     return {
-      fixedNavBar: false
+      fixedNavBar: false,
+      mdiMagnify 
     }
   },
   methods: {

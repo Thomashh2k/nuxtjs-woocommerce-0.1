@@ -1,3 +1,7 @@
 #nav-content + main-body-part {
   padding-top: 102px;
 }
+
+.v-field {
+  color: rgb(250, 245, 255) !important;
+}

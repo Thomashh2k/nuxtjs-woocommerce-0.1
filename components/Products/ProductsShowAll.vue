@@ -8,7 +8,7 @@
               v-if="product.slug"
               :key="product.id"
               style="width: 351px; z-index: 0"
-              class="card-bg-color card-height tw-text-black tw-mt-6 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 card-bg-color"
+              class="card-bg-color card-height tw-text-black tw-mt-6 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 hover:shadow-2xl card-bg-color"
             >
             <!-- tw-bg-violet-900 -->
             <NuxtLink
