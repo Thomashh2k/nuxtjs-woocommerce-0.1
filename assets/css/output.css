@@ -710,6 +710,14 @@ video {
   height: auto;
 }
 
+.tw-h-4 {
+  height: 1rem;
+}
+
+.tw-h-20 {
+  height: 5rem;
+}
+
 .tw-w-1\/2 {
   width: 50%;
 }
@@ -976,6 +984,10 @@ video {
 
 .tw-pt-4 {
   padding-top: 1rem;
+}
+
+.tw-pt-10 {
+  padding-top: 2.5rem;
 }
 
 .tw-text-left {

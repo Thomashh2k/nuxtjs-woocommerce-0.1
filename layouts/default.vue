@@ -1,7 +1,7 @@
 <template>
   <div>
     <LayoutNavbar />
-      <v-row class="main-body-part tw-pt-20">
+      <v-row class="main-body-part">
         <v-col cols="1"></v-col>
         <v-col class="content">
           <slot />

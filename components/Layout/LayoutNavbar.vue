@@ -4,11 +4,11 @@
       class=""
     >
       <v-row>
-        <v-col cols="1"></v-col>
+        <!-- <v-col cols="1"></v-col> -->
         <v-col>  
             <LayoutMobileMenu />
             <div
-              class="navbar-width-lg tw-mt-4 tw-bg-violet-900 lg:tw-mt-0 lg:tw-text-right tw-px-6 lg:tw-px-0 lg:tw-pt-5 xl:tw-pt-7"
+              class="navbar-width-lg tw-mt-4 tw-bg-violet-900 lg:tw-mt-0 lg:tw-text-right tw-px-6 lg:tw-px-0 lg:tw-pt-5 xl:tw-pt-7 tw-h-30"
             >
               <nav
                 id="block-main"
@@ -23,7 +23,7 @@
                   >
                     <NuxtLink to="/">
                       <span
-                        class="tw-text-xl tw-text-white tw-no-underline lg:tw-text-black tw-is-active"
+                        class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
                       >
                         Home
                       </span>
@@ -34,7 +34,7 @@
                   >
                     <NuxtLink to="/products">
                       <span
-                        class="tw-text-xl tw-text-white tw-no-underline lg:tw-text-black"
+                        class="tw-text-xl tw-text-purple-50 tw-no-underline"
                         >Products</span
                       >
                     </NuxtLink>
@@ -44,7 +44,7 @@
                   >
                     <NuxtLink to="/categories">
                       <span
-                        class="tw-text-xl tw-text-white tw-no-underline lg:tw-text-black tw-is-active"
+                        class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
                         >Categories</span
                       >
                     </NuxtLink>
@@ -54,7 +54,7 @@
                   >
                     <NuxtLink to="/search">
                       <span
-                        class="tw-text-xl tw-text-white tw-no-underline lg:tw-text-black tw-is-active"
+                        class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
                         >Search</span
                       >
                     </NuxtLink>
@@ -67,46 +67,17 @@
                 </ul>
               </nav>
             </div>
-            <nav id="nav-content" :class="fixedNavBar ? 'sticky' : ''" class="' tw-h-24 tw-bg-violet-900'">
+            <nav id="nav-content" :class="fixedNavBar ? 'sticky' : ''" class="tw-h-24 tw-bg-violet-900">
               test
             </nav>
+            <div :class="fixedNavBar ? 'computedScroll' : ''"></div>
         </v-col>
-        <v-col cols="1"></v-col>
+        <!-- <v-col cols="1"></v-col> -->
       </v-row>
     </header>
 </template>
-<!-- <script setup>
-import { ref, onBeforeMount, onUnmounted} from 'vue'
-
-onBeforeMount(() => {
-  debugger
-  window.addEventListener('scroll', () => { handleScollEvent()});
-  window.onscroll = handleScollEvent()
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScollEvent());
-});
-
-let fixedNavBar = ref(false);
-
-function handleScollEvent() {
-  var header = window.document.getElementById("nav-content");
-  var sticky = header.offsetTop;
-  if (window.scrollY > sticky) {
-    fixedNavBar = ref(true);
-  } else {
-    fixedNavBar = ref(false);
-  }
-  debugger
-  console.log('fixedNavBar: ' + fixedNavBar.value)
-}
-</script> -->
 <script>
-// import { LayoutMobileMenu } from '@/components/Layout/LayoutMobileMenu.vue'
-
 export default {
-  // components: { LayoutMobileMenu },
   name: 'LayoutNavbar',
   beforeCreate() {
     debugger
@@ -148,7 +119,7 @@ header {
   position: fixed;
   top: 0;
   z-index: 50;
-  width: 83.1%;
+  width: 100%;
 }
 
 .sticky + .content {
@@ -158,7 +129,9 @@ header {
 .navbar-width-lg {
   width: 100%;
 }
-
+.computedScroll {
+  height: 75px;
+}
 
 /* #nav-content + .main-body-part {
   padding-top: 102px;
