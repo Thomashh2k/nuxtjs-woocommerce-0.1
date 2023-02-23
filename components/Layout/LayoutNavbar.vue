@@ -71,6 +71,10 @@
                 <v-col cols="4"></v-col>
                 <v-col>
                   <div class="tw-flex tw-justify-center">
+                    <v-btn-toggle
+                      rounded="xl"
+                      class="tw-w-full"
+                    >
                     <v-text-field 
                       density="comfortable"
                       variant="solo"
@@ -79,11 +83,20 @@
                     >
                     </v-text-field>
                     <v-btn variant="text" icon="mdi-magnify" ></v-btn>
+                  </v-btn-toggle>
                   </div>
                 </v-col>
                 <v-col cols="4">
                   <div class="tw-flex tw-justify-end">
-                    <v-btn variant="text" icon="mdi-account" ></v-btn>
+                    <v-menu transition="slide-y-transition" :close-on-content-click="false">
+                      <template v-slot:activator="{ props }">
+                        <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
+                      </template>
+                      <v-card>
+                        <v-text-field></v-text-field>
+                        <v-text-field type="password"></v-text-field>
+                      </v-card>
+                    </v-menu>
                   </div>
                 </v-col>
               </v-row>
@@ -95,40 +108,42 @@
     </header>
 </template>
 <script>
-import { mdiMagnify  } from '@mdi/js'
+import { mdiMagnify } from '@mdi/js'
+
 export default {
-  name: 'LayoutNavbar',
-  beforeCreate() {
-    debugger
-    if(process.client) {
-      window.addEventListener('scroll', () => { this.handleScollEvent() });
-    }
-  },
-  beforeDestroy() {
-    if(process.client) {
-      window.removeEventListener('scroll', () => { this.handleScollEvent()} );
-    }
-  },
-  data() {
-    return {
-      fixedNavBar: false,
-      mdiMagnify 
-    }
-  },
-  methods: {
-    handleScollEvent() {
-      debugger
-      if(process.client) {
-        var header = document.getElementById("nav-content");
-        var sticky = header.offsetTop;
-        if (window.pageYOffset > sticky) {
-          this.fixedNavBar = true;
-        } else {
-          this.fixedNavBar = false;
+    name: "LayoutNavbar",
+    beforeCreate() {
+        debugger;
+        if (process.client) {
+            window.addEventListener("scroll", () => { this.handleScollEvent(); });
         }
-      }
+    },
+    beforeDestroy() {
+        if (process.client) {
+            window.removeEventListener("scroll", () => { this.handleScollEvent(); });
+        }
+    },
+    data() {
+        return {
+            fixedNavBar: false,
+            mdiMagnify
+        };
+    },
+    methods: {
+        handleScollEvent() {
+            debugger;
+            if (process.client) {
+                var header = document.getElementById("nav-content");
+                var sticky = header.offsetTop;
+                if (window.pageYOffset > sticky) {
+                    this.fixedNavBar = true;
+                }
+                else {
+                    this.fixedNavBar = false;
+                }
+            }
+        }
     }
-  }
 }
 </script>
 <style>

@@ -4,5 +4,6 @@
     <ul role="list">
       There was an error locating the page
     </ul>
+    {{ $attrs.error.message }}
   </main>
 </template>

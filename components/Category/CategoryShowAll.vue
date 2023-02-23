@@ -80,14 +80,14 @@ for (let i = 0; i < data.value.productCategories.nodes.length; i++) {
   background-color: rgb(76 29 149 / var(--tw-bg-opacity));
 }
 .link-sony-playstation:hover {
-  background: white !important;
-  color: #0070d1 !important;
+  background: #0070d1 !important;
+  color: white !important;
 
   @apply tw-border tw-border-gray-300 tw-rounded-lg 
 }
 .link-microsoft-xbox:hover {
-  background: white !important;
-  color: rgb(16, 124, 16) !important;
+  background: rgb(16, 124, 16) !important;
+  color: white  !important;
 
   @apply tw-border tw-border-gray-300 tw-rounded-lg
 }
