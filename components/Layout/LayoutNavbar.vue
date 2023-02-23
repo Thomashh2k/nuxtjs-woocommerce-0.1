@@ -67,39 +67,60 @@
               </nav>
             </div>
             <nav id="nav-content" :class="fixedNavBar ? 'sticky' : ''" class="tw-h-24 tw-pt-4 tw-bg-violet-900 tw-shadow-2xl">
-              <v-row>
-                <v-col cols="4"></v-col>
-                <v-col>
-                  <div class="tw-flex tw-justify-center">
-                    <v-btn-toggle
-                      rounded="xl"
-                      class="tw-w-full"
-                    >
-                    <v-text-field 
-                      density="comfortable"
-                      variant="solo"
-                      bg-color="rgb(26, 6, 58)"
-                      color="rgb(250, 245, 255)"
-                    >
-                    </v-text-field>
-                    <v-btn variant="text" icon="mdi-magnify" ></v-btn>
-                  </v-btn-toggle>
-                  </div>
-                </v-col>
-                <v-col cols="4">
-                  <div class="tw-flex tw-justify-end">
-                    <v-menu transition="slide-y-transition" :close-on-content-click="false">
-                      <template v-slot:activator="{ props }">
-                        <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
-                      </template>
-                      <v-card>
-                        <v-text-field></v-text-field>
-                        <v-text-field type="password"></v-text-field>
-                      </v-card>
-                    </v-menu>
-                  </div>
-                </v-col>
-              </v-row>
+                <v-row>
+                  <v-col xl="4" lg="4" ></v-col>
+                  <v-col xl="4" lg="4" md="4" sm="11" xs="11">
+                    <div class="tw-flex tw-justify-center">
+                      <v-btn-toggle
+                        rounded="xl"
+                        class="tw-w-full"
+                      >
+                      <v-text-field 
+                        density="comfortable"
+                        variant="solo"
+                        bg-color="rgb(26, 6, 58)"
+                        color="rgb(250, 245, 255)"
+                      >
+                      </v-text-field>
+                      <v-btn variant="text" icon="mdi-magnify" ></v-btn>
+                    </v-btn-toggle>
+                    </div>
+                  </v-col>
+                  <v-col cols="1">
+                    <div class="tw-flex tw-justify-start">
+                      <v-menu 
+                        transition="slide-y-transition"
+                        :close-on-content-click="false"
+                        location="bottom"
+                        open-on-hover
+                        width="300"
+                        >
+                        <!--  -->
+                        <template v-slot:activator="{ props }">
+                          <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
+                        </template>
+                        <v-card style="background: #4c1d95; padding: 0.5rem; translate: -90%">
+                        <v-text-field 
+                          variant="solo"
+                          density="compact"
+                          bg-color="rgb(26, 6, 58)"
+                          color="rgb(250, 245, 255)"
+                        ></v-text-field>
+                          <v-text-field 
+                            type="password"
+                            density="compact"
+                            bg-color="rgb(26, 6, 58)"
+                            color="rgb(250, 245, 255)"
+                            variant="solo"
+                          ></v-text-field>
+                        </v-card>
+                      </v-menu>
+                    </div>
+                  </v-col>
+                  <v-col xl="3" lg="3">
+  
+                  </v-col>
+                </v-row>
             </nav>
             <div :class="fixedNavBar ? 'computedScroll' : ''"></div>
         </v-col>
