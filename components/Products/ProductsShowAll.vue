@@ -44,7 +44,7 @@
                   </div>
                 </NuxtLink>
                 <v-card-actions class="tw-absolute tw-bottom-0 tw-right-0" style="z-index: 10;">
-                  <v-btn color="success" class="tw-text-xl" rounded icon="mdi mdi-cart-plus" />
+                  <v-btn color="success" class="tw-text-xl" rounded icon="mdi mdi-cart-plus" @click="addProductToCart(product)"/>
                 </v-card-actions>
               </v-card>
         </template>
@@ -53,12 +53,12 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import FETCH_ALL_PRODUCTS_QUERY from "@/apollo/queries/FETCH_ALL_PRODUCTS_QUERY.gql";
 import GET_PRODUCTS_FROM_CATEGORY_QUERY from "@/apollo/queries/GET_PRODUCTS_FROM_CATEGORY_QUERY.gql";
 // import { mdiCartPlus } from '@mdi/font'
 
-import { filteredVariantPrice } from "@/utils/functions";
+import { filteredVariantPrice, addProductToCart } from "@/utils/functions";
 
 const props = defineProps({
   categoryId: { type: String, required: false },

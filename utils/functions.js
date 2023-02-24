@@ -1,4 +1,6 @@
 import { uid } from "uid";
+import { useCart } from "@/store/useCart";
+import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
 
 /**
  * Strips HTML from the inputted string
@@ -83,3 +85,22 @@ export function getCookie(cName) {
   });
   return res;
 }
+export function addProductToCart (product) {
+  debugger
+  const cart = useCart();
+  const productId = product.databaseId ? product.databaseId : product;
+  const productQueryInput = {
+    productId,
+  };
+
+  const addToCartvariables = { input: productQueryInput };
+
+  cart.addToCart(product);
+
+  const { mutate } = useMutation(ADD_TO_CART_MUTATION, {
+    addToCartvariables,
+  });
+
+  mutate(addToCartvariables);
+
+};

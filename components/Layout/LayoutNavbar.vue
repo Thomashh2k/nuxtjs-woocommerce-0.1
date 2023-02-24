@@ -20,11 +20,11 @@
                   <li
                     class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
                   >
-                    <NuxtLink to="/">
+                    <NuxtLink to="/products">
                       <span
                         class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
                       >
-                        Home
+                      Produkte
                       </span>
                     </NuxtLink>
                   </li>
@@ -34,18 +34,9 @@
                     <NuxtLink to="/products">
                       <span
                         class="tw-text-xl tw-text-purple-50 tw-no-underline"
-                        >Products</span
-                      >
-                    </NuxtLink>
-                  </li>
-                  <li
-                    class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
-                  >
-                    <NuxtLink to="/categories">
-                      <span
-                        class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
-                        >Categories</span
-                      >
+                        >
+                        Hilfe
+                        </span>
                     </NuxtLink>
                   </li>
                   <li
@@ -54,14 +45,25 @@
                     <NuxtLink to="/search">
                       <span
                         class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
-                        >Search</span
                       >
+                      Treuerabatt
+                      </span>
                     </NuxtLink>
                   </li>
                   <li
                     class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
                   >
-                    <LayoutCart />
+                    <NuxtLink to="/categories">
+                      <span
+                        class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
+                      >
+                        Über uns
+                      </span>
+                    </NuxtLink>
+                  </li>
+                  <li
+                    class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
+                  >
                   </li>
                 </ul>
               </nav>
@@ -87,38 +89,88 @@
                     </div>
                   </v-col>
                   <v-col cols="1">
-                    <div class="tw-flex tw-justify-start">
+                    <div class="tw-flex tw-justify-start tw-pr-8">
                       <v-menu 
                         transition="slide-y-transition"
                         :close-on-content-click="false"
                         location="bottom"
-                        open-on-hover
                         width="300"
                         >
-                        <!--  -->
+                        <!-- open-on-hover -->
                         <template v-slot:activator="{ props }">
                           <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
                         </template>
-                        <v-card style="background: #4c1d95; padding: 0.5rem; translate: -90%">
-                        <v-text-field 
-                          variant="solo"
-                          density="compact"
-                          bg-color="rgb(26, 6, 58)"
-                          color="rgb(250, 245, 255)"
-                        ></v-text-field>
-                          <v-text-field 
-                            type="password"
-                            density="compact"
-                            bg-color="rgb(26, 6, 58)"
-                            color="rgb(250, 245, 255)"
-                            variant="solo"
-                          ></v-text-field>
+                        <v-card style="background: rgb(50, 17, 102); padding: 0.5rem; translate: -90%">
+                          <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Anmelden</v-card-title>
+                          <v-card-text>
+                            <v-text-field 
+                              variant="solo"
+                              density="compact"
+                              label="Benutzername"
+                              bg-color="rgb(26, 6, 58)"
+                              color="rgb(250, 245, 255)"
+                            ></v-text-field>
+                              <v-text-field 
+                                type="password"
+                                density="compact"
+                                label="Password"
+                                bg-color="rgb(26, 6, 58)"
+                                color="rgb(250, 245, 255)"
+                                variant="solo"
+                              ></v-text-field>
+                              <div class="tw-flex tw-flex-col">
+                                <nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link>
+                                <nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link>
+                              </div>
+                          </v-card-text>
+                          <v-card-action class="tw-justify-end tw-flex tw-p-4">
+                            <v-btn color="rgb(26, 6, 58)"><div class="tw-text-purple-50 tw-normal-case">Login</div></v-btn>
+                          </v-card-action>
                         </v-card>
                       </v-menu>
                     </div>
                   </v-col>
                   <v-col xl="3" lg="3">
-  
+                    <div class="tw-flex tw-justify-end tw-pr-8">
+                      <v-menu 
+                        transition="slide-y-transition"
+                        :close-on-content-click="false"
+                        location="bottom"
+                        width="300"
+                        >
+                        <!-- open-on-hover -->
+                        <template v-slot:activator="{ props }">
+                          <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
+                        </template>
+                        <v-card style="background: rgb(50, 17, 102); padding: 0.5rem;">
+                          <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Anmelden</v-card-title>
+                          <v-card-text>
+                            <v-text-field 
+                              variant="solo"
+                              density="compact"
+                              label="Benutzername"
+                              bg-color="rgb(26, 6, 58)"
+                              color="rgb(250, 245, 255)"
+                            ></v-text-field>
+                              <v-text-field 
+                                type="password"
+                                density="compact"
+                                label="Password"
+                                bg-color="rgb(26, 6, 58)"
+                                color="rgb(250, 245, 255)"
+                                variant="solo"
+                              ></v-text-field>
+                              <div class="tw-flex tw-flex-col">
+                                <nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link>
+                                <nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link>
+                              </div>
+                          </v-card-text>
+                          <v-card-action class="tw-justify-end tw-flex tw-p-4">
+                            <v-btn color="rgb(26, 6, 58)"><div class="tw-text-purple-50 tw-normal-case">Login</div></v-btn>
+                          </v-card-action>
+                        </v-card>
+                      </v-menu>
+                    </div>
                   </v-col>
                 </v-row>
             </nav>
@@ -188,7 +240,9 @@ header {
 .computedScroll {
   height: 75px;
 }
-
+.account-card-bg {
+  background: rgb(50, 17, 102);
+}
 /* #nav-content + .main-body-part {
   padding-top: 102px;
 } */

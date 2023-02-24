@@ -88,22 +88,19 @@
 
 <script setup>
 import GET_SINGLE_PRODUCT_QUERY from "@/apollo/queries/GET_SINGLE_PRODUCT_QUERY.gql";
-import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
 
 import {
   stripHTML,
   filteredVariantPrice,
   filteredVariantName,
+  addProductToCart,
 } from "@/utils/functions";
 
-import { useCart } from "@/store/useCart";
-debugger
 
 const isLoading = useState("isLoading", () => false);
 
 const config = useRuntimeConfig();
 
-const cart = useCart();
 
 const props = defineProps({
   id: { type: String, required: true },
@@ -115,31 +112,5 @@ const { data, onError } = await useAsyncQuery(GET_SINGLE_PRODUCT_QUERY, variable
 console.log(data)
 console.log(onError)
 
-const addProductToCart = async (product) => {
-  debugger
-  const productId = product.databaseId ? product.databaseId : product;
-  const productQueryInput = {
-    productId,
-  };
 
-  isLoading.value = true;
-
-  const addToCartvariables = { input: productQueryInput };
-
-  cart.addToCart(product);
-
-  const { mutate, onDone, onError } = useMutation(ADD_TO_CART_MUTATION, {
-    addToCartvariables,
-  });
-
-  mutate(addToCartvariables);
-
-  onDone(() => {
-    isLoading.value = false;
-  });
-
-  onError(() => {
-    isLoading.value = false;
-  });
-};
 </script>

@@ -808,6 +808,10 @@ video {
   flex-direction: row;
 }
 
+.tw-flex-col {
+  flex-direction: column;
+}
+
 .tw-flex-wrap {
   flex-wrap: wrap;
 }
@@ -925,10 +929,6 @@ video {
   padding: 2rem;
 }
 
-.tw-p-1 {
-  padding: 0.25rem;
-}
-
 .tw-px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -982,6 +982,14 @@ video {
   padding-top: 1rem;
 }
 
+.tw-pr-8 {
+  padding-right: 2rem;
+}
+
+.tw-pt-8 {
+  padding-top: 2rem;
+}
+
 .tw-text-left {
   text-align: left;
 }
@@ -1030,6 +1038,10 @@ video {
 
 .tw-font-semibold {
   font-weight: 600;
+}
+
+.tw-normal-case {
+  text-transform: none;
 }
 
 .tw-text-black {

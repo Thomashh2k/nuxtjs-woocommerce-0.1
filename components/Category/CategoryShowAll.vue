@@ -92,8 +92,8 @@ for (let i = 0; i < data.value.productCategories.nodes.length; i++) {
   @apply tw-border tw-border-gray-300 tw-rounded-lg
 }
 .link-nintendo-switch:hover {
-  background: white !important;
-  color: red !important;
+  background: red !important;
+  color: white !important;
 
   @apply tw-border tw-border-gray-300 tw-rounded-lg
 }
