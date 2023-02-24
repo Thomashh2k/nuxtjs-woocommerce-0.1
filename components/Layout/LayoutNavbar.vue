@@ -88,57 +88,15 @@
                     </v-btn-toggle>
                     </div>
                   </v-col>
-                  <v-col cols="1">
-                    <div class="tw-flex tw-justify-start tw-pr-8">
-                      <v-menu 
-                        transition="slide-y-transition"
-                        :close-on-content-click="false"
-                        location="bottom"
-                        width="300"
-                        >
-                        <!-- open-on-hover -->
-                        <template v-slot:activator="{ props }">
-                          <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
-                        </template>
-                        <v-card style="background: rgb(50, 17, 102); padding: 0.5rem; translate: -90%">
-                          <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Anmelden</v-card-title>
-                          <v-card-text>
-                            <v-text-field 
-                              variant="solo"
-                              density="compact"
-                              label="Benutzername"
-                              bg-color="rgb(26, 6, 58)"
-                              color="rgb(250, 245, 255)"
-                            ></v-text-field>
-                              <v-text-field 
-                                type="password"
-                                density="compact"
-                                label="Password"
-                                bg-color="rgb(26, 6, 58)"
-                                color="rgb(250, 245, 255)"
-                                variant="solo"
-                              ></v-text-field>
-                              <div class="tw-flex tw-flex-col">
-                                <nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link>
-                                <nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link>
-                              </div>
-                          </v-card-text>
-                          <v-card-action class="tw-justify-end tw-flex tw-p-4">
-                            <v-btn color="rgb(26, 6, 58)"><div class="tw-text-purple-50 tw-normal-case">Login</div></v-btn>
-                          </v-card-action>
-                        </v-card>
-                      </v-menu>
-                    </div>
-                  </v-col>
-                  <v-col xl="3" lg="3">
+                  <v-col xl="4" lg="4">
                     <div class="tw-flex tw-justify-end tw-pr-8">
                       <v-menu 
                         transition="slide-y-transition"
                         :close-on-content-click="false"
                         location="bottom"
+                        open-on-hover
                         width="300"
                         >
-                        <!-- open-on-hover -->
                         <template v-slot:activator="{ props }">
                           <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
                         </template>
@@ -146,13 +104,15 @@
                           <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Anmelden</v-card-title>
                           <v-card-text>
                             <v-text-field 
+                              v-model="loginPL.username"
                               variant="solo"
                               density="compact"
                               label="Benutzername"
                               bg-color="rgb(26, 6, 58)"
                               color="rgb(250, 245, 255)"
                             ></v-text-field>
-                              <v-text-field 
+                              <v-text-field
+                                v-model="loginPL.password"
                                 type="password"
                                 density="compact"
                                 label="Password"
@@ -166,7 +126,7 @@
                               </div>
                           </v-card-text>
                           <v-card-action class="tw-justify-end tw-flex tw-p-4">
-                            <v-btn color="rgb(26, 6, 58)"><div class="tw-text-purple-50 tw-normal-case">Login</div></v-btn>
+                            <v-btn color="rgb(26, 6, 58)"><div class="tw-text-purple-50 tw-normal-case" @click="login">Login</div></v-btn>
                           </v-card-action>
                         </v-card>
                       </v-menu>
@@ -182,42 +142,52 @@
 </template>
 <script>
 import { mdiMagnify } from '@mdi/js'
-
+import { login } from "@/utils/functions"
 export default {
     name: "LayoutNavbar",
     beforeCreate() {
-        debugger;
-        if (process.client) {
-            window.addEventListener("scroll", () => { this.handleScollEvent(); });
-        }
+      debugger;
+      if (process.client) {
+          window.addEventListener("scroll", () => { this.handleScollEvent(); });
+      }
     },
     beforeDestroy() {
-        if (process.client) {
-            window.removeEventListener("scroll", () => { this.handleScollEvent(); });
-        }
+      if (process.client) {
+          window.removeEventListener("scroll", () => { this.handleScollEvent(); });
+      }
     },
     data() {
-        return {
-            fixedNavBar: false,
-            mdiMagnify
-        };
+      return {
+          fixedNavBar: false,
+          mdiMagnify,
+          loginPL: {
+            clientMutationId: null,
+            username: null,
+            password: null
+          }
+      };
     },
     methods: {
-        handleScollEvent() {
-            debugger;
-            if (process.client) {
-                var header = document.getElementById("nav-content");
-                var sticky = header.offsetTop;
-                if (window.pageYOffset > sticky) {
-                    this.fixedNavBar = true;
-                }
-                else {
-                    this.fixedNavBar = false;
-                }
-            }
-        }
+      handleScollEvent() {
+          if (process.client) {
+              var header = document.getElementById("nav-content");
+              var sticky = header.offsetTop;
+              if (window.pageYOffset > sticky) {
+                  this.fixedNavBar = true;
+              }
+              else {
+                  this.fixedNavBar = false;
+              }
+          }
+      },
+      async login() {
+        const result = login(this.loginPL);
+        debugger
+        return result
+      }
     }
 }
+
 </script>
 <style>
 header {

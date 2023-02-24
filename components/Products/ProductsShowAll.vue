@@ -76,6 +76,7 @@ let data = {}
 
 if (props.categoryId) {
   const categoryVariables = { id: props.categoryId, slug: props.categorySlug };
+  debugger
   const result = await useAsyncQuery(
     GET_PRODUCTS_FROM_CATEGORY_QUERY,
     categoryVariables

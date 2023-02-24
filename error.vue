@@ -5,5 +5,6 @@
       There was an error locating the page
     </ul>
     {{ $attrs.error.message }}
-  </main>
+    <div v-html="$attrs.error.stack"></div>
+</main>
 </template>

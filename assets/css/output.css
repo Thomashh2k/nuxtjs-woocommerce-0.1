@@ -820,10 +820,6 @@ video {
   align-items: center;
 }
 
-.tw-justify-start {
-  justify-content: flex-start;
-}
-
 .tw-justify-end {
   justify-content: flex-end;
 }
@@ -970,6 +966,10 @@ video {
   padding-right: 1rem;
 }
 
+.tw-pr-8 {
+  padding-right: 2rem;
+}
+
 .tw-pt-1 {
   padding-top: 0.25rem;
 }
@@ -980,14 +980,6 @@ video {
 
 .tw-pt-4 {
   padding-top: 1rem;
-}
-
-.tw-pr-8 {
-  padding-right: 2rem;
-}
-
-.tw-pt-8 {
-  padding-top: 2rem;
 }
 
 .tw-text-left {

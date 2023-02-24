@@ -13,16 +13,15 @@ export default defineNuxtPlugin((nuxtApp) => {
     sameSite: "lax",
   });
   const config = useRuntimeConfig();
-
   const httpLink = createHttpLink({
-    uri: config.graphqlURL,
+    uri: "http://localhost:8080/graphql",
   });
 
   const middleware = new ApolloLink((operation, forward) => {
     /**
      * If session data exist in local storage, set value as session header.
      */
-
+    debugger
     if (process.client && cookie.value) {
       operation.setContext(() => ({
         headers: {
@@ -39,6 +38,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       /**
        * Check for session header and update session in local storage accordingly.
        */
+      debugger
       const context = operation.getContext();
 
       const {
