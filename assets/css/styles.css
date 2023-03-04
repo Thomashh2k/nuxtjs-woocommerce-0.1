@@ -5,3 +5,12 @@
 .v-field {
   color: rgb(250, 245, 255) !important;
 }
+
+.v-messages__message {
+  color: red;
+  font-size: small;
+}
+
+.v-field--error:not(.v-field--disabled) .v-label.v-field-label {
+  color: red !important;
+}

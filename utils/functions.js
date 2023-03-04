@@ -1,7 +1,6 @@
 import { uid } from "uid";
 import { useCart } from "@/store/useCart";
-import { useAuth } from "@/store/useAuth";
-import LOGIN_USER_MUTATION from "@/apollo/mutations/LOGIN_USER_MUTATION.gql";
+
 import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
 
 /**
@@ -105,20 +104,4 @@ export function addProductToCart (product) {
 
   mutate(addToCartvariables);
 
-};
-
-export function login (payload) {
-
-    debugger
-    const authStore = useAuth();
-
-    const loginVariables = { input: payload };
-    const { mutate, onDone} = useMutation(LOGIN_USER_MUTATION, { variables: loginVariables });
-    mutate(payload);
-    const result = onDone((result) => {
-      debugger
-      authStore.setToken(result.data.login.authToken)
-    })
-
-    return result
 };

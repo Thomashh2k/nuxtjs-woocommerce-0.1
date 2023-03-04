@@ -2,6 +2,24 @@
   // https://nuxt.com/docs/guide/concepts/typescript
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
+    "types": [
+      "@nuxtjs/auth-next",
+      "@types/node",
+      "@nuxt/types"
+    ],
+    "target": "ES2018",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": [
+      "ESNext",
+      "ESNext.AsyncIterable",
+      "DOM"
+    ],
+    "esModuleInterop": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "strict": false,
+    "noEmit": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./*"],
@@ -10,5 +28,5 @@
       "@@/*": ["./*"]
     }
   },
-  "exclude": ["node_modules", ".nuxt", "dist"]
+  "exclude": ["node_modules", "dist"]
 }

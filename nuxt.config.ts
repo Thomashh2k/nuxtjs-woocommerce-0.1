@@ -7,16 +7,36 @@ export default defineNuxtConfig({
   components: true,
   css: ["~/assets/css/main.css", "~/assets/css/animate.min.css", 'vuetify/lib/styles/main.sass', '@mdi/font/css/materialdesignicons.min.css', '~/assets/css/output.css', '~/assets/css/styles.css'],
   build: {
-    transpile: ['vuetify'],
+    transpile: ['vuetify', 'vee-validate'],
   },
+  buildModules: ['@nuxt/typescript-build'],
   modules: [
     "@pinia/nuxt",
     "@pinia-plugin-persistedstate/nuxt",
     "@nuxtjs/apollo",
+    // '@sidebase/nuxt-auth',
+    // "@nuxtjs/auth-next",
+    // "@nuxtjs/auth",
+    // "@nuxtjs/axios",
     "@formkit/nuxt",
     "nuxt-icon",
   ],
-  plugins: ["~/plugins/apollo"],
+  // auth: {
+  //   strategies: {
+  //     graphql: {
+  //       scheme: '~/schemes/graphqlScheme.js',
+  //     },
+  //   },
+  //    redirect: {
+  //    logout: '/',
+  //     callback: false,
+  //     home: '/',
+  //   },
+  // },
+  // axios: {
+  //   baseURL: 'http://localhost:8080'
+  // },
+  plugins: ["~/plugins/apollo.js"],
   runtimeConfig: {
     public: {
       graphqlURL: process.env.PUBLIC_GRAPHQL_URL,

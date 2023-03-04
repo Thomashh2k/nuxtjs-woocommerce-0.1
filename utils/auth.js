@@ -1,16 +1,19 @@
+import { useAuth } from "@/store/useAuth";
+import LOGIN_USER_MUTATION from "@/apollo/mutations/LOGIN_USER_MUTATION.gql";
 
+export function login (payload) {
 
-// import LOGIN_USER_MUTATION from '@/apollo/mutations/LOGIN_USER_MUTATION.gql';
+    debugger
+    const authStore = useAuth();
 
-// import login from '@/types/payloads/login'
-// // import user from '@/types/user'
+    const loginVariables = { input: payload };
+    const { mutate, onDone} = useMutation(LOGIN_USER_MUTATION, { variables: loginVariables });
+    mutate(payload);
+    const result = onDone((result) => {
+      debugger
+      authStore.setToken(result.data.login.authToken)
+      authStore.setUser(result.data.login.user)
+    })
 
-// import useAsyncMutation from '@nuxtjs/apollo'
-
-// export function login (payload) {
-
-//     debugger
-//     const result = await useAsyncMutation(LOGIN_USER_MUTATION, payload);
-    
-//     return result
-// };
+    return result
+};

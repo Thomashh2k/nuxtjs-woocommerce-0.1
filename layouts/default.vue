@@ -9,7 +9,7 @@
         <v-col cols="1"></v-col>
       </v-row>
     <LayoutFooter />
-    <LayoutStickyFooter />
+    <!-- <LayoutStickyFooter /> -->
   </div>
 </template>
 <style scoped>

@@ -15,16 +15,21 @@ export const useAuth = defineStore("userState", {
     },
     setUser(user) {
         this.user = user
-
     },
+    logout() {
+      this.jwt = ''
+      this.user = {}
+    }
   },
   getters: {
     getToken() {
         return this.jwt
     },
-
     getUser() {
         return this.user
+    },
+    isLoggedIn() {
+      return this.jwt !== ''
     }
   },
   persist: true,

@@ -75,6 +75,7 @@
                     <div class="tw-flex tw-justify-center">
                       <v-btn-toggle
                         rounded="xl"
+                        style="background-color: rgb(26, 6, 58);"
                         class="tw-w-full"
                       >
                       <v-text-field 
@@ -84,12 +85,12 @@
                         color="rgb(250, 245, 255)"
                       >
                       </v-text-field>
-                      <v-btn variant="text" icon="mdi-magnify" ></v-btn>
+                      <v-btn flat icon="mdi-magnify" style="color: rgb(250, 245, 255); background-color: rgb(26, 6, 58);"></v-btn>
                     </v-btn-toggle>
                     </div>
                   </v-col>
                   <v-col xl="4" lg="4">
-                    <div class="tw-flex tw-justify-end tw-pr-8">
+                    <div  class="tw-flex tw-justify-end tw-pr-8">
                       <v-menu 
                         transition="slide-y-transition"
                         :close-on-content-click="false"
@@ -100,7 +101,7 @@
                         <template v-slot:activator="{ props }">
                           <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
                         </template>
-                        <v-card style="background: rgb(50, 17, 102); padding: 0.5rem;">
+                        <v-card v-if="!authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
                           <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Anmelden</v-card-title>
                           <v-card-text>
                             <v-text-field 
@@ -121,16 +122,33 @@
                                 variant="solo"
                               ></v-text-field>
                               <div class="tw-flex tw-flex-col">
-                                <nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link>
-                                <nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link>
+                                <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
+                                <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
                               </div>
                           </v-card-text>
                           <v-card-action class="tw-justify-end tw-flex tw-p-4">
-                            <v-btn color="rgb(26, 6, 58)"><div class="tw-text-purple-50 tw-normal-case" @click="login">Login</div></v-btn>
+                            <v-btn color="primary"><div class="tw-text-purple-50 tw-normal-case" @click="login">Login</div></v-btn>
+                          </v-card-action>
+                        </v-card>
+                        <v-card v-if="authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
+                          <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Account</v-card-title>
+                          <v-card-text>
+                            <v-btn color="primary" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;">Dashboard</v-btn>
+                            <v-btn color="primary" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;">Bestellungen</v-btn>
+                          </v-card-text>
+                          <v-card-action class="tw-justify-center tw-flex tw-p-4">
+                            <v-btn color="red" @click="authStore.logout()"><div class="tw-text-purple-50 tw-normal-case">Logout</div></v-btn>
                           </v-card-action>
                         </v-card>
                       </v-menu>
                     </div>
+                    <!-- <div v-if="authStore.isLoggedIn" class="tw-flex tw-justify-end tw-pr-8">
+                      <v-btn-toggle class="btn-toggle" rounded="xl">
+                        <v-btn class="tw-text-purple-50" icon="mdi-account" variant="outlined" to="account"></v-btn>
+                        <v-btn @click="authStore.logout()" icon="mdi-logout" variant="outlined" class="tw-bg-red-600 logout-btn">
+                        </v-btn>
+                      </v-btn-toggle>
+                    </div> -->
                   </v-col>
                 </v-row>
             </nav>
@@ -141,8 +159,12 @@
     </header>
 </template>
 <script>
-import { mdiMagnify } from '@mdi/js'
-import { login } from "@/utils/functions"
+
+import { mdiMagnify, mdiLogout, mdiAccount } from '@mdi/js'
+import { login } from "@/utils/auth"
+import { useAuth } from "@/store/useAuth";
+
+
 export default {
     name: "LayoutNavbar",
     beforeCreate() {
@@ -160,6 +182,9 @@ export default {
       return {
           fixedNavBar: false,
           mdiMagnify,
+          mdiAccount,
+          mdiLogout,
+          authStore: useAuth(),
           loginPL: {
             clientMutationId: null,
             username: null,
@@ -182,14 +207,18 @@ export default {
       },
       async login() {
         const result = login(this.loginPL);
-        debugger
+        this.loginPL = {
+          clientMutationId: null,
+          username: null,
+          password: null
+        }
         return result
       }
     }
 }
 
 </script>
-<style>
+<style lang="scss">
 header {
   max-width: 100%;
 }
@@ -212,6 +241,16 @@ header {
 }
 .account-card-bg {
   background: rgb(50, 17, 102);
+}
+.logout-btn {
+  border-color: red !important;
+  border-width: 2px !important;
+  border-left: 2px !important;
+}
+.btn-toggle:hover {
+  background: rgb(26, 6, 58) !important;
+  color: rgb(250, 245, 255);
+  opacity: 1;
 }
 /* #nav-content + .main-body-part {
   padding-top: 102px;

@@ -12,6 +12,9 @@
     "refresh": "rm -rf node_modules && rm package-lock.json && npm i && npm run format"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.16.0",
+    "@nuxt/typescript-build": "^2.1.0",
+    "@nuxt/typescript-runtime": "^2.1.0",
     "@nuxtjs/apollo": "^5.0.0-alpha.5",
     "@pinia-plugin-persistedstate/nuxt": "^1.0.0",
     "autoprefixer": "^10.4.13",
@@ -19,6 +22,7 @@
     "nuxt-icon": "^0.2.11",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
+    "sass": "^1.58.3",
     "tailwindcss": "^3.2.6"
   },
   "overrides": {
@@ -29,11 +33,11 @@
     "@mdi/font": "^7.1.96",
     "@mdi/js": "^7.1.96",
     "@pinia/nuxt": "^0.4.6",
+    "@vee-validate/rules": "^4.7.4",
     "pinia": "^2.0.30",
-    "sass": "^1.58.0",
     "uid": "^2.0.1",
     "vee-validate": "^4.7.4",
     "vuetify": "^3.1.5",
-    "yup": "^1.0.0"
+    "yup": "^1.0.2"
   }
 }
