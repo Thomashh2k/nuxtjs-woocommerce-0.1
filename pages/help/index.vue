@@ -1,5 +1,5 @@
 <template>
     <div>
-        /register
+        /help
     </div>
 </template>

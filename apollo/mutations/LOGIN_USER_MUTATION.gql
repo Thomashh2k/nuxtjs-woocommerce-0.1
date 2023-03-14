@@ -3,7 +3,10 @@ mutation LoginUser ($input: LoginInput!) {
     authToken
     user {
       id
-      name
+      firstName
+      lastName
+      username
+      email
     }
   }
 }

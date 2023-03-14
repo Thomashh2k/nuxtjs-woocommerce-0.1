@@ -1,7 +1,6 @@
 <template>
-  <div class="tw-bg-violet-900 tw-h-40 footer-gradient tw-bottom-0 tw-z-50">
     <footer
-      class="tw-p-10 tw-bottom-0"
+      class="tw-p-10 tw-bg-violet-900 tw-h-40 footer-gradient tw-w-full tw-z-50"
     >
     <v-row>
       <v-col>
@@ -20,7 +19,6 @@
       </v-col>
     </v-row>
     </footer>
-  </div>
 </template>
 
 <script setup>

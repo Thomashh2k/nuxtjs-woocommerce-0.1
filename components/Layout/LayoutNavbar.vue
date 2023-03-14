@@ -126,19 +126,19 @@
                                 <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
                               </div>
                           </v-card-text>
-                          <v-card-action class="tw-justify-end tw-flex tw-p-4">
-                            <v-btn color="primary"><div class="tw-text-purple-50 tw-normal-case" @click="login">Login</div></v-btn>
-                          </v-card-action>
+                          <v-card-actions class="tw-justify-end tw-flex tw-p-4">
+                            <v-btn color="success" variant="outlined"><div class="tw-normal-case" @click="login">Login</div></v-btn>
+                          </v-card-actions>
                         </v-card>
                         <v-card v-if="authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
                           <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Account</v-card-title>
                           <v-card-text>
-                            <v-btn color="primary" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;">Dashboard</v-btn>
-                            <v-btn color="primary" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;">Bestellungen</v-btn>
+                            <v-btn color="primary" variant="outlined" to="/account/dashboard" class="tw-w-full tw-normal-case tw-m-1 tw-text-purple-50" style="text-transform: none;"><div class="tw-text-purple-50">Dashboard</div></v-btn>
+                            <v-btn color="primary" variant="outlined" to="/account/dashboard/orders" class="tw-w-full tw-normal-case tw-m-1 tw-text-purple-50" style="text-transform: none;"><div class="tw-text-purple-50">Bestellungen</div></v-btn>
                           </v-card-text>
-                          <v-card-action class="tw-justify-center tw-flex tw-p-4">
-                            <v-btn color="red" @click="authStore.logout()"><div class="tw-text-purple-50 tw-normal-case">Logout</div></v-btn>
-                          </v-card-action>
+                          <v-card-actions class="tw-justify-center tw-flex tw-p-4">
+                            <v-btn color="red" variant="outlined" @click="authStore.logout()"><div class="tw-normal-case">Logout</div></v-btn>
+                          </v-card-actions>
                         </v-card>
                       </v-menu>
                     </div>

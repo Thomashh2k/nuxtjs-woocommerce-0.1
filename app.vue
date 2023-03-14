@@ -2,7 +2,7 @@
   <!DOCTYPE html>
   <Html lang="en">
     <Body
-      class="tw-antialiased tw-duration-300 tw-transition-colors tw-text-gray-800 dark:tw-text-gray-200 tw-bg-white body-color"
+      class="tw-antialiased tw-duration-300 tw-transition-colors tw-text-gray-800 dark:tw-text-gray-200 tw-bg-white body-color tw-m-0 tw-h-screen"
     >
       <NuxtLayout>
         <NuxtLoadingIndicator :height="5" :duration="3000" :throttle="400" />

@@ -1,7 +1,5 @@
-mutation MyMutation {
-  registerCustomer(
-    input: {username: "willi.merling", firstName: "willi", lastName: "merling", password: "abc123", email: "wmerling@example.com"}
-  ) {
-    clientMutationId
+mutation registerUser($input: RegisterCustomerInput!){
+  registerCustomer(input: $input) {
+    authToken
   }
 }

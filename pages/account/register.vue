@@ -1,6 +1,6 @@
 <template>
     <div>
-       <v-card class="card-bg-color tw-text-black tw-mt-6  lg:tw-mr-4 hover:shadow-2xl card-bg-color">
+       <v-card class="tw-text-black tw-mt-6  lg:tw-mr-4 hover:shadow-2xl account-card-bg tw-h-100">
             <v-card-title>
                 <h2 class="tw-text-purple-50">Registrieren</h2>
             </v-card-title>
@@ -71,7 +71,7 @@
                         <v-col cols="12" md="6">
                                 <div class="tw-flex tw-flex-row">
                                     <v-text-field 
-                                        v-model="registerPL.shipping.address"
+                                        v-model="address.value.value"
                                         variant="solo"
                                         density="compact"
                                         class="tw-mr-1 tw-mb-2"
@@ -80,7 +80,7 @@
                                         color="rgb(250, 245, 255)"
                                     />
                                     <v-text-field 
-                                        v-model="registerPL.shipping.addressNr"
+                                        v-model="addressNr.value.value"
                                         variant="solo"
                                         density="compact"
                                         class="tw-ml-1 tw-mb-2"
@@ -91,7 +91,7 @@
                                 </div>
                                 <div class="tw-flex tw-flex-row">
                                     <v-text-field 
-                                        v-model="registerPL.shipping.zipCode"
+                                        v-model="zipCode.value.value"
                                         variant="solo"
                                         density="compact"
                                         class="tw-mr-1 tw-mb-2"
@@ -100,7 +100,7 @@
                                         color="rgb(250, 245, 255)"
                                     />
                                     <v-text-field 
-                                        v-model="registerPL.shipping.country"
+                                        v-model="country.value.value"
                                         variant="solo"
                                         density="compact"
                                         class="tw-ml-1 tw-mb-2"
@@ -113,14 +113,26 @@
                     </v-row>
                 </v-form>
             </v-card-text>
-            <v-card-action>
-                <v-btn color="success" @click="submit" type="submit">Registrieren</v-btn>
-            </v-card-action>
+            <v-card-actions>
+                <v-row>
+                    <v-col cols="12" md="6">
+                        <div class="tw-flex tw-justify-center tw-pb-4">
+                            <v-btn color="success" @click="submit" type="submit" variant="outlined">
+                                <p class="tw-normal-case">Registrieren</p>
+                            </v-btn>
+                        </div>
+                    </v-col>
+                    <v-col cols="12" md="6">
+                    </v-col>
+                </v-row>
+            </v-card-actions>
        </v-card>
     </div>
 </template>
 <script>
-  import { useField, useForm } from 'vee-validate'
+import { useField, useForm } from 'vee-validate'
+import { registerCustomer } from "@/utils/auth"
+
 
 export default{
     name: 'register',
@@ -129,13 +141,13 @@ export default{
         const { handleSubmit, handleReset } = useForm({
             validationSchema: {
                 firstName(value) {
-                    if (!value) return 'Vorname ist ein Pflichtfeld'
+                    if (!value) return 'Vorname ist ein Pflichtfeld.'
                     if (value?.length >= 2) return true
 
                     return 'Vorname muss mindestens zwei Buchstaben enthalten.'
                 },
                 lastName(value) {
-                    if (!value) return 'Nachname ist ein Pflichtfeld'
+                    if (!value) return 'Nachname ist ein Pflichtfeld.'
                     if (value?.length >= 2) return true
 
                     return 'Nachname muss mindestens zwei Buchstaben enthalten.'
@@ -144,20 +156,22 @@ export default{
                     if (!value) return 'E-Mail ist ein Pflichtfeld'
                     if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
 
-                    return 'Es muss eine gültige E-Mail Addresse eingegeben werdem.'
+                    return 'Es muss eine gültige E-Mail Addresse eingegeben werden.'
                 },
                 username (value) {
                     debugger
-                    if (!value) return 'Benutzername ist ein Pflichtfeld'
+                    if (!value) return 'Benutzername ist ein Pflichtfeld.'
                     if (value.length >= 5) return true
 
-                    return 'Must be a valid e-mail.'
+                    return 'Benutzername muss länger als fünf Zeichen sein.'
                 },
                 password (value) {
                     if (!value) return 'Passwort ist ein Pflichtfeld'
+                    // BUG....
                     if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
+                    else return true
 
-                    return 'Passwort muss groß und klein buchstaben, Zahlen und Sonderzeichen enthalten'
+                    return 'Passwort muss groß und klein buchstaben, Zahlen und Sonderzeichen enthalten.'
                 },
             }
         })
@@ -168,11 +182,19 @@ export default{
         const username = useField('username')
         const password = useField('password')
 
+        const address = useField('address')
+        const addressNr = useField('addressNr')
+        const zipCode = useField('zipCode')
+        const country = useField('country')
+
         const submit = handleSubmit(values => {
-            console.log(values)
-            console.log('registered...')
+            debugger
+            const router = useRouter();
+
+            registerCustomer(values, router);
+            console.log(values);
         })
-        return { firstName, lastName, email, username, password, submit }
+        return { firstName, lastName, email, username, password, address, addressNr, zipCode, country, submit }
     },
     data() {
         return {
@@ -186,11 +208,6 @@ export default{
             },
         }
     },
-    methods: {
-        // async submit() {
-
-        // }
-    }
 }
 </script>
 <style scoped>
@@ -200,5 +217,8 @@ export default{
 .card-bg-color {
   /* background: rgb(26, 6, 58) !important; */
   background-color: rgb(76 29 149 / var(--tw-bg-opacity));
+}
+.account-card-bg {
+  background: rgb(50, 17, 102);
 }
 </style>

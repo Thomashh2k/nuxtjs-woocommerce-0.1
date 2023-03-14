@@ -44,7 +44,7 @@
                   </div>
                 </NuxtLink>
                 <v-card-actions class="tw-absolute tw-bottom-0 tw-right-0" style="z-index: 10;">
-                  <v-btn color="success" class="tw-text-xl" rounded icon="mdi mdi-cart-plus" @click="addProductToCart(product)"/>
+                  <v-btn color="success" variant="outlined" class="tw-text-xl" rounded icon="mdi mdi-cart-plus" @click="addProductToCart(product)"/>
                 </v-card-actions>
               </v-card>
         </template>
