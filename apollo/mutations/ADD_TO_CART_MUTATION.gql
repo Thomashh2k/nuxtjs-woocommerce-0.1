@@ -1,58 +1,25 @@
-mutation($input: AddToCartInput!) {
-  addToCart(input: $input) {
+mutation($productId: Int!, $quantity: Int! ) {
+  addToCart(input: { productId: $productId, quantity: $quantity}) {
+    cart {
+      displayPricesIncludeTax
+      feeTotal
+      shippingTotal
+      total
+      contents {
+        productCount
+      }
+    }
     cartItem {
       key
       product {
-        id
-        databaseId
-        name
-        description
-        type
-        onSale
-        slug
-        averageRating
-        reviewCount
-        image {
-          id
-          sourceUrl
-          altText
-        }
-        galleryImages {
-          nodes {
-            id
+        node {
+          name
+          databaseId
+          image {
             sourceUrl
-            altText
           }
         }
       }
-      variation {
-        id
-        databaseId
-        name
-        description
-        type
-        onSale
-        price
-        regularPrice
-        salePrice
-        image {
-          id
-          sourceUrl
-          altText
-        }
-        attributes {
-          nodes {
-            id
-            attributeId
-            name
-            value
-          }
-        }
-      }
-      quantity
-      total
-      subtotal
-      subtotalTax
     }
   }
 }

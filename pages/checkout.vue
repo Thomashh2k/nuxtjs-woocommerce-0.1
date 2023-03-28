@@ -1,8 +1,18 @@
 <template>
-  <div>
-    <CartContents />
-    <CheckoutForm />
-  </div>
+  <v-row>
+    <v-col md="1"></v-col>
+    <v-col cols="12" md="10">
+      <v-row>
+        <v-col cols="12" md="8">
+          <CheckoutForm class="tw-w-full tw-h-full"/>
+        </v-col>
+        <v-col cols="12" md="4" class="tw-flex tw-items-center">
+          <CartContents class="tw-w-full" style="height: 87%;"/>
+        </v-col>
+      </v-row>
+    </v-col>
+    <v-col md="1"></v-col>
+  </v-row>
 </template>
 
 <script setup>

@@ -1,6 +1,6 @@
 <template>
     <div>
-       <v-card class="tw-text-black tw-mt-6  lg:tw-mr-4 hover:shadow-2xl account-card-bg tw-h-100">
+       <v-card class="tw-text-black tw-mt-6 lg:tw-mr-4 hover:shadow-2xl account-card-bg tw-h-100">
             <v-card-title>
                 <h2 class="tw-text-purple-50">Registrieren</h2>
             </v-card-title>

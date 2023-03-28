@@ -1,63 +1,69 @@
 <template>
-  <div>
-    <div v-if="data.cart?.contents?.nodes?.length">
-      <h1 class="tw-h-10 tw-p-6 tw-text-3xl tw-font-bold tw-text-center">Cart</h1>
-      <section class="mt-10">
-        <div
-          v-for="products in data.cart.contents.nodes"
-          :key="products.id"
-          class="tw-container tw-mx-auto tw-mt-4 tw-flex-container"
-        >
-          <div class="item">
-            <span class="tw-block tw-mt-2 tw-font-extrabold">Remove: <br /></span>
-            <span class="item-content">
-              <img
-                class="tw-mt-2 tw-ml-4 tw-cursor-pointer"
-                :class="{ removing: isRemoving }"
-                alt="Remove icon"
-                aria-label="Remove"
-                src="@/assets/svg/Remove.svg"
-                @click="handleRemoveProduct(products)"
-              />
-            </span>
-          </div>
+  <v-card style="background: rgb(50, 17, 102)">
+    <v-card-text v-if="cartItems?.length">
+        <h1 class="tw-h-10 tw-p-6 tw-text-3xl tw-font-bold tw-text-center tw-text-purple-50">Cart</h1>
+        <section class="mt-10">
+          <div 
+              v-for="content in cartItems"
+              key="item.databaseId"
+              class="tw-flex tw-flex-row tw-p-1 tw-cursor-pointer tw-decoration-purple-50" 
+              >
 
-          <div class="item">
-            <span class="tw-block tw-mt-2 tw-font-extrabold">Name: <br /></span>
-            <span class="item-content">{{ products.product.name }}</span>
-          </div>
-          <div class="item">
-            <span class="tw-block tw-mt-2 tw-font-extrabold">Quantity: <br /> </span>
-            <span class="item-content">
-              {{ products.quantity }}
-            </span>
-          </div>
-          <div class="item">
-            <span class="tw-block tw-mt-2 tw-font-extrabold">Subtotal: <br /></span>
-            <span class="item-content"> {{ products.total }} </span>
-          </div>
-        </div>
-      </section>
-    </div>
+              <NuxtLink style="width:10%" :to="{
+                  path: '/product/' + content.product.slug,
+                  query: { id: content.databaseId },
+              }">
+                  <v-img :src="content.product.image.sourceUrl"></v-img>
+              </NuxtLink>
+              <NuxtLink id="prodInfo" class="tw-text-purple-50 tw-ml-4 hover:tw-underline" style="width: 86%;" 
+                :to="{
+                  path: '/product/' + content.product.slug,
+                  query: { id: content.databaseId },
+              }">
+                <div class="tw-flex tw-flex-row">
+                  <h6>{{ content.product.name }}</h6>
+
+                </div>
+                  <div v-if="content.product.onSale" class="tw-flex tw-justify-center tw-mt-2">
+                      <div class="tw-line-through">
+                          <span v-if="content.variations" v-html="filteredVariantPrice(content.price, 'right')"></span>
+                          <span v-else v-html="content.regularPrice"></span>
+                      </div>
+                      <div class="">
+                          <span v-if="content.variations" v-html="filteredVariantPrice(content.price)"></span>
+                          <span v-else v-html="content.salePrice"></span>
+                      </div>
+                  </div>
+                  <div v-else>
+                      <p class="tw-mt-2 tw-text-sm" v-html="content.product.price"></p>
+                  </div>
+              </NuxtLink>
+              <div class="tw-flex tw-flex-col">
+                <v-icon icon="mdi-close" class="tw-text-purple-50" flat variant="plain" @click="handleRemoveProduct(content)">
+                </v-icon>
+              </div>
+            </div>
+        </section>
+      </v-card-text>
     <h2
-      v-if="!data.cart?.contents?.nodes?.length"
-      class="tw-m-4 tw-text-3xl tw-text-center"
+      v-if="!cartItems?.length"
+      class="tw-m-4 tw-text-3xl tw-text-center tw-text-purple-50"
     >
       Cart is currently empty
     </h2>
     <CommonButton
       link-to="/checkout"
-      v-if="showCheckoutButton && data.cart?.contents?.nodes?.length"
+      v-if="showCheckoutButton && cartItems?.length"
       center-button
       >CHECKOUT</CommonButton
     >
-  </div>
+  </v-card>
 </template>
 
 <script setup>
 import GET_CART_QUERY from "@/apollo/queries/GET_CART_QUERY.gql";
 import UPDATE_CART_MUTATION from "@/apollo/mutations/UPDATE_CART_MUTATION.gql";
-
+import { removeProductFromCart } from "@/utils/functions";
 import { useCart } from "@/store/useCart";
 
 const isRemoving = useState("isRemoving", () => false);
@@ -67,10 +73,9 @@ const cart = useCart();
 defineProps({
   showCheckoutButton: { type: Boolean, required: false, default: false },
 });
-
-const { data } = await useAsyncQuery(GET_CART_QUERY);
-
-const handleRemoveProduct = (product) => {
+debugger
+const cartItems = cart.getCartItems
+const handleRemoveProduct = async (product) => {
   const updatedItems = [];
 
   const { key } = product;
@@ -87,21 +92,21 @@ const handleRemoveProduct = (product) => {
       items: updatedItems,
     },
   };
+  await removeProductFromCart(product)
+  isRemoving.value = false;
 
-  cart.removeProductFromCart(product);
+  // const { mutate, onDone, onError } = useMutation(UPDATE_CART_MUTATION, {
+  //   variables,
+  // });
 
-  const { mutate, onDone, onError } = useMutation(UPDATE_CART_MUTATION, {
-    variables,
-  });
+  // mutate(variables);
 
-  mutate(variables);
+  // onDone(() => {
+  //   isRemoving.value = false;
+  //   document.location = "/cart";
+  // });
 
-  onDone(() => {
-    isRemoving.value = false;
-    document.location = "/cart";
-  });
-
-  onError(() => (isRemoving.value = false));
+  // onError(() => (isRemoving.value = false));
 };
 </script>
 

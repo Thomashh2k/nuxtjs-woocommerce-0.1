@@ -1,5 +1,13 @@
 <template>
   <div v-if="data?.products?.nodes">
+    <v-snackbar
+      v-model="errMsg"
+      :timeout="2000"
+      color="blue-grey"
+      rounded="pill"
+    >
+      {{ errMsg }}
+    </v-snackbar>
     <section>
       <div id="product-container" class="tw-flex tw-flex-wrap tw-justify-center tw-items-center">
         <template v-for="product in data.products.nodes">
@@ -73,7 +81,7 @@ const productImage = (product) =>
 const productVariables = { limit: 99 };
 
 let data = {}
-
+let errMsg = undefined
 if (props.categoryId) {
   const categoryVariables = { id: props.categoryId, slug: props.categorySlug };
   debugger
@@ -92,6 +100,12 @@ if (props.categoryId) {
   await result.execute();
   data = result.data.value
 
+}
+const addToCart = async (product) => {
+  const result = await addProductToCart(product);
+  if(result !== false) {
+    errMsg = result.message
+  }
 }
 </script>
 

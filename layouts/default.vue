@@ -56,6 +56,6 @@ export default {
 </script>
 <style scoped>
 .content {
-  padding-top: 102px;
+  padding-top: 75px;
 }
 </style>

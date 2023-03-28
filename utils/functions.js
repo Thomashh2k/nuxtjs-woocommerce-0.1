@@ -2,6 +2,8 @@ import { uid } from "uid";
 import { useCart } from "@/store/useCart";
 
 import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
+import REMOVE_ITEM_FROM_CART from "@/apollo/mutations/REMOVE_ITEM_FROM_CART.gql";
+import CHECKOUT_MUTATION from "@/apollo/mutations/CHECKOUT_MUTATION.gql";
 
 /**
  * Strips HTML from the inputted string
@@ -86,22 +88,76 @@ export function getCookie(cName) {
   });
   return res;
 }
-export function addProductToCart (product) {
-  debugger
+export async function addProductToCart (product) {
   const cart = useCart();
-  const productId = product.databaseId ? product.databaseId : product;
-  const productQueryInput = {
+  const productId = product.databaseId;
+  const quantity = 1;
+  const addToCartvariables = {
     productId,
+    quantity
   };
-
-  const addToCartvariables = { input: productQueryInput };
-
-  cart.addToCart(product);
-
-  const { mutate } = useMutation(ADD_TO_CART_MUTATION, {
+  
+  const { mutate, onError } = useMutation(ADD_TO_CART_MUTATION, {
     variables: addToCartvariables
   });
+  
+  const result = await mutate(addToCartvariables);
+  debugger
 
-  mutate(addToCartvariables);
+  const obj = {
+    product: product,
+    cartKey: result.data.addToCart.cartItem.key
+  }
+  cart.addToCart(obj);
+  let notAvailable
+  debugger
+  notAvailable = onError((err) => {
+  debugger
 
+    if(err.message.includes('Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
+      return err
+    } else {
+      return false
+    }
+  })
+  debugger
+  return notAvailable
 };
+
+export function removeProductFromCart (content) {
+  debugger
+  const cart = useCart();
+  cart.removeProductFromCart(content);
+  const removeItemsVariables = {
+    databaseId: [content.key],
+  };
+  const { mutate, onError } = useMutation(REMOVE_ITEM_FROM_CART, {
+    variables: removeItemsVariables
+  });
+
+  mutate(removeItemsVariables);
+  // onError((err) => {
+  //   if()
+  // })
+}
+
+export async function checkout(shipping, paymentMethod, shippingMethod, billing) {
+
+  if(billing == undefined) {
+    billing = shipping
+  }
+
+  const checkoutVariables = {
+    shipping: shipping,
+    billing: billing,
+    paymentMethod: paymentMethod,
+    shippingMethod: shippingMethod,
+  };
+
+  const { mutate } = useMutation(CHECKOUT_MUTATION, {
+    variables: checkoutVariables
+  });
+
+  mutate(checkoutVariables);
+
+} 

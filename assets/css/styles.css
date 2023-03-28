@@ -14,3 +14,6 @@
 .v-field--error:not(.v-field--disabled) .v-label.v-field-label {
   color: red !important;
 }
+.v-window__container {
+  width: 100% !important;
+}

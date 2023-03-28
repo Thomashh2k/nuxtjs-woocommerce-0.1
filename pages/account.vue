@@ -2,6 +2,7 @@
     <div>
         <v-card class="account-card-bg">
           <v-tabs
+          v-if="!$route.path.includes('register')"
             v-model="tab"
             class="tw-bg-violet-900"
           >
@@ -14,10 +15,10 @@
             <v-tab value="three">
               <div class="tw-text-purple-50 tw-normal-case">Item Three</div>
             </v-tab>
-            <v-spacer/>
+            <!-- <v-spacer />
             <div class="tw-flex tw-items-center tw-mr-4">
               <v-btn color="red" variant="outlined" @click="logout"><div class="tw-normal-case">Logout</div></v-btn>
-            </div>
+            </div> -->
           </v-tabs>
           <v-card-text style="margin: unset; padding: unset">
             <v-window v-model="tab">

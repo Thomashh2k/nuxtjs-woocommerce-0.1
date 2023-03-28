@@ -2,85 +2,103 @@
   <div v-if="data.product">
     <section>
       <div class="tw-container tw-flex tw-flex-wrap tw-items-center tw-pt-4 tw-pb-12 tw-mx-auto">
-        <div
-          class="tw-grid tw-grid-cols-1 tw-gap-4 tw-mt-8 lg:tw-grid-cols-2 xl:tw-grid-cols-2 md:tw-grid-cols-2 sm:tw-grid-cols-2"
-        >
-          <img
-            v-if="data.product.image"
-            id="product-image"
-            class="tw-h-auto tw-p-8 tw-transition tw-duration-500 tw-ease-in-out tw-transform xl:tw-p-2 md:tw-p-2 lg:tw-p-2 hover:tw-shadow-lg hover:tw-scale-95"
-            :alt="data.product.name"
-            :src="data.product.image.sourceUrl"
-          />
-          <img
-            v-else
-            id="product-image"
-            class="tw-h-auto tw-p-8 tw-transition tw-duration-500 tw-ease-in-out tw-transform xl:tw-p-2 md:tw-p-2 lg:tw-p-2 hover:tw-shadow-lg hover:tw-scale-95"
-            :alt="data.product.name"
-            :src="config.placeholderImage"
-          />
-          <div class="tw-ml-8">
-            <p class="tw-text-3xl tw-font-bold tw-text-left">
-              {{ data.product.name }}
-            </p>
-            <div v-if="data.product.onSale" class="tw-flex">
-              <p class="tw-pt-1 tw-mt-4 tw-text-3xl tw-text-purple-50">
-                <span v-if="data.productvariations">
-                  {{ filteredVariantPrice(data.product.price.replace('&nbsp;', ' ')) }}</span
-                >
-                <span v-else v-html="data.product.salePrice"></span>
+        <v-row>
+          <v-col>
+            <img
+              v-if="data.product.image"
+              id="product-image"
+              class="tw-h-auto tw-p-8 tw-transition tw-duration-500 tw-ease-in-out tw-transform xl:tw-p-2 md:tw-p-2 lg:tw-p-2 hover:tw-shadow-lg hover:tw-scale-95"
+              :alt="data.product.name"
+              :src="data.product.image.sourceUrl"
+            />
+            <img
+              v-else
+              id="product-image"
+              class="tw-h-auto tw-p-8 tw-transition tw-duration-500 tw-ease-in-out tw-transform xl:tw-p-2 md:tw-p-2 lg:tw-p-2 hover:tw-shadow-lg hover:tw-scale-95"
+              :alt="data.product.name"
+              :src="config.placeholderImage"
+            />
+          </v-col>
+          <v-col cols="12" lg="7">
+            <div>
+              <p class="tw-text-3xl tw-font-bold tw-text-left xl:tw-text-left tw-text-center">
+                {{ data.product.name }}
               </p>
-              <p class="tw-pt-1 tw-pl-8 tw-mt-4 tw-text-2xl tw-text-purple-50 tw-line-through">
-                <span v-if="data.productvariations">
-                  {{ filteredVariantPrice(data.product.price, "right") }}</span
-                >
-                <span v-else v-html="data.product.regularPrice"></span>
+              <div v-if="data.product.onSale" class="tw-flex xl:tw-text-left tw-text-center">
+                <p class="tw-pt-1 tw-mt-4 tw-text-3xl tw-text-purple-50">
+                  <span v-if="data.productvariations">
+                    {{ filteredVariantPrice(data.product.price.replace('&nbsp;', ' ')) }}</span
+                  >
+                  <span v-else v-html="data.product.salePrice"></span>
+                </p>
+                <p class="tw-pt-1 tw-pl-8 tw-mt-4 tw-text-2xl tw-text-purple-50 tw-line-through">
+                  <span v-if="data.productvariations">
+                    {{ filteredVariantPrice(data.product.price, "right") }}</span
+                  >
+                  <span v-else v-html="data.product.regularPrice"></span>
+                </p>
+              </div>
+              <p v-else class="tw-pt-1 tw-mt-4 tw-text-2xl tw-text-purple-50 xl:tw-text-left tw-text-center" v-html="data.product.price">
               </p>
-            </div>
-            <p v-else class="tw-pt-1 tw-mt-4 tw-text-2xl tw-text-purple-50" v-html="data.product.price">
-            </p>
-            <!-- {{ data.product.price.replace('&nbsp;', ' ') }} -->
-            <br />
-            <p class="tw-pt-1 tw-mt-4 tw-text-2xl">
-              {{ stripHTML(data.product.description) }}
-            </p>
-            <p
-              v-if="data.product.stockQuantity"
-              class="tw-pt-1 tw-mt-4 tw-text-2xl tw-text-green-500"
-            >
-              {{ data.product.stockQuantity }} in stock
-            </p>
-            <p
-              v-if="data.product.variations"
-              class="tw-pt-1 tw-mt-4 tw-text-xl tw-text-purple-50"
-            >
-              <span class="py-2">Varianter</span>
-              <select
-                id="variant"
-                name="variant"
-                class="tw-block tw-w-64 tw-px-6 tw-py-2 tw-bg-white tw-border tw-border-purple-50 tw-rounded-lg focus:tw-outline-none focus:tw-shadow-outline"
+              <p
+                v-if="data.product.stockQuantity"
+                class="tw-pt-1 tw-mt-4 tw-text-xl tw-text-green-500 xl:tw-text-left tw-text-center"
               >
-                <option
-                  v-for="(variation, index) in data.product.variations.nodes"
-                  :key="variation.databaseId"
-                  :value="variation.databaseId"
-                  :selected="index === 0"
+                {{ data.product.stockQuantity }} in stock
+              </p>
+              <div class="pt-1 mt-2 xl:tw-text-left tw-text-center">
+                <v-btn-group color="green" variant="outlined" rounded="xl" style="border: unset">
+                  <v-btn
+                    @click="addProductToCart(data.product)"
+                    :loading="isLoading"
+                    style="border-right: 1px solid;"
+                    class="tw-border-2"
+                  >
+                  <div class="tw-normal-case tw-text-lg">
+                      In den Warenkorb
+                    </div>
+                  </v-btn>
+                    <v-btn
+                    @click="addProductToCart(data.product)"
+                    class="tw-border-2"
+
+                    :loading="isLoading"
+                  >
+                  <div class="tw-normal-case tw-text-lg">
+                      Sofort Kaufen
+                    </div>
+                  </v-btn>
+                </v-btn-group>
+              </div>
+              <br />
+              <p class="tw-pt-1 tw-mt-4 lg:tw-text-2xl">
+                {{ stripHTML(data.product.description) }}
+              </p>
+              <p
+                v-if="data.product.variations"
+                class="tw-pt-1 tw-mt-4 tw-text-xl tw-text-purple-50"
+              >
+                <span class="py-2">Varianter</span>
+                <select
+                  id="variant"
+                  name="variant"
+                  class="tw-block tw-w-64 tw-px-6 tw-py-2 tw-bg-white tw-border tw-border-purple-50 tw-rounded-lg focus:tw-outline-none focus:tw-shadow-outline"
                 >
-                  {{ filteredVariantName(data.product.name, variation.name) }}
-                  ({{ variation.stockQuantity }} in stock)
-                </option>
-              </select>
-            </p>
-            <div class="pt-1 mt-2">
-              <CommonButton
-                @common-button-click="addProductToCart(data.product)"
-                :is-loading="isLoading"
-              >
-                ADD TO CART</CommonButton
-              >
+                  <option
+                    v-for="(variation, index) in data.product.variations.nodes"
+                    :key="variation.databaseId"
+                    :value="variation.databaseId"
+                    :selected="index === 0"
+                  >
+                    {{ filteredVariantName(data.product.name, variation.name) }}
+                    ({{ variation.stockQuantity }} in stock)
+                  </option>
+                </select>
+              </p>
+
             </div>
-          </div>
-        </div>
+          </v-col>
+        </v-row>
       </div>
     </section>
   </div>

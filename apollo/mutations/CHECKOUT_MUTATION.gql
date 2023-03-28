@@ -1,7 +1,24 @@
- mutation CHECKOUT_MUTATION($input: CheckoutInput!) {
-    checkout(input: $input) {
-      result
-      redirect
+#  mutation CHECKOUT_MUTATION($input: CheckoutInput!) {
+#     checkout(input: $input) {
+#       result
+#       redirect
+#     }
+#   }
+mutation MyMutation($shippingMethod: [String] = "", $paymentMethod: String = "", $billing: CustomerAddressInput = {}, $shipping1: CustomerAddressInput = {}) {
+  checkout(
+    input: {billing: $billing, paymentMethod: $paymentMethod, shippingMethod: $shippingMethod, shipping: $shipping1}
+  ) {
+    order {
+      billing {
+        firstName
+        lastName
+        address1
+        country
+        city
+        postcode
+      }
+      status
+      pricesIncludeTax
     }
   }
-
+}
