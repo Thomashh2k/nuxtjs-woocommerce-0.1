@@ -1,10 +1,17 @@
-{
-  products(first: 24) {
+query MyQuery($search: String = "", $categoryIn: [String] = "", $exclude: [Int] = 10 $first: Int = 10, $last: Int = 10, $before: String = "", $after: String = "") {
+  products(
+    where: {search: $search, categoryIn: $categoryIn exclude: $exclude }
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+  ){
     nodes {
       databaseId
       name
       onSale
       slug
+      sku
       status
       image {
         sourceUrl
@@ -29,6 +36,12 @@
           }
         }
       }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
     }
   }
 }

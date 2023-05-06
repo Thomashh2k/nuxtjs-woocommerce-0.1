@@ -1,0 +1,8 @@
+query GetPageQuery($uri: String = "") {
+  pageBy(uri: $uri) {
+    date
+    databaseId
+    title(format: RENDERED)
+    content(format: RENDERED)
+  }
+}

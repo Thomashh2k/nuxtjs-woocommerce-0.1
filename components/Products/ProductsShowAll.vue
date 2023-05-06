@@ -1,26 +1,17 @@
 <template>
-  <div v-if="data?.products?.nodes">
-    <v-snackbar
-      v-model="errMsg"
-      :timeout="2000"
-      color="blue-grey"
-      rounded="pill"
-    >
-      {{ errMsg }}
-    </v-snackbar>
-    <section>
-      <div id="product-container" class="tw-flex tw-flex-wrap tw-justify-center tw-items-center">
-        <template v-for="product in data.products.nodes">
+  <section v-if="products?.nodes">
+    <div id="product-container" class="tw-flex tw-flex-wrap tw-justify-center tw-items-center">
+      <template v-for="product in products?.nodes">
 
-            <v-card
-              v-if="product.slug"
-              :key="product.id"
-              style="width: 351px; z-index: 0"
-              class="card-bg-color card-height tw-text-black tw-mt-6 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 hover:shadow-2xl card-bg-color"
-            >
-            <!-- tw-bg-violet-900 -->
+          <v-card
+            v-if="product.slug"
+            :key="product.id"
+            style="z-index: 0"
+            class="card-bg-color card-height card-width tw-text-black lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1024px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1024px]:tw-mr-2 hover:shadow-2xl card-bg-color"
+          >
+          <!-- tw-bg-violet-900 -->
             <NuxtLink
-              class="tw-cursor-pointer tw-decoration-purple-50 hover:tw-underline"
+              class="tw-cursor-pointer"
               :to="{
                 path: '/product/' + product.slug,
                 query: { id: product.databaseId },
@@ -28,17 +19,25 @@
             >
                 <img
                   id="product-image"
-                  class="tw-border tw-mx-auto tw-w-4/5 lg:tw-h-4/6 tw-rounded tw-drop-shadow-lg tw-transition tw-duration-500 tw-ease-in-out tw-transform tw-cursor-pointer lg:tw-ml-0 lg:tw-w-full  tw-hover:tw-scale-95"
+                  class="tw-border tw-w-4/5 lg:tw-h-72 md:tw-h-56 sm:tw-h-56 max-[768px]:tw-h-56 tw-rounded tw-drop-shadow-lg tw-transition tw-duration-500 tw-ease-in-out tw-transform tw-cursor-pointer lg:tw-ml-0 tw-w-full  tw-hover:tw-scale-95"
                   :alt="product.name"
                   :src="productImage(product)"
                 />
-                  <div class="tw-flex tw-justify-center tw-pt-3">
-                    <p class="tw-text-lg tw-font-bold tw-text-center tw-cursor-pointer tw-text-purple-50">
+                  <div class="tw-flex tw-justify-center tw-pt-3 hover:tw-underline tw-decoration-purple-50">
+                    <p class="lg:tw-text-lg max-[1024px]:tw-text-xs tw-font-bold tw-text-center tw-cursor-pointer tw-text-purple-50">
                       {{ product.name }}
                     </p>
                   </div>
-                  <div v-if="product.onSale" class="tw-flex tw-justify-center tw-mt-2">
-                    <div class="tw-text-lg tw-text-purple-50 tw-line-through">
+                  <div class="tw-flex tw-justify-center tw-text-sm">
+                    <div v-if="product.stockStatus === 'OUT_OF_STOCK'" style="color:rgb(244, 67, 54);">
+                      Nicht vorrätig
+                    </div>
+                    <div v-else style="color:rgb(76, 175, 80);">
+                      Auf Lager
+                    </div>
+                  </div>
+                  <div v-if="product.onSale" class="tw-flex tw-justify-start tw-m-2 tw-mb-0 lg:tw-text-sm  hover:tw-underline tw-decoration-purple-50  max-[1024px]:tw-text-base">
+                    <div class="tw-text-purple-50 tw-line-through">
                       <span v-if="product.variations" v-html="filteredVariantPrice(product.price, 'right')"></span>
                       <span v-else v-html="product.regularPrice"></span>
                     </div>
@@ -48,29 +47,32 @@
                     </div>
                   </div>
                   <div v-else>
-                    <p class="tw-mt-2 tw-text-xl tw-text-center tw-text-purple-50" v-html="product.price"></p>
+                    <p class="tw-m-2 tw-text-xl tw-text-center tw-text-purple-50 hover:tw-underline tw-decoration-purple-50  max-[1024px]:tw-text-base" v-html="product.price"></p>
                   </div>
-                </NuxtLink>
-                <v-card-actions class="tw-absolute tw-bottom-0 tw-right-0" style="z-index: 10;">
-                  <v-btn color="success" variant="outlined" class="tw-text-xl" rounded icon="mdi mdi-cart-plus" @click="addProductToCart(product)"/>
-                </v-card-actions>
-              </v-card>
-        </template>
-      </div>
-    </section>
-  </div>
+            </NuxtLink>
+            <v-card-actions style="z-index: 10;"  class="tw-absolute tw-items-center tw-bottom-0 tw-left-28 max-[1024px]:tw-left-16">
+              <div>
+                <v-btn-toggle color="success" variant="outlined" rounded="xl" class="tw-w-60 max-[1024px]:tw-h-4 max-[1024px]:tw-pt-2">
+                  <v-btn style="border: 2px solid rgb(76, 175, 80); color: rgb(76, 175, 80); border-right: unset;" :disabled="product.stockStatus === 'OUT_OF_STOCK'" class="tw-text-xl action-btns" icon="mdi-cash-register" @click="addProductToCart(product)"/>
+                  <v-btn style="border: 2px solid rgb(76, 175, 80); color: rgb(76, 175, 80); border-left: unset; margin-inline-start: unset;" :disabled="product.stockStatus === 'OUT_OF_STOCK'" class="tw-text-xl action-btns" icon="mdi-cart-plus" @click="addProductToCart(product)"/>
+                </v-btn-toggle>
+              </div>
+            </v-card-actions>
+            </v-card>
+  
+      </template>
+    </div>
+  </section>
 </template>
 
 <script setup>
-import FETCH_ALL_PRODUCTS_QUERY from "@/apollo/queries/FETCH_ALL_PRODUCTS_QUERY.gql";
-import GET_PRODUCTS_FROM_CATEGORY_QUERY from "@/apollo/queries/GET_PRODUCTS_FROM_CATEGORY_QUERY.gql";
+// ProductsShowAll.vue
 // import { mdiCartPlus } from '@mdi/font'
 
 import { filteredVariantPrice, addProductToCart } from "@/utils/functions";
 
 const props = defineProps({
-  categoryId: { type: String, required: false },
-  categorySlug: { type: String, required: false },
+  products: {type: Object, required: true}
 });
 
 const config = useRuntimeConfig();
@@ -78,29 +80,8 @@ const config = useRuntimeConfig();
 const productImage = (product) =>
   product.image ? product.image.sourceUrl : config.placeholderImage;
 
-const productVariables = { limit: 99 };
 
-let data = {}
-let errMsg = undefined
-if (props.categoryId) {
-  const categoryVariables = { id: props.categoryId, slug: props.categorySlug };
-  debugger
-  const result = await useAsyncQuery(
-    GET_PRODUCTS_FROM_CATEGORY_QUERY,
-    categoryVariables
-  );
-  await result.execute();
-  debugger
-  data = result.data.value.productCategory;
-} else {
-  const result = await useAsyncQuery(
-    FETCH_ALL_PRODUCTS_QUERY,
-    productVariables
-  );
-  await result.execute();
-  data = result.data.value
 
-}
 const addToCart = async (product) => {
   const result = await addProductToCart(product);
   if(result !== false) {
@@ -114,8 +95,24 @@ a:hover {
   border: none;
 }
 .card-height {
-  height: 28rem;
+  height: 30rem;
 }
+.card-width {
+    width: 340px;
+}
+@media (max-width: 1024px) {
+  .card-width {
+    width: 240px;
+  }
+  .card-height {
+    height: 24.5rem;
+  }
+  .action-btns {
+    height: 41px !important;
+    border-width: 3px !important;
+  }
+}
+
 .card-bg-color {
   /* background: rgb(26, 6, 58) !important; */
   background-color: rgb(76 29 149 / var(--tw-bg-opacity));

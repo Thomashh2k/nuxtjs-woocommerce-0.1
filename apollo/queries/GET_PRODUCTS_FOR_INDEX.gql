@@ -1,0 +1,98 @@
+query IndexPageQuery {
+  products(first: 10, where: {featured: true}) {
+    nodes {
+      databaseId
+      name
+      onSale
+      slug
+      status
+      image {
+        sourceUrl
+      }
+      ... on SimpleProduct {
+        databaseId
+        price
+        stockStatus
+        regularPrice
+        salePrice
+      }
+      ... on VariableProduct {
+        databaseId
+        price
+        regularPrice
+        salePrice
+        variations {
+          nodes {
+            price
+            regularPrice
+            salePrice
+          }
+        }
+      }
+    }
+  }
+  products(first: 10, where: {orderby: {field: DATE}}) {
+    nodes {
+      databaseId
+      name
+      onSale
+      slug
+      status
+      image {
+        sourceUrl
+      }
+      ... on SimpleProduct {
+        databaseId
+        price
+        stockStatus
+        regularPrice
+        salePrice
+      }
+      ... on VariableProduct {
+        databaseId
+        price
+        regularPrice
+        salePrice
+        variations {
+          nodes {
+            price
+            regularPrice
+            salePrice
+          }
+        }
+      }
+    }
+  }
+  products(first: 10, where: {onSale: true}) {
+    nodes {
+      databaseId
+      name
+      onSale
+      slug
+      status
+      image {
+        sourceUrl
+      }
+      ... on SimpleProduct {
+        databaseId
+        price
+        stockStatus
+        regularPrice
+        salePrice
+      }
+      ... on VariableProduct {
+        databaseId
+        price
+        regularPrice
+        salePrice
+        variations {
+          nodes {
+            price
+            regularPrice
+            salePrice
+          }
+        }
+      }
+    }
+  }
+}

@@ -21,7 +21,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     /**
      * If session data exist in local storage, set value as session header.
      */
-    debugger
     if (process.client && cookie.value) {
       operation.setContext(() => ({
         headers: {
@@ -38,7 +37,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       /**
        * Check for session header and update session in local storage accordingly.
        */
-      debugger
       const context = operation.getContext();
 
       const {

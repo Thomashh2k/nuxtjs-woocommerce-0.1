@@ -33,7 +33,6 @@ import { useAuth } from "@/store/useAuth";
 
 export default {
     setup() {
-        debugger
         const authStore = useAuth();
         const freshlyRegisteredUser = authStore.user;
         freshlyRegisteredUser.email === null ? freshlyRegisteredUser.email = '@example.com' : freshlyRegisteredUser.email = freshlyRegisteredUser.email

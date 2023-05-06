@@ -137,7 +137,6 @@ import { registerCustomer } from "@/utils/auth"
 export default{
     name: 'register',
     setup() {
-        debugger
         const { handleSubmit, handleReset } = useForm({
             validationSchema: {
                 firstName(value) {
@@ -159,7 +158,6 @@ export default{
                     return 'Es muss eine gültige E-Mail Addresse eingegeben werden.'
                 },
                 username (value) {
-                    debugger
                     if (!value) return 'Benutzername ist ein Pflichtfeld.'
                     if (value.length >= 5) return true
 
@@ -188,26 +186,13 @@ export default{
         const country = useField('country')
 
         const submit = handleSubmit(values => {
-            debugger
             const router = useRouter();
 
             registerCustomer(values, router);
             console.log(values);
         })
         return { firstName, lastName, email, username, password, address, addressNr, zipCode, country, submit }
-    },
-    data() {
-        return {
-            registerPL: {
-                shipping: {
-                    address: '',
-                    addressNr: '',
-                    zipCode: '',
-                    country: ''
-                }
-            },
-        }
-    },
+    }
 }
 </script>
 <style scoped>

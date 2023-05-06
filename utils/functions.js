@@ -1,9 +1,12 @@
 import { uid } from "uid";
 import { useCart } from "@/store/useCart";
+import { useOrderReceived } from "@/store/useOrderReceived";
+import { useSnackbar } from "@/store/snackbar";
 
 import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
 import REMOVE_ITEM_FROM_CART from "@/apollo/mutations/REMOVE_ITEM_FROM_CART.gql";
 import CHECKOUT_MUTATION from "@/apollo/mutations/CHECKOUT_MUTATION.gql";
+import { string } from "yup";
 
 /**
  * Strips HTML from the inputted string
@@ -73,7 +76,24 @@ export function createCheckoutData(form) {
     transactionId: "test",
   };
 }
-
+export function priceToNumber(price) {
+  let _price = price.replace('&nbsp;€', '')
+  _price = _price.replace(',', '.')
+  const test = Number(_price).toFixed(2)
+  return Number(_price).toFixed(2)
+}
+export function wpriceToPrice(price) {
+  return price.replace('&nbsp;', ' ')
+}
+export function numberToPrice(number, currency = '€') {
+  
+  if(typeof number === 'number') {
+    number = number.toFixed(2)
+  }
+  let _number = number.toString()
+  _number = _number.replace('.', ',')
+  return _number + currency
+}
 /**
  * Get specific cookie from document.cookie
  * @param {String} cName Name of cookie to return
@@ -97,67 +117,81 @@ export async function addProductToCart (product) {
     quantity
   };
   
-  const { mutate, onError } = useMutation(ADD_TO_CART_MUTATION, {
+  const { mutate, onError, onDone } = useMutation(ADD_TO_CART_MUTATION, {
     variables: addToCartvariables
   });
-  
-  const result = await mutate(addToCartvariables);
-  debugger
 
-  const obj = {
-    product: product,
-    cartKey: result.data.addToCart.cartItem.key
-  }
-  cart.addToCart(obj);
-  let notAvailable
-  debugger
-  notAvailable = onError((err) => {
-  debugger
+  mutate(addToCartvariables);
 
-    if(err.message.includes('Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
-      return err
+  onError((err) => {
+    const snackbar = useSnackbar()
+    if(err.message.includes('<a href="http://localhost:8080" class="button wc-forward">Warenkorb anzeigen</a> Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
+      snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.')
     } else {
-      return false
+      snackbar.setMessage(err.message)
     }
   })
-  debugger
-  return notAvailable
+  onDone((result) => {
+    
+    cart.addToCart(product);
+    cart.addCartId(result.data.addToCart.cartItem.key);
+    cart.addCartDetails(result.data.addToCart.cart);
+  })
+
+
 };
 
 export function removeProductFromCart (content) {
-  debugger
   const cart = useCart();
   cart.removeProductFromCart(content);
+  
   const removeItemsVariables = {
-    databaseId: [content.key],
+    cartKey: [cart.getCartId],
   };
   const { mutate, onError } = useMutation(REMOVE_ITEM_FROM_CART, {
     variables: removeItemsVariables
   });
 
   mutate(removeItemsVariables);
+
+  onError((err) => {
+    const snackbar = useSnackbar()
+    snackbar.setMessage(err.message)
+  })
   // onError((err) => {
   //   if()
   // })
 }
 
-export async function checkout(shipping, paymentMethod, shippingMethod, billing) {
-
+export async function checkout(shipping, paymentMethod, transactionId, shippingMethod, billing, router) {
+  shipping.address1 = shipping.address
+  delete shipping.zipCode
+  delete shipping.address
   if(billing == undefined) {
     billing = shipping
   }
-
   const checkoutVariables = {
-    shipping: shipping,
-    billing: billing,
-    paymentMethod: paymentMethod,
-    shippingMethod: shippingMethod,
+    input: {
+      shipping: shipping,
+      billing: billing,
+      transactionId: transactionId,
+      paymentMethod: paymentMethod,
+      shippingMethod: shippingMethod,
+    }
   };
-
-  const { mutate } = useMutation(CHECKOUT_MUTATION, {
+  const { mutate, onError, onDone } = useMutation(CHECKOUT_MUTATION, {
     variables: checkoutVariables
   });
 
   mutate(checkoutVariables);
 
+  onError((err) => {
+    const snackbar = useSnackbar()
+    snackbar.setMessage(err.message)
+  })
+  onDone((res) => {
+    const orderReceivedStore = useOrderReceived();
+    orderReceivedStore.setOrder(res.data.checkout.order)
+    navigateTo('/order-received')
+  })
 } 

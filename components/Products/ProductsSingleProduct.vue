@@ -105,6 +105,7 @@
 </template>
 
 <script setup>
+// ProductsSingleProduct.vue
 import GET_SINGLE_PRODUCT_QUERY from "@/apollo/queries/GET_SINGLE_PRODUCT_QUERY.gql";
 
 import {
@@ -113,7 +114,6 @@ import {
   filteredVariantName,
   addProductToCart,
 } from "@/utils/functions";
-
 
 const isLoading = useState("isLoading", () => false);
 

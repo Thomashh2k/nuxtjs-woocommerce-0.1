@@ -4,21 +4,71 @@
 #       redirect
 #     }
 #   }
-mutation MyMutation($shippingMethod: [String] = "", $paymentMethod: String = "", $billing: CustomerAddressInput = {}, $shipping1: CustomerAddressInput = {}) {
-  checkout(
-    input: {billing: $billing, paymentMethod: $paymentMethod, shippingMethod: $shippingMethod, shipping: $shipping1}
-  ) {
+#  mutation MyMutation($shippingMethod: [String] = "", $paymentMethod: String = "", $billing: CustomerAddressInput = {}, $shipping: CustomerAddressInput = {}) {
+#    checkout(
+#      input: {billing: $billing, paymentMethod: $paymentMethod, shippingMethod: $shippingMethod, shipping: $shipping}
+#    ) {
+#      result
+#      redirect
+#      order {
+#        billing {
+#          firstName
+#          lastName
+#          address1
+#          country
+#          city
+#          postcode
+#        }
+#        status
+#        pricesIncludeTax
+#      }
+#    }
+#  }
+mutation checkout($input: CheckoutInput!){
+  checkout(input: $input){
+    result
+    redirect
     order {
-      billing {
-        firstName
-        lastName
-        address1
-        country
-        city
-        postcode
-      }
+      needsPayment
       status
-      pricesIncludeTax
+      orderNumber
     }
   }
 }
+# mutation MyMutation {
+#   checkout(
+#     input: {billing: {
+#        address1:"aaaaa"
+#       city:	"aaa"
+#       country:	DE
+#       email:	"aa@aa.aa"
+#       firstName:	"aa"
+#       lastName:	"aa"
+#       phone:	"235325326545"
+#     }, paymentMethod: "", shippingMethod: "", shipping: {
+#         address1:"aaaaa"
+#         city:	"aaa"
+#         country:	DE
+#         email:	"aa@aa.aa"
+#         firstName:	"aa"
+#         lastName:	"aa"
+#         phone:	"235325326545"
+#     	}
+#   	}
+#   ) {
+#     result
+#     redirect
+#     order {
+#       billing {
+#         firstName
+#         lastName
+#         address1
+#         country
+#         city
+#         postcode
+#       }
+#       status
+#       pricesIncludeTax
+#     }
+#   }
+# }

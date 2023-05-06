@@ -2,27 +2,34 @@ import { defineStore } from "pinia";
 
 const state = {
   cart: [],
-  loading: true,
-  error: null,
+  cartDetails: null,
+  cartId: null,
 };
 
 export const useCart = defineStore("cartState", {
   state: () => state,
   actions: {
     addToCart(product) {
+      
       const foundProductInCartIndex = this.cart.findIndex(
-        (cartproduct) => product.slug === cartproduct.slug
+        (cf) => product.slug === cf.slug
       );
 
       if (foundProductInCartIndex > -1) {
+        this.cart.push(product);
         this.cart[foundProductInCartIndex].quantity += 1;
       } else {
         product.quantity = 1;
         this.cart.push(product);
       }
     },
+    addCartDetails(details) {
+      this.cartDetails = details
+    },
+    addCartId(cartId) {
+      this.cartId = cartId
+    },
     removeProductFromCart(product) {
-      debugger
       this.cart.splice(this.cart.indexOf(el => el.key === product.key), 1);
     },
     clearCart() {
@@ -36,13 +43,23 @@ export const useCart = defineStore("cartState", {
     getCartItems() {
       return this.cart
     },
+    getCartDetails() {
+      return this.cartDetails
+    },
+    getCartId() {
+      return this.cartId
+    },
     getCartTotal() {
-      const currencySymbol = useRuntimeConfig().public.currencySymbol || "kr";
-
       return this.cart.reduce(
-        (total, product) =>
-          total +
-          Number(product.price.replace(currencySymbol, "")) * product.quantity,
+        (total, item) => {
+          // Remove '&nbsp;€' because we need a Number not a string
+          const noSpecialCharacter = item.price.replace('&nbsp;€', "")
+          // Replace commas with dots because javascript is too stupid for commas...
+          const noCommas = noSpecialCharacter.replace(',', ".")
+          // Convert to Number
+          const number = Number(noCommas) * item.quantity
+          return total + Number(number) * item.quantity
+        },
         0
       );
     },

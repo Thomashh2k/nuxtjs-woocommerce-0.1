@@ -1,6 +1,51 @@
-{
-  productCategories(first: 20) {
+{ 
+  productCategories(first: 50) {
     nodes {
+      children {
+        nodes {
+          id
+          databaseId
+          name
+          slug
+          ancestors {
+            nodes {
+              name
+              slug
+              id
+            }
+          }
+          children {
+            nodes {
+              id
+              databaseId
+              name
+              slug
+              ancestors {
+                nodes {
+                  name
+                  slug
+                  id
+                }
+              }
+              children {
+                nodes {
+                  id
+                  databaseId
+                  name
+                  slug
+                  ancestors {
+                    nodes {
+                      name
+                      slug
+                      id
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
       id
       databaseId
       name

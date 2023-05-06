@@ -24,30 +24,31 @@ query ProductsFromCategory($id: ID!) {
           onSale
           price
           id
+          stockStatus
         }
-        ... on VariableProduct {
-          salePrice
-          regularPrice
-          onSale
-          price
-          id
-        }
-        ... on ExternalProduct {
-          price
-          id
-          externalUrl
-        }
-        ... on GroupProduct {
-          products {
-            nodes {
-              ... on SimpleProduct {
-                id
-                price
-              }
-            }
-          }
-          id
-        }
+        # ... on VariableProduct {
+        #   salePrice
+        #   regularPrice
+        #   onSale
+        #   price
+        #   id
+        # }
+        # ... on ExternalProduct {
+        #   price
+        #   id
+        #   externalUrl
+        # }
+        # ... on GroupProduct {
+        #   products {
+        #     nodes {
+        #       ... on SimpleProduct {
+        #         id
+        #         price
+        #       }
+        #     }
+        #   }
+        #   id
+        # }
       }
     }
   }

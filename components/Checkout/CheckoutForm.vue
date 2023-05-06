@@ -1,8 +1,6 @@
 <template>
   <section class="tw-container tw-p-4 tw-py-2 tw-mx-auto">
-    <v-card class="tw-text-black tw-mt-6 lg:tw-mr-4 hover:shadow-2xl account-card-bg tw-h-100">
-      <v-card-text>
-        <Form :validation-schema="BILLING_SCHEMA" @submit="handleSubmit">
+        <v-form @submit="submitCheckout">
           <div class="tw-mx-auto">
             <div class="tw-flex tw-flex-row">
               <v-text-field 
@@ -48,19 +46,20 @@
                 color="rgb(250, 245, 255)"
               />
                 
-              <!-- v-bind="city"
-              :error-messages="city.errorMessage.value" -->
               <v-text-field
+                v-model="city.value.value"
                 class="tw-w-1/3 tw-m-2"
                 label="Stadt"
+                :error-messages="city.errorMessage.value"
                 variant="solo"
                 density="compact"
                 bg-color="rgb(26, 6, 58)"
                 color="rgb(250, 245, 255)"
               />
             </div>
-            <v-text-field
+            <v-select
               v-model="country.value.value"
+              :items="countryItems"
               :error-messages="country.errorMessage.value"
               label="Land"
               class="tw-m-2"
@@ -79,23 +78,19 @@
               bg-color="rgb(26, 6, 58)"
               color="rgb(250, 245, 255)"
             />
-            <!-- v-model="phone" -->
-            <!-- :error-messages="phone.errorMessage.value" -->
             <v-text-field
+              v-model="phone.value.value" 
               label="Telefon"
               class="tw-m-2"
+              :error-messages="phone.errorMessage.value"
               variant="solo"
               density="compact"
               bg-color="rgb(26, 6, 58)"
               color="rgb(250, 245, 255)"
             />
-            <div class="tw-w-full tw-flex tw-justify-center tw-mt-6">
-              <v-btn color="green" variant="outlined" @click="submitCheckout" ><div class="tw-normal-case">Bestellen</div></v-btn>
-            </div>
+
           </div>
-        </Form>
-      </v-card-text>
-    </v-card>
+        </v-form>
   </section>
 </template>
 
@@ -103,25 +98,52 @@
 import { Form, useField, useForm } from "vee-validate";
 import { uid } from "uid";
 
-import { BILLING_FIELDS, BILLING_SCHEMA } from "./constants/BILLING_FIELDS";
-
 import CHECKOUT_MUTATION from "@/apollo/mutations/CHECKOUT_MUTATION.gql";
 
+import { validationScheme } from '@/components/Checkout/validation';
+import { computed } from 'vue'
 export default {
-  setup() {
+  data() {
+    return {
+      countryItems: [
+        {title: 'Deutschland', value: 'DE'},
+        {title: 'Österreich', value: 'AT'},
+        {title: 'Schweiz', value: 'CH'}
+      ]
+    }
+  },
+  expose: ['submitCheckout', 'hasFormErrors'],
+  emits: ['updatedAddressInfo', 'resetTab'],
+  props: {
+    tabPos: {
+      type: String,
+      required: true
+    }
+  },
+  watch: {
+    async tabPos(newVal, oldVal) {
+      
+      await this.submitCheckout()
+      if(this.hasFormErrors) {
+        this.$emit('gotFormErrors')
+        if(newVal === 'payment') {
+          this.$emit('resetTab', 'shipping')
+        }
+      }
+    }
+  },
+  setup(props, context) {
+    
     const { handleSubmit, handleReset } = useForm({
-
       validationSchema: {
         firstName(value) {
             if (!value) return 'Vorname ist ein Pflichtfeld.'
             if (value?.length >= 2) return true
-
             return 'Vorname muss mindestens zwei Buchstaben enthalten.'
         },
         lastName(value) {
             if (!value) return 'Nachname ist ein Pflichtfeld.'
             if (value?.length >= 2) return true
-
             return 'Nachname muss mindestens zwei Buchstaben enthalten.'
         },
         email (value) {
@@ -140,84 +162,55 @@ export default {
         zipCode (value) {
             if (!value) return 'Postleitzahl ist ein Pflichtfeld'
             if (value.length > 5) return 'Postleitzahl kann nicht länger als fünf Zeichen sein'
-
             return true
         },
         country (value) {
             if (!value) return 'Land ist ein Pflichtfeld'
-            if (value.length > 35) return 'Land darf nicht länger als 30 Zeichen sein.'
-            if (value.length < 5) return 'Addresse darf nicht kleiner als fünf Zeichen sein.'
+            if (value.length > 30) return 'Land darf nicht länger als 30 Zeichen sein.'
+            if (value.length < 2) return 'Land darf nicht kleiner als fünf Zeichen sein.'
+          
+            return true
+        },
+        city (value) {
+            if (!value) return 'Stadt ist ein Pflichtfeld'           
+            if (value.length > 30) return 'Stadt darf nicht länger als 30 Zeichen sein.'          
+            if (value.length < 3) return 'Stadt darf nicht kleiner als 3 Zeichen sein.'
+        
+            return true
+        },
+        phone (value) {
+            if(value === undefined) value = ""
+            if (value.length > 35) return 'Handynummer darf nicht länger als 15 Zeichen sein.'
+            if (value.length < 5) return 'Handynummer darf nicht kleiner als 10 Zeichen sein.'
 
             return true
         },
       }
-    })
+    });
 
     const firstName = useField('firstName')
     const lastName = useField('lastName')
     const email = useField('email')
 
     const address = useField('address')
-    // const addressNr = useField('addressNr')
     const zipCode = useField('zipCode')
     const country = useField('country')
 
+    const city = useField('city')
+    const phone = useField('phone')
     const submitCheckout = handleSubmit(values => {
-      console.log(values)
-      console.log('2do: submit checkout...')
+      context.emit('updatedAddressInfo', values)
     })
-    return { firstName, lastName, email, address, zipCode, country, submitCheckout }
+    const hasFormErrors = computed(() => {
+      submitCheckout()
+      console.log(firstName.errorMessage)
+      if(firstName.errorMessage.value) {
+        return true
+      }
+      return false
+    })
+    return { firstName, lastName, email, address, zipCode, country, city, phone, submitCheckout, hasFormErrors }
 
-  },
+  }
 }
-
-const handleSubmit = ({
-  firstName,
-  lastName,
-  address1,
-  address2,
-  city,
-  country,
-  state,
-  postcode,
-  email,
-  phone,
-  company,
-}) => {
-  const billing = {
-    firstName,
-    lastName,
-    address1,
-    address2,
-    city,
-    country,
-    state,
-    postcode,
-    email,
-    phone,
-    company,
-  };
-
-  const checkoutData = {
-    clientMutationId: uid(),
-    billing,
-    shipping: billing,
-    shipToDifferentAddress: false,
-    paymentMethod,
-    isPaid: false,
-    transactionId: "hjkhjkhsdsdiui",
-  };
-
-  const variables = { input: checkoutData };
-
-  const { mutate, onDone, onError } = useMutation(CHECKOUT_MUTATION, {
-    variables,
-  });
-
-  mutate(checkoutData);
-
-  onDone(async () => await navigateTo("/success"));
-
-  onError(() => alert("Error, order not placed"));
-};
 </script>

@@ -5,14 +5,15 @@
     <v-row>
       <v-col>
         <div class="tw-flex tw-flex-col">
-          <nuxt-link class="hover:tw-underline tw-cursor-pointer">Impressum</nuxt-link>
-          <nuxt-link class="hover:tw-underline tw-cursor-pointer">AGB</nuxt-link>
+          <nuxt-link class="hover:tw-underline tw-cursor-pointer" to="/impressum">Impressum</nuxt-link>
+          <nuxt-link class="hover:tw-underline tw-cursor-pointer" to="/agb">AGB</nuxt-link>
         </div>
       </v-col>
       <v-col>
         <div class="tw-flex tw-flex-col">
-            <nuxt-link class="tw-flex tw-justify-end hover:tw-underline tw-cursor-pointer">Wiederufsrecht</nuxt-link>
-            <nuxt-link class="tw-flex tw-justify-end hover:tw-underline tw-cursor-pointer">Rückgaberecht</nuxt-link>
+          <nuxt-link class="tw-flex tw-justify-end hover:tw-underline tw-cursor-pointer">Wiederufsrecht</nuxt-link>
+          <nuxt-link class="tw-flex tw-justify-end hover:tw-underline tw-cursor-pointer">Rückgaberecht</nuxt-link>
+          <nuxt-link class="tw-flex tw-justify-end hover:tw-underline tw-cursor-pointer" to="/datenschutzerklaerung">Datenschutzerklärung</nuxt-link>
         </div>
       </v-col>
     </v-row>

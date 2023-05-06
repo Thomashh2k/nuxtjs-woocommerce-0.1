@@ -6,7 +6,7 @@
         width="300"
     >
         <template v-slot:activator="{ props }">
-            <v-btn v-if="cartItems.length > 0" variant="text" icon v-bind="props">
+            <v-btn variant="text" icon v-bind="props">
                 <v-badge v-if="cart.getCartQuantity > 0" :content="cart.getCartQuantity" color="error">
                     <v-icon>mdi-cart-outline</v-icon>
                 </v-badge>
@@ -21,33 +21,36 @@
                     key="item.databaseId"
                     class="tw-flex tw-flex-row tw-p-1 tw-cursor-pointer tw-decoration-purple-50 hover:tw-underline" 
                     :to="{
-                        path: '/product/' + item.product.slug,
-                        query: { id: item.product.databaseId },
+                        path: '/product/' + item.slug,
+                        query: { id: item.databaseId },
                 }">
 
                     <div >
-                        <v-img style="width:70px; height: 90px;" :src="item.product.image.sourceUrl"></v-img>
+                        <v-img style="width:70px; height: 90px;" :src="item.image.sourceUrl"></v-img>
                     </div>
                     <div id="prodInfo" class="tw-text-purple-50 tw-ml-4">
-                        <h6>{{ item.product.name }}</h6>
-                        <div v-if="item.product.onSale" class="tw-flex tw-justify-center tw-mt-2">
+                        <h6>{{ item.name }}</h6>
+                        <div v-if="item.onSale" class="tw-flex tw-justify-center tw-mt-2">
                             <div class="tw-line-through">
-                                <span v-if="item.product.variations" v-html="filteredVariantPrice(item.product.price, 'right')"></span>
-                                <span v-else v-html="item.product.regularPrice"></span>
+                                <span v-if="item.variations" v-html="filteredVariantPrice(item.price, 'right')"></span>
+                                <span v-else v-html="item.regularPrice"></span>
                             </div>
                             <div class="">
-                                <span v-if="item.product.variations" v-html="filteredVariantPrice(item.product.price)"></span>
-                                <span v-else v-html="item.product.salePrice"></span>
+                                <span v-if="item.variations" v-html="filteredVariantPrice(item.price)"></span>
+                                <span v-else v-html="item.salePrice"></span>
                             </div>
                         </div>
                         <div v-else>
-                            <p class="tw-mt-2 tw-text-sm" v-html="item.product.price"></p>
+                            <p class="tw-mt-2 tw-text-sm" v-html="item.price"></p>
                         </div>
                     </div>
                 </NuxtLink>
+                <div class="tw-text-purple-50 tw-text-lg tw-flex tw-items-center tw-justify-center tw-w-full tw-h-full">
+                    <h1 v-if="cartItems.length === 0">Ihr Warenkorb ist leer</h1>
+                </div>
             </v-card-text>
             <v-card-actions class="tw-justify-center tw-flex tw-p-4">
-                <v-btn color="green" variant="outlined" to="/checkout"><div class="tw-normal-case">Bestellen</div></v-btn>
+                <v-btn color="green" variant="outlined" to="/checkout" rounded="xl" :disabled="cartItems.length === 0"><div class="tw-normal-case">Bestellen</div></v-btn>
             </v-card-actions>
         </v-card>
     </v-menu>
@@ -58,7 +61,6 @@ import { useCart } from "@/store/useCart";
 
 export default {
     data() {
-        debugger
         const _cart = useCart()
         return {
             mdiCartOutline,

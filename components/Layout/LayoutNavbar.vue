@@ -5,92 +5,154 @@
       <v-row>
         <!-- <v-col cols="1"></v-col> -->
         <v-col>  
-            <LayoutMobileMenu />
-            <div
-              class="navbar-width-lg tw-mt-4 tw-bg-violet-900 lg:tw-mt-0 lg:tw-text-right tw-px-6 lg:tw-px-0 lg:tw-pt-5 xl:tw-pt-7 tw-h-30"
-            >
-              <nav
-                id="block-main"
-                role="navigation"
-                aria-labelledby="block-main-menu"
-              >
-                <ul
-                  class="tw-items-center tw-justify-end tw-flex-1 tw-pr-4 tw-mr-4 tw-list-reset lg:tw-flex"
-                >
-                  <li
-                    class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
-                  >
+            <div class="navbar-width-lg tw-bg-violet-900 lg:tw-mt-0 lg:tw-text-right tw-px-6 lg:tw-px-0 lg:tw-pt-5 xl:tw-pt-5 tw-h-30">
+              <nav id="block-main" role="navigation" aria-labelledby="block-main-menu">
+                <ul class="tw-items-center min-[960px]:tw-justify-end max-[960px]:tw-justify-center tw-flex-1 tw-pr-4 tw-mr-4 tw-list-reset tw-flex lg:tw-text-xl md:tw-text-xl sm:tw-text-xl">
+                  <li class="tw-inline-block tw-py-2 tw-font-semibold tw-no-underline tw-px-4">
                     <NuxtLink to="/products">
-                      <span
-                        class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
-                      >
-                      Produkte
+                      <span class="tw-text-purple-50 tw-no-underline tw-is-active">
+                        Produkte
                       </span>
                     </NuxtLink>
                   </li>
-                  <li
-                    class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
-                  >
+                  <li class="tw-inline-block tw-py-2 tw-font-semibold tw-no-underline tw-px-4">
                     <NuxtLink to="/products">
-                      <span
-                        class="tw-text-xl tw-text-purple-50 tw-no-underline"
-                        >
+                      <span class=" tw-text-purple-50 tw-no-underline">
                         Hilfe
-                        </span>
-                    </NuxtLink>
-                  </li>
-                  <li
-                    class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
-                  >
-                    <NuxtLink to="/search">
-                      <span
-                        class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
-                      >
-                      Treuerabatt
                       </span>
                     </NuxtLink>
                   </li>
-                  <li
-                    class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
-                  >
+                  <!-- <li class="tw-inline-block tw-py-2 tw-font-semibold tw-no-underline tw-px-4">
+                    <NuxtLink to="/search">
+                      <span class=" tw-text-purple-50 tw-no-underline tw-is-active">
+                        Treuerabatt
+                      </span>
+                    </NuxtLink>
+                  </li> -->
+                  <li class="tw-inline-block tw-py-2 tw-font-semibold tw-no-underline tw-px-4">
                     <NuxtLink to="/categories">
-                      <span
-                        class="tw-text-xl tw-text-purple-50 tw-no-underline tw-is-active"
-                      >
+                      <span class=" tw-text-purple-50 tw-no-underline tw-is-active">
                         Über uns
                       </span>
                     </NuxtLink>
                   </li>
-                  <li
-                    class="tw-inline-block tw-py-2 tw-text-xl tw-font-semibold tw-no-underline lg:tw-text-base lg:tw-px-4"
-                  >
-                  </li>
                 </ul>
               </nav>
             </div>
-            <nav id="nav-content" :class="fixedNavBar ? 'sticky' : ''" class="tw-h-24 tw-pt-4 tw-bg-violet-900 tw-shadow-2xl">
+            <nav id="nav-content" :class="fixedNavBar ? 'sticky' : ''" class="max-[960px]:tw-h-26 min-[960px]:tw-h-24 tw-pt-4 tw-bg-violet-900 tw-shadow-2xl">
                 <v-row>
-                  <v-col xl="4" lg="4" ></v-col>
-                  <v-col xl="4" lg="4" md="4" sm="11" xs="11">
-                    <div class="tw-flex tw-justify-center">
-                      <v-btn-toggle
-                        rounded="xl"
-                        style="background-color: rgb(26, 6, 58);"
-                        class="tw-w-full"
+                  <v-col xl="3" lg="3" md="2" cols="1"></v-col>
+                  <v-col xl="6" lg="6" md="8" sm="10" xs="10">
+                    <div class="max-[960px]:tw-flex min-[960px]:tw-hidden">
+                      <CartItem/>
+                      <v-spacer />
+                      <v-menu 
+                        transition="slide-y-transition"
+                        :close-on-content-click="false"
+                        location="bottom"
+                        width="300"
+                        >
+                        <!-- open-on-hover -->
+                        <template v-slot:activator="{ props }">
+                          <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
+                        </template>
+                        <v-card v-if="!authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
+                          <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Anmelden</v-card-title>
+                          <v-card-text>
+                            <v-text-field 
+                              v-model="loginPL.username"
+                              variant="solo"
+                              density="compact"
+                              label="Benutzername"
+                              bg-color="rgb(26, 6, 58)"
+                              color="rgb(250, 245, 255)"
+                            ></v-text-field>
+                              <v-text-field
+                                v-model="loginPL.password"
+                                type="password"
+                                density="compact"
+                                label="Password"
+                                bg-color="rgb(26, 6, 58)"
+                                color="rgb(250, 245, 255)"
+                                variant="solo"
+                              ></v-text-field>
+                              <div class="tw-flex tw-flex-col">
+                                <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
+                                <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
+                              </div>
+                          </v-card-text>
+                          <v-card-actions class="tw-justify-end tw-flex tw-p-4">
+                            <v-btn color="success" rounded="xl" variant="outlined"><div class="tw-normal-case" @click="login">Login</div></v-btn>
+                          </v-card-actions>
+                        </v-card>
+                        <v-card v-if="authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
+                          <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Account</v-card-title>
+                          <v-card-text>
+                            <v-btn color="primary" variant="outlined" to="/account/dashboard" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;"><div class="tw-text-purple-50">Dashboard</div></v-btn>
+                            <v-btn color="primary" variant="outlined" to="/account/dashboard/orders" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;"><div class="tw-text-purple-50">Bestellungen</div></v-btn>
+                          </v-card-text>
+                          <v-card-actions class="tw-justify-center tw-flex tw-p-4">
+                            <v-btn color="red" rounded="xl" variant="outlined" @click="authStore.logout()"><div class="tw-normal-case">Logout</div></v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-menu>
+                    </div>
+                    <div class="tw-flex tw-justify-center max-[960px]:tw-p-4 min-[960px]:tw-pt-0">
+                      <v-menu
+                        v-model="searchResultMenu"
+                        transition="slide-y-transition"
+                        location="bottom"
+                        :close-on-content-click="false"
                       >
-                      <v-text-field 
-                        density="comfortable"
-                        variant="solo"
-                        bg-color="rgb(26, 6, 58)"
-                        color="rgb(250, 245, 255)"
-                      >
-                      </v-text-field>
-                      <v-btn flat icon="mdi-magnify" style="color: rgb(250, 245, 255); background-color: rgb(26, 6, 58);"></v-btn>
-                    </v-btn-toggle>
+                      <template v-slot:activator="{ props }">
+                        <v-btn-toggle
+                          rounded="xl"
+                          v-bind="props"
+                          style="background-color: rgb(26, 6, 58);"
+                          class="tw-w-full"
+                        >
+                          <v-text-field
+                            v-model="search"
+                            density="comfortable"
+                            variant="solo"
+                            bg-color="rgb(26, 6, 58)"
+                            color="rgb(250, 245, 255)"
+                            @update:modelValue="searchProductsOnChange"
+                          >
+                          </v-text-field>
+                          <v-btn flat icon="mdi-magnify" style="color: rgb(250, 245, 255); background-color: rgb(26, 6, 58);" @click="redirectToSearchPage"></v-btn>
+                        </v-btn-toggle>
+                      </template>
+                        <v-list  v-if="instantSearchProducts.length > 0">
+                          <v-list-item
+                            v-for="(item, i) in instantSearchProducts"
+                            :key="i"
+                          >
+                          <NuxtLink :to="{
+                            path: '/product/' + item.slug,
+                            query: { id: item.databaseId }
+                          }">
+                            <div class="tw-flex">
+                              <v-list-item-media>
+                                <v-img
+                                  class="tw-w-24 tw-h-24"
+                                  :src="item.image.sourceUrl"
+                                />
+                              </v-list-item-media>
+                              <div class="tw-flex tw-flex-col">
+                                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                <v-list-item-subtitle>---</v-list-item-subtitle>
+                              </div>
+                            </div>
+                          </NuxtLink>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
                     </div>
                   </v-col>
-                  <v-col xl="4" lg="4">
-                    <div  class="tw-flex tw-justify-end tw-pr-8">
+                  <v-col xl="3" lg="3" md="2" cols="1">
+                    <div class="tw-justify-end tw-pr-8 max-[960px]:tw-hidden min-[960px]:tw-flex">
+                      <CartItem/>
                       <v-menu 
                         transition="slide-y-transition"
                         :close-on-content-click="false"
@@ -141,21 +203,12 @@
                           </v-card-actions>
                         </v-card>
                       </v-menu>
-                      <CartItem/>
                     </div>
-                    <!-- <div v-if="authStore.isLoggedIn" class="tw-flex tw-justify-end tw-pr-8">
-                      <v-btn-toggle class="btn-toggle" rounded="xl">
-                        <v-btn class="tw-text-purple-50" icon="mdi-account" variant="outlined" to="account"></v-btn>
-                        <v-btn @click="authStore.logout()" icon="mdi-logout" variant="outlined" class="tw-bg-red-600 logout-btn">
-                        </v-btn>
-                      </v-btn-toggle>
-                    </div> -->
                   </v-col>
                 </v-row>
             </nav>
             <div :class="fixedNavBar ? 'computedScroll' : ''"></div>
         </v-col>
-        <!-- <v-col cols="1"></v-col> -->
       </v-row>
     </header>
 </template>
@@ -164,12 +217,12 @@
 import { mdiMagnify, mdiLogout, mdiAccount } from '@mdi/js'
 import { login } from "@/utils/auth"
 import { useAuth } from "@/store/useAuth";
+import { miniSearchProducts } from "@/utils/search";
 
 
 export default {
     name: "LayoutNavbar",
     beforeCreate() {
-      debugger;
       if (process.client) {
           window.addEventListener("scroll", () => { this.handleScollEvent(); });
       }
@@ -184,14 +237,27 @@ export default {
           fixedNavBar: false,
           mdiMagnify,
           mdiAccount,
+          search: '',
           mdiLogout,
           authStore: useAuth(),
+          instantSearchProducts: [],
+          searchResultMenu: false,
           loginPL: {
             clientMutationId: null,
             username: null,
             password: null
           }
       };
+    },
+    watch: {
+      instantSearchProducts(newVal) {
+        this.searchResultMenu = newVal.length > 0
+      }
+    },
+    created() {
+      if(this.$route.query.q !== undefined) {
+        this.search = this.$route.query.q
+      }
     },
     methods: {
       handleScollEvent() {
@@ -214,6 +280,23 @@ export default {
           password: null
         }
         return result
+      },
+      async searchProductsOnChange() {
+        if(this.search !== '') {
+          this.instantSearchProducts = await miniSearchProducts(this.search, 3)
+        }
+      },
+      redirectToSearchPage() {
+        
+        if(this.search !== '') {
+          if(this.search !== this.$route.query.q) {
+            console.log('push')
+            this.$router.push({path: '/search', query: {q: this.search}})
+          } else {
+            console.log('go')
+            this.$router.go()
+          }
+        }
       }
     }
 }

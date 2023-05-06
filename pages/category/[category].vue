@@ -1,11 +1,16 @@
+<!-- OBSOLETE -->
+
 <template>
-  <ProductsShowAll
-    :category-id="route.query.id"
-    :category-slug="route.params.category"
-  />
+  <div>
+    <CategoryShowAll />
+    <ProductsShowAll
+      :products="data"
+    />
+  </div>
 </template>
 
 <script setup>
+import GET_PRODUCTS_FROM_CATEGORY_QUERY from "@/apollo/queries/GET_PRODUCTS_FROM_CATEGORY_QUERY.gql";
 const route = useRoute();
 
 useHead({
@@ -21,4 +26,15 @@ useHead({
   ],
   link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
 });
+
+let data = {};
+let errMsg = undefined;
+const categoryVariables = { id: route.query.id, slug: route.path };
+const result = await useAsyncQuery(
+  GET_PRODUCTS_FROM_CATEGORY_QUERY,
+  categoryVariables
+);
+await result.execute();
+data = result.data.value.productCategory.products;
+
 </script>

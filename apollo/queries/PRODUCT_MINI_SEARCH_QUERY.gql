@@ -1,0 +1,13 @@
+query MyQuery($search: String = "", $first: Int = 0) {
+  products(where: {search: $search}, first: $first) {
+    nodes {
+      id
+      title
+      databaseId
+      slug
+      image {
+        sourceUrl
+      }
+    }
+  }
+}
