@@ -1,4 +1,6 @@
+query 
 {
+  viewer { databaseId } 
   products(first: 24) {
     nodes {
       databaseId

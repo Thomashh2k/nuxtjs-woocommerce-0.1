@@ -1,0 +1,10 @@
+mutation UpdateUserInfo($input: UpdateCustomerInput = {id: "", firstName: "", lastName: "", name: ""}) {
+  updateCustomer(input: $input) {
+    clientMutationId
+    authToken
+    refreshToken
+    customer {
+      jwtAuthToken
+    }
+  }
+}

@@ -1,0 +1,10 @@
+mutation UpdateUserBilling($input: UpdateCustomerInput = {id: "", billing: {}}) {
+  updateCustomer(input: $input) {
+    clientMutationId
+    authToken
+    refreshToken
+    customer {
+      jwtAuthToken
+    }
+  }
+}

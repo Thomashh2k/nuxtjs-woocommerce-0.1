@@ -136,6 +136,6 @@ const handleRemoveProduct = async (product) => {
   //   document.location = "/cart";
   // });
 
-  // onError(() => (isRemoving.value = false));
+  // onError((err) => (isRemoving.value = false));
 };
 </script>

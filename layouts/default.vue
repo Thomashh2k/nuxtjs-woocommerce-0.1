@@ -13,7 +13,7 @@
     <v-snackbar
       v-model="showSnackbar"
       :timeout="3000"
-      color="red"
+      :color="snackbar.getType === 'error' ? 'red' : 'green'"
       multi-line
     >
     <div class="tw-text-purple-50" v-html="msg">
@@ -41,7 +41,7 @@ export default {
   setup() {
     const snackbar = useSnackbar();
     const { message } = storeToRefs(snackbar)
-    return { snackbar, message}
+    return { snackbar, message }
   },
   data() {
     return {

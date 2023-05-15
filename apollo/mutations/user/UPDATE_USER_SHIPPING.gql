@@ -1,0 +1,10 @@
+mutation UpdateUserShipping($input: UpdateCustomerInput = {id: "", shipping: {}, billing: {}}) {
+  updateCustomer(input: $input) {
+    clientMutationId
+    authToken
+    refreshToken
+    customer {
+      jwtAuthToken
+    }
+  }
+}

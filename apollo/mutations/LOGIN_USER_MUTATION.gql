@@ -1,12 +1,48 @@
 mutation LoginUser ($input: LoginInput!) {
   login( input: $input ) {
     authToken
+    refreshToken
+    customer {
+      jwtAuthToken
+    }
     user {
       id
       firstName
       lastName
       username
       email
+    },
+    customer {
+      billing {
+        address1
+        address2
+        city
+        country
+        firstName
+        lastName
+        postcode
+      }
+      shipping {
+        address1
+        address2
+        city
+        country
+        firstName
+        lastName
+        postcode
+      }
+      # orders(where: {customerId: $customerId}, first: $first, last: $last, after: "") {
+      #   nodes {
+      #     status
+      #     transactionId
+      #   }
+      #   pageInfo {
+      #     endCursor
+      #     hasNextPage
+      #     hasPreviousPage
+      #     startCursor
+      #   }
+      # }
     }
   }
 }

@@ -1,0 +1,37 @@
+query DashboardQuery($customerId: Int = 10, $first: Int = 10, $last: Int = 10, $before: String = "") {
+  customer {
+    billing {
+      address1
+      address2
+      city
+      country
+      firstName
+      lastName
+      postcode
+    }
+    shipping {
+      address1
+      address2
+      city
+      country
+      firstName
+      lastName
+      postcode
+    }
+    orders(where: {customerId: $customerId}, first: $first, last: $last, after: "") {
+      nodes {
+        status
+        transactionId
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
+      }
+    }
+    email
+    firstName
+    lastName
+  }
+}

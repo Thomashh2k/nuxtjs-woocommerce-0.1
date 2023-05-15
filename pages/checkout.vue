@@ -10,7 +10,7 @@
           >
           <!-- :direction="window.screen.width < 600 ? 'vertical' : 'horizontal'" -->
           <v-tab value="cart">
-            <div class="tw-text-purple-50 tw-normal-case">Warenkorb</div>
+            <div class="tw-text-purple-50 tw-normal-case" >Warenkorb</div>
           </v-tab>
           <v-tab value="shipping">
             <div class="tw-text-purple-50 tw-normal-case">Versand</div>
@@ -44,53 +44,67 @@
   </v-row>
 </template>
 
-<script setup>
-import { ref } from 'vue';
+<script>
+import { ref, reactive } from 'vue';
 import PaymentForm from '@/components/Checkout/PaymentForm';
 import CartContents from '@/components/Checkout/CartContents';
 import { checkout } from "@/utils/functions";
 
-let tab = ref('cart')
-let addressInfo = null
 const checkoutForm = ref(null)
-
-useHead({
-  title: "Checkout",
-  titleTemplate: "%s - Nuxt 3 Woocommerce",
-  meta: [
-    { name: "viewport", content: "width=device-width, initial-scale=1" },
-    {
-      hid: "description",
-      name: "description",
-      content: "Nuxt 3 Woocommerce",
-    },
-  ],
-  link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
-});
-
-const router = useRouter()
-
-
-onMounted(() => {
-  watch(tab, (newVal, oldVal) => {
-    
-    checkoutForm.value.submitCheckout()
-    if(addressInfo === null || checkoutForm.value.hasFormErrors) {
-      if(newVal === 'payment') {
-        $emit('resetTab', 'shipping')
+export default {
+  name: 'checkout',
+  components: {
+    PaymentForm,
+    CartContents
+  },
+  setup() {
+    useHead({
+      title: "Checkout",
+      titleTemplate: "%s - Nuxt 3 Woocommerce",
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          hid: "description",
+          name: "description",
+          content: "Nuxt 3 Woocommerce",
+        },
+      ],
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    });
+  },
+  data() {
+    return {
+      tab: 'cart',
+      addressInfo: null
+    }
+  },
+  watch: {
+    tab(newV, oldV) {
+      debugger
+      if(this._suppressWatcher) {
+        this._suppressWatcher = false
+        return
+      }
+      if(this.$refs.checkoutForm !== undefined) {
+        this.$refs.checkoutForm.submitCheckout()
+        if(this.addressInfo === null || this.$refs.checkoutForm.hasFormErrors) {
+          this._suppressWatcher = true
+          this.tab = newV == 'payments' ? 'shipping' : newV
+        }
+      } else {
+        this._suppressWatcher = true
+        this.tab = 'shipping'
       }
     }
+  },
+  methods: {
+    updatedAddressInfo ($event) {
+      this.addressInfo = $event
+    },
+    checkedout($event, tId){
+      checkout(addressInfo, $event, tId, undefined, undefined, this.$router)
+    },
   }
-)
-})
-const updatedAddressInfo = ($event) => {
-  
-  addressInfo = $event
 }
-const checkedout = ($event, tId) => {
-  
-  checkout(addressInfo, $event, tId, undefined, undefined, router)
-}
-
 
 </script>

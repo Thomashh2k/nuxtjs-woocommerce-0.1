@@ -1,6 +1,7 @@
 import PRODUCT_MINI_SEARCH_QUERY from "@/apollo/queries/PRODUCT_MINI_SEARCH_QUERY.gql";
 import PRODUCT_PAGE_SEARCH_QUERY from "@/apollo/queries/PRODUCT_PAGE_SEARCH_QUERY.gql";
 import PRODUCT_PAGE_CATEGORY_SEARCH_QUERY from "@/apollo/queries/PRODUCT_PAGE_CATEGORY_SEARCH_QUERY.gql";
+import { useSnackbar } from "@/store/snackbar";
 
 export async function miniSearchProducts(search, first) {
     const searchVar = { search: search, first: first };
@@ -19,14 +20,16 @@ export async function miniSearchProducts(search, first) {
 export async function pageSearchProducts(search, first, after = null, before = null, last = null, exclude = null) {
     const searchVar = { search, first, after, before, last, exclude };
 
-
-    
-
     return new Promise((resolve, reject) => {
       const result = useQuery(PRODUCT_PAGE_SEARCH_QUERY, searchVar, {
         fetchPolicy: 'cache-and-network',
       });
-  
+      
+      result.onError((err) => {
+        const snackbar = useSnackbar()
+        snackbar.setMessage(err.message, 'error')
+      })
+
       result.onResult((res) => {
         const data = res?.data;
   
@@ -71,7 +74,12 @@ export function pageCategorySearchProducts(search, itemsPerPage, cursor, exclude
       const result = useQuery(PRODUCT_PAGE_CATEGORY_SEARCH_QUERY, searchVar, {
         fetchPolicy: 'cache-and-network',
       });
-  
+      
+      result.onError((err) => {
+        const snackbar = useSnackbar()
+        snackbar.setMessage(err.message, 'error')
+      })
+
       result.onResult((res) => {
         const data = res?.data;
   

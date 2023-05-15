@@ -121,8 +121,7 @@ export default {
     }
   },
   watch: {
-    async tabPos(newVal, oldVal) {
-      
+    async tabPos(newVal, oldVal) { 
       await this.submitCheckout()
       if(this.hasFormErrors) {
         this.$emit('gotFormErrors')
@@ -133,7 +132,6 @@ export default {
     }
   },
   setup(props, context) {
-    
     const { handleSubmit, handleReset } = useForm({
       validationSchema: {
         firstName(value) {

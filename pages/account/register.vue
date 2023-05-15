@@ -189,7 +189,6 @@ export default{
             const router = useRouter();
 
             registerCustomer(values, router);
-            console.log(values);
         })
         return { firstName, lastName, email, username, password, address, addressNr, zipCode, country, submit }
     }

@@ -126,9 +126,9 @@ export async function addProductToCart (product) {
   onError((err) => {
     const snackbar = useSnackbar()
     if(err.message.includes('<a href="http://localhost:8080" class="button wc-forward">Warenkorb anzeigen</a> Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
-      snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.')
+      snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.', 'error')
     } else {
-      snackbar.setMessage(err.message)
+      snackbar.setMessage(err.message, 'error')
     }
   })
   onDone((result) => {
@@ -156,11 +156,8 @@ export function removeProductFromCart (content) {
 
   onError((err) => {
     const snackbar = useSnackbar()
-    snackbar.setMessage(err.message)
+    snackbar.setMessage(err.message, 'error')
   })
-  // onError((err) => {
-  //   if()
-  // })
 }
 
 export async function checkout(shipping, paymentMethod, transactionId, shippingMethod, billing, router) {
@@ -187,7 +184,7 @@ export async function checkout(shipping, paymentMethod, transactionId, shippingM
 
   onError((err) => {
     const snackbar = useSnackbar()
-    snackbar.setMessage(err.message)
+    snackbar.setMessage(err.message, 'error')
   })
   onDone((res) => {
     const orderReceivedStore = useOrderReceived();
