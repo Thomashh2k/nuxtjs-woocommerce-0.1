@@ -43,7 +43,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   });
     // }
     if (process.client && cookie.value && operation.operationName !== 'LoginUser') {
-    debugger
       operation.setContext(() => ({
          headers: {
            "woocommerce-session": `Session ${cookie.value}`,
@@ -59,6 +58,8 @@ export default defineNuxtPlugin((nuxtApp) => {
       /**
        * Check for session header and update session in local storage accordingly.
        */
+      debugger
+
       const context = operation.getContext();
       if(response.data.login !== undefined) {
         authorization.value = response.data.login.authToken
@@ -68,7 +69,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       const {
         response: { headers },
       } = context;
-      debugger
 
       const session = headers.get("woocommerce-session") || headers.get("Authorization") || cookie.value;
 

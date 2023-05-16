@@ -64,17 +64,17 @@ export default {
     async updateShippingInfo($event) {
       this.customer.shipping = $event
       await updateUserShipping(this.customer, this.userInfo)
-      this.authStore.setCustomer(this.customer)
     },
     async updateBillingInfo($event) {
       this.customer.billing = $event
       await updateUserBilling(this.customer, this.userInfo)
-      this.authStore.setCustomer(this.customer)
     },
     async updateUserInfo($event) {
-      this.userInfo = $event
-      await updateUserInfo(this.userInfo, this.userInfo)
-      this.authStore.setUser(this.userInfo)
+      debugger
+      this.userInfo.firstName = $event.firstName
+      this.userInfo.lastName = $event.lastName
+      // this.userInfo.email = $event.email
+      await updateUserInfo(this.userInfo)
     }
   }
 }

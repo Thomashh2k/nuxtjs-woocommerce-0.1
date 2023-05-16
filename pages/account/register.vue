@@ -44,16 +44,6 @@
                                     bg-color="rgb(26, 6, 58)"
                                     color="rgb(250, 245, 255)"
                                 />
-                                <v-text-field 
-                                    v-model="username.value.value"
-                                    variant="solo"
-                                    density="compact"
-                                    :error-messages="username.errorMessage.value"
-                                    class="tw-mb-2"
-                                    label="Benutzername"
-                                    bg-color="rgb(26, 6, 58)"
-                                    color="rgb(250, 245, 255)"
-                                />
                                 <v-text-field
                                     v-model="password.value.value"
                                     type="password"
@@ -157,12 +147,6 @@ export default{
 
                     return 'Es muss eine gültige E-Mail Addresse eingegeben werden.'
                 },
-                username (value) {
-                    if (!value) return 'Benutzername ist ein Pflichtfeld.'
-                    if (value.length >= 5) return true
-
-                    return 'Benutzername muss länger als fünf Zeichen sein.'
-                },
                 password (value) {
                     if (!value) return 'Passwort ist ein Pflichtfeld'
                     // BUG....
@@ -177,7 +161,6 @@ export default{
         const firstName = useField('firstName')
         const lastName = useField('lastName')
         const email = useField('email')
-        const username = useField('username')
         const password = useField('password')
 
         const address = useField('address')
@@ -190,7 +173,7 @@ export default{
 
             registerCustomer(values, router);
         })
-        return { firstName, lastName, email, username, password, address, addressNr, zipCode, country, submit }
+        return { firstName, lastName, email, password, address, addressNr, zipCode, country, submit }
     }
 }
 </script>

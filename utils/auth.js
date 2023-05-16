@@ -2,7 +2,7 @@ import { useAuth } from "@/store/useAuth";
 import { useSnackbar } from "@/store/snackbar";
 import LOGIN_USER_MUTATION from "@/apollo/mutations/LOGIN_USER_MUTATION.gql";
 import REGISTER_CUSTOMER_MUTATION from '@/apollo/mutations/REGISTER_CUSTOMER_MUTATION.gql'
-export function login (payload) {
+export async function login (payload) {
 
     const authStore = useAuth();
 
@@ -34,7 +34,7 @@ export function login (payload) {
     return { resultDone, resultErr }
 };
 
-export function registerCustomer(payload, router) {
+export async function registerCustomer(payload, router) {
   const authStore = useAuth();
 
   const registerVariables = { 
@@ -42,7 +42,6 @@ export function registerCustomer(payload, router) {
       firstName: payload.firstName.charAt(0).toUpperCase() + payload.firstName.slice(1),
       lastName: payload.lastName.charAt(0).toUpperCase() + payload.lastName.slice(1),
       email: payload.email,
-      username: payload.username,
       password: payload.password,
       shipping: {
         // address1: payload.address.charAt(0).toUpperCase() + payload.address.slice(1),
@@ -59,7 +58,7 @@ export function registerCustomer(payload, router) {
   const { mutate, onDone, onError } = useMutation(REGISTER_CUSTOMER_MUTATION, { variables: registerVariables });
   mutate(payload);
 
-  const result = onDone((result) => {
+ onDone((result) => {
     if(result.data.registerCustomer.authToken) {
       authStore.setUser({
         freshlyRegistered: true,
@@ -69,13 +68,11 @@ export function registerCustomer(payload, router) {
       })
       router.push('/account/registered')
     }
-    return result
   })
 
-  result.onError((err) => {
+  onError((err) => {
     const snackbar = useSnackbar()
     snackbar.setMessage(err.message, 'error')
   })
 
-  return result
 }

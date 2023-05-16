@@ -27,16 +27,7 @@
                         @change="lastName.value.value = lastName.value.value.charAt(0).toUpperCase() + lastName.value.value.slice(1)"
                     />
                 </div>
-                <v-text-field 
-                    v-model="username.value.value"
-                    :error-messages="username.errorMessage.value"
-                    variant="solo"
-                    density="compact"
-                    class="tw-mb-2"
-                    label="Benutzername"
-                    bg-color="rgb(26, 6, 58)"
-                    color="rgb(250, 245, 255)"
-                />
+
                 <div class="tw-mb-8">
                     <v-btn color="primary" class="tw-w-full tw-normal-case tw-my-1 tw-text-purple-50" style="text-transform: none;" variant="outlined" rounded="xl">
                         <div class="tw-text-purple-50">E-Mail ändern</div>
@@ -90,28 +81,20 @@ export default {
                     if (value?.length >= 2) return true
 
                     return 'Nachname muss mindestens zwei Buchstaben enthalten.'
-                },
-                username(value) {
-                    if (!value) return 'Addresse ist ein Pflichtfeld.'
-                    if (value?.length >= 2) return true
-
-                    return 'Addresse muss mindestens zwei Buchstaben enthalten.'
                 }
             }
         })
         const firstName = useField('firstName')
         const lastName = useField('lastName')
-        const username = useField('username')
 
         firstName.value.value = props.userInfo.firstName
         lastName.value.value = props.userInfo.lastName
-        username.value.value = props.userInfo.username
 
         const submit = handleSubmit(values => {
             context.emit('save', values)
         })
 
-        return { submit, firstName, lastName, username}
+        return { submit, firstName, lastName}
     },
 }
 </script>

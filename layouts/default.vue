@@ -29,8 +29,7 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <LayoutFooter />
-    <!-- <LayoutStickyFooter /> -->
+    <LayoutFooter id="footer" :class="footerIsBottom ? '' : 'stickToBottom'"  />
   </div>
 </template>
 <script>
@@ -46,7 +45,8 @@ export default {
   data() {
     return {
       showSnackbar: false,
-      msg: null
+      msg: null,
+      footerIsBottom: true
     }
   },
   watch: {
@@ -60,12 +60,27 @@ export default {
           this.msg = newVal;
         }
       }
+    },
+    $route(newVal, oldVal) {
+      if(newVal !== oldVal) {
+        this.footerIsBottom = this.isFooterAtBottom()
+      }
     }
+  },
+  created() {
+    this.footerIsBottom = this.isFooterAtBottom()
   },
   methods: {
     closeSnackbar() {
       this.showSnackbar = false;
       this.snackbar.removeMessage();
+    },
+    isFooterAtBottom() {
+      if(process.client) {
+        return document.getElementById('footer').getBoundingClientRect().bottom <= window.innerHeight;
+      } else {
+        return true
+      }
     }
   }
 }
@@ -73,5 +88,10 @@ export default {
 <style scoped>
 .content {
   padding-top: 75px;
+}
+
+.stickToBottom {
+  bottom: 0;
+  position: absolute;
 }
 </style>

@@ -1,5 +1,5 @@
 export default interface login {
     clientMutationId: string | null;
-    username: string;
+    email: string;
     password: string;
 }

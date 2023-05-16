@@ -63,7 +63,7 @@
                               v-model="loginPL.username"
                               variant="solo"
                               density="compact"
-                              label="Benutzername"
+                              label="E-Mail"
                               bg-color="rgb(26, 6, 58)"
                               color="rgb(250, 245, 255)"
                             ></v-text-field>
@@ -170,7 +170,7 @@
                               v-model="loginPL.username"
                               variant="solo"
                               density="compact"
-                              label="Benutzername"
+                              label="E-Mail"
                               bg-color="rgb(26, 6, 58)"
                               color="rgb(250, 245, 255)"
                             ></v-text-field>
@@ -273,7 +273,7 @@ export default {
           }
       },
       async login() {
-        const result = login(this.loginPL);
+        const result = await login(this.loginPL);
         this.loginPL = {
           clientMutationId: null,
           username: null,

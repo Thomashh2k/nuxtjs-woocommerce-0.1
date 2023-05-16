@@ -6,8 +6,10 @@ import UPDATE_USER_BILLING from '@/apollo/mutations/user/UPDATE_USER_BILLING.gql
 import UPDATE_USER_SHIPPING from '@/apollo/mutations/user/UPDATE_USER_SHIPPING.gql'
 import UPDATE_USER_PASSWORD from '@/apollo/mutations/user/UPDATE_USER_PASSWORD.gql'
 import { useSnackbar } from "@/store/snackbar";
+import { useAuth } from '@/store/useAuth.js'
 
-export async function updateUserInfo(customerInfo, userInfo) {
+export async function updateUserInfo(userInfo) {
+  debugger
   const userInfoVar = {
       input: {
         id: userInfo.id,
@@ -28,10 +30,13 @@ export async function updateUserInfo(customerInfo, userInfo) {
     })
     onDone((result) => {
       const authStore = useAuth();
+      const snackbar = useSnackbar()
 
-      authStore.setRefreshToken(result.data.login.refreshToken);
-      authStore.setCustomerJwt(result.data.login.customer.jwtAuthToken);
-      authStore.setToken(result.data.login.authToken);
+      authStore.setRefreshToken(result.data.updateCustomer.refreshToken);
+      authStore.setCustomerJwt(result.data.updateCustomer.customer.jwtAuthToken);
+      authStore.setToken(result.data.updateCustomer.authToken);
+
+      authStore.setUser(userInfo);
 
       snackbar.setMessage('Persöhnliche Daten aktualisiert', 'success');
     })
@@ -58,10 +63,13 @@ export async function updateUserShipping(customerInfo, userInfo) {
     })
     onDone((result) => {
       const authStore = useAuth();
+      const snackbar = useSnackbar()
 
       authStore.setRefreshToken(result.data.login.refreshToken)
       authStore.setCustomerJwt(result.data.login.customer.jwtAuthToken)
       authStore.setToken(result.data.login.authToken)
+
+      authStore.setCustomer(customerInfo)
 
       snackbar.setMessage('Lieferanschrift aktualisiert', 'success')
 
@@ -89,10 +97,13 @@ export async function updateUserBilling(customerInfo, userInfo) {
     })
     onDone((result) => {
       const authStore = useAuth();
+      const snackbar = useSnackbar()
 
       authStore.setRefreshToken(result.data.login.refreshToken)
       authStore.setCustomerJwt(result.data.login.customer.jwtAuthToken)
       authStore.setToken(result.data.login.authToken)
+
+      authStore.setCustomer(customerInfo)
 
       snackbar.setMessage('Rechnungsadresse aktualisiert', 'success')
 

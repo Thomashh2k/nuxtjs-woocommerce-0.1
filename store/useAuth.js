@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 
 const state = {
   user: {
-    username: null,
     email: null,
     firstName: null,
     lasstName: null,

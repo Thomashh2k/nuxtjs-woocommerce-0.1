@@ -1,4 +1,4 @@
-mutation UpdateUserInfo($input: UpdateCustomerInput = {id: "", firstName: "", lastName: "", name: ""}) {
+mutation UpdateUserInfo($input: UpdateCustomerInput = {id: "", firstName: "", lastName: "", nickname: ""}) {
   updateCustomer(input: $input) {
     clientMutationId
     authToken
