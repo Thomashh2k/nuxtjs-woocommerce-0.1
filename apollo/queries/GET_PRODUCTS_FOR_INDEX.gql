@@ -1,5 +1,5 @@
 query IndexPageQuery {
-  products(first: 10, where: {featured: true}) {
+  featuredProducts: products(first: 10, where: {featured: true}) {
     nodes {
       databaseId
       name
@@ -31,7 +31,7 @@ query IndexPageQuery {
       }
     }
   }
-  products(first: 10, where: {orderby: {field: DATE}}) {
+  newestProducts: products(first: 10, where: {orderby: {field: DATE}}) {
     nodes {
       databaseId
       name
@@ -63,7 +63,7 @@ query IndexPageQuery {
       }
     }
   }
-  products(first: 10, where: {onSale: true}) {
+  onSaleProducts: products(first: 10, where: {onSale: true}) {
     nodes {
       databaseId
       name

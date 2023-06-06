@@ -8,36 +8,33 @@
         <h1 class="tw-text-center tw-text-2xl">Suchergebniss für "{{ $route.query.q }}"</h1>
         <CategoryShowAll :is-search-page="true" :search-query="search" />
         <ProductsShowAll class="tw-mb-6" :products="products" />
-
       </div>
       <h1 v-if="!pageInfo.hasNextPage && !fetchingMore" class="tw-text-center tw-text-2xl">Es gibt keine weiteren Produkte zum laden</h1>
       <div v-if="fetchingMore">
-        <v-skeleton-loader
-          class="mx-auto border"
-          max-width="300"
-          type="image, article"
-        ></v-skeleton-loader>
-        <v-skeleton-loader
-          class="mx-auto border"
-          max-width="300"
-          type="image, article"
-        ></v-skeleton-loader>
-        <v-skeleton-loader
-          class="mx-auto border"
-          max-width="300"
-          type="image, article"
-        ></v-skeleton-loader>
-        <v-skeleton-loader
-          class="mx-auto border"
-          max-width="300"
-          type="image, article"
-        ></v-skeleton-loader>
-        <v-skeleton-loader
-          class="mx-auto border"
-          max-width="300"
-          type="image, article"
-        ></v-skeleton-loader>
+        <div v-if="true" class="tw-flex tw-flex-wrap tw-justify-center tw-items-center">
+          <v-skeleton-loader
+            class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
+            type="image, article"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
+            type="image, article"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
+            type="image, article"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
+            type="image, article"
+          ></v-skeleton-loader>
+          <v-skeleton-loader
+            class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
+            type="image, article"
+          ></v-skeleton-loader>
+        </div>
         <v-progress-linear
+          v-else
           indeterminate
           color="yellow-darken-2"
         ></v-progress-linear>
@@ -47,7 +44,7 @@
 
 <script>
 import { pageSearchProducts } from "@/utils/search";
-
+import * as labsComponents from 'vuetify/labs/components'
 export default {
   setup() {
     useHead(() => ({
@@ -63,6 +60,9 @@ export default {
       ],
       link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     }));
+  },
+  components: {
+    ...labsComponents,
   },
   data() {
     return {
@@ -144,4 +144,24 @@ export default {
     width: 32%;
   }
 }
+.card-bg-color {
+  /* background: rgb(26, 6, 58) !important; */
+  background-color: rgb(76 29 149 / var(--tw-bg-opacity));
+}
+
+.card-height {
+  height: 30rem;
+}
+.card-width {
+  max-width: 340px;
+}
+@media (max-width: 1280px) {
+  .card-width {
+    max-width: 240px;
+  }
+  .card-height {
+    height: 24.5rem;
+  }
+}
+
 </style>

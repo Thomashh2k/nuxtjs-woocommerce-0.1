@@ -1,36 +1,148 @@
 <template>
-    <div>
+    <div ref="section">
         <IndexHero />
         <CategoryShowAll />
-        <h1 class="tw-text-purple-50 tw-text-2xl tw-py-4" >
+        <h1 class="tw-text-purple-50 tw-text-2xl tw-py-4 tw-text-center">
             Neuerscheinungen
         </h1>
         <v-divider/>
-        <ProductsRow :products="data" />
-        <h1 class="tw-text-purple-50 tw-text-2xl tw-py-4">
+        <ProductsRow v-if="!isLoading" :products="newestProducts" />
+        <v-window v-else>
+            <v-window-item class="tw-flex tw-flex-row">
+                <v-skeleton-loader
+                    v-for="index in productsLength" :key="productsLength"
+                    class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
+                    type="image, article"
+                ></v-skeleton-loader>
+                <v-progress-linear
+                    indeterminate
+                    color="yellow-darken-2"
+                ></v-progress-linear>
+            </v-window-item>
+        </v-window>
+        <h1 class="tw-text-purple-50 tw-text-2xl tw-py-4 tw-text-center">
             Bestseller
         </h1>
         <v-divider/>
-        <ProductsRow :products="data" />
-        <h1 class="tw-text-purple-50 tw-text-2xl tw-py-4">
+        <ProductsRow v-if="!isLoading" :products="featuredProducts" />
+        <v-window v-else>
+            <v-window-item class="tw-flex tw-flex-row">
+                <v-skeleton-loader
+                    v-for="index in productsLength" :key="productsLength"
+                    class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
+                    type="image, article"
+                ></v-skeleton-loader>
+                <v-progress-linear
+                    indeterminate
+                    color="yellow-darken-2"
+                ></v-progress-linear>
+            </v-window-item>
+        </v-window>
+        <h1 class="tw-text-purple-50 tw-text-2xl tw-py-4 tw-text-center">
             Angebote
         </h1>
         <v-divider/>
-        <ProductsRow :products="data" />
+        <ProductsRow v-if="!isLoading" :products="onSaleProducts" />
+        <v-window v-else>
+            <v-window-item class="tw-flex tw-flex-row">
+                <v-skeleton-loader
+                    v-for="index in productsLength" :key="productsLength"
+                    class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
+                    type="image, article"
+                ></v-skeleton-loader>
+                <v-progress-linear
+                    indeterminate
+                    color="yellow-darken-2"
+                ></v-progress-linear>
+            </v-window-item>
+        </v-window>
+        <h1 v-if="onSaleProducts.nodes.length === 0" class="tw-text-purple-50 tw-text-xl tw-py-4 tw-text-center">
+            Leider haben wir keine Angebote momentan.
+        </h1>
     </div>
 </template>
-<script setup>
-import FETCH_ALL_PRODUCTS_QUERY from "@/apollo/queries/FETCH_ALL_PRODUCTS_QUERY.gql";
-let data = {}
-let errMsg = undefined
-const productVariables = { limit: 99 };
+<script>
+import GET_PRODUCTS_FOR_INDEX from "@/apollo/queries/GET_PRODUCTS_FOR_INDEX.gql";
+import * as labsComponents from 'vuetify/labs/components'
 
-const result = await useAsyncQuery(
-FETCH_ALL_PRODUCTS_QUERY,
-productVariables
-);
-await result.execute();
+export default {
+    name: 'IndexPage',
+    components: {
+    ...labsComponents,
+    },
+    data() {
+        return {
+            isLoading: true,
+            productsLength: null,
+            featuredProducts: {
+                nodes: []
+            },
+            newestProducts: {
+                nodes: []
+            },
+            onSaleProducts: {
+                nodes: []
+            },
+            errMsg: undefined
+        }
+    },
+    computed: {
+        cardWidth() {
+            if(window.innerWidth > 1536) {
+                return 340
 
-data = result.data.value.products
+            } else if(window.innerWidth < 1536) {
+                return 240
 
+            } if(window.innerWidth < 1280) {
+                return 240
+
+            } if(window.innerWidth < 960) {
+                return 200
+            } 
+        }
+    },
+    async mounted() {
+        this.productsLength = this.productsGroupLength()
+        const productVariables = { limit: 99 };
+        const result = await useAsyncQuery(
+            GET_PRODUCTS_FOR_INDEX,
+            productVariables
+        );
+        await result.execute();
+
+        this.featuredProducts = result.data.value.featuredProducts
+        this.newestProducts = result.data.value.newestProducts
+        this.onSaleProducts = result.data.value.onSaleProducts
+        this.isLoading = false
+    },
+    methods: {
+        productsGroupLength() {
+            let _productsGroupLength = 0
+            debugger
+            const slideGroupWrapper = this.$refs.section;
+            const visibleWidth = slideGroupWrapper.getBoundingClientRect().width;
+            let totalWidth = 0
+
+            while(totalWidth < visibleWidth) {
+                _productsGroupLength++;
+                totalWidth += this.cardWidth
+            }
+
+            return _productsGroupLength;
+        }
+    }
+}
 </script>
+<style>
+    .card-height {
+        height: 30rem;
+    }
+    .card-width {
+        max-width: 340px;
+    }
+    .card-bg-color {
+        /* background: rgb(26, 6, 58) !important; */
+        background-color: rgb(76 29 149 / var(--tw-bg-opacity));
+    }
+</style>

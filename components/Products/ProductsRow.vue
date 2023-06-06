@@ -1,6 +1,12 @@
 <template>
   <section ref="section">
     <v-window v-if="productsPages.length > 0" center-active show-arrows id="product-container" class="slide-group-wrapper">
+      <template v-slot:prev="{ props }">
+        <v-btn icon="mdi-chevron-left" @click="props.onClick" class="btn-bg-color"></v-btn>
+      </template>
+      <template v-slot:next="{ props }">
+        <v-btn icon="mdi-chevron-right" @click="props.onClick" class="btn-bg-color"></v-btn>
+      </template>
       <v-window-item v-for="(productPage, index) in productsPages" :key="index" class="tw-flex tw-flex-row">
         <v-card
           v-for="(product) in productPage"
@@ -60,27 +66,26 @@
         </v-card>
       </v-window-item>
     </v-window>
-    <div v-else>
-      <v-progress-linear
-        indeterminate
-        color="yellow-darken-2"
-      ></v-progress-linear>
-    </div>
+
   </section>
 </template>
   
 <script>
 import { filteredVariantPrice, addProductToCart } from "@/utils/functions";
+import * as labsComponents from 'vuetify/labs/components'
 
 export default {
   name: 'ProductsRow',
   props: {
     products: {type: Object, required: true}
   },
+  components: {
+    ...labsComponents,
+  },
   mounted() {
     debugger
     if(process.client) {
-      this.productsLength = this.productsGroupLength(this.products.nodes)
+      this.productsLength = this.productsGroupLength()
   
       this.productsPages = this.convertToTwoDimensionalArray(this.products.nodes, this.productsLength)
     }
@@ -105,9 +110,6 @@ export default {
       } if(window.innerWidth < 960) {
         return 200
       } 
-    },
-    computedProducts() {
-      return this.productsPages
     }
   },
   methods: {
@@ -153,6 +155,14 @@ export default {
     a:hover {
         border: none;
     }
+    .btn-bg-color {
+      background-color: rgb(26, 6, 58);
+      color: rgb(250 245 255);
+    }
+    .card-bg-color {
+      /* background: rgb(26, 6, 58) !important; */
+      background-color: rgb(76 29 149 / var(--tw-bg-opacity));
+    }
     .card-height {
         height: 30rem;
     }
@@ -192,10 +202,5 @@ export default {
         .v-btn-toggle {
             display: none;
         }
-    }
-
-    .card-bg-color {
-        /* background: rgb(26, 6, 58) !important; */
-        background-color: rgb(76 29 149 / var(--tw-bg-opacity));
     }
 </style>
