@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="tw-bg-violet-900">
     <LayoutNavbar />
-    <article class="main-body-part content" style="height: 100%;">
+    <article class="main-body-part content" style="height: 100%; background: #1a063a;">
       <v-row>
         <v-col cols="1" sm="1" md="1" lg="1" xl="1"></v-col>
         <v-col cols="10" sm="10" md="10" lg="10" xl="10">
@@ -11,12 +11,12 @@
       </v-row>
     </article>
     <v-snackbar
-      v-model="showSnackbar"
+      v-model="message"
       :timeout="3000"
       :color="snackbar.getType === 'error' ? 'red' : 'green'"
       multi-line
     >
-    <div class="tw-text-purple-50" v-html="msg">
+    <div class="tw-text-purple-50" v-html="message">
 
     </div>
       <template v-slot:actions>
@@ -52,13 +52,9 @@ export default {
   watch: {
     message(newVal, oldVal) {
       if(newVal !== oldVal) {
-        if(newVal === null) {
-          this.showSnackbar = false;
-          this.msg = null;
-        } else if(newVal !== null) {
-          this.showSnackbar = true;
-          this.msg = newVal;
-        }
+        setTimeout(() => {
+          this.snackbar.removeMessage();   
+        }, 3000)
       }
     },
     $route(newVal, oldVal) {

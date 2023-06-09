@@ -185,7 +185,7 @@ export default {
         address2.value.value = props.addressInfo.address2
         postcode.value.value = props.addressInfo.postcode
         city.value.value = props.addressInfo.city
-        country.value = props.addressInfo.country
+        country.value.value = props.addressInfo.country
 
         const submit = handleSubmit(values => {
             debugger

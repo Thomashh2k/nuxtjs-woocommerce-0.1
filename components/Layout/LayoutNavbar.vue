@@ -56,7 +56,7 @@
                         <template v-slot:activator="{ props }">
                           <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
                         </template>
-                        <v-card v-if="!authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
+                        <v-card v-if="!authStore.isLoggedIn" :loading.sync="isLoggingIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
                           <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Anmelden</v-card-title>
                           <v-card-text>
                             <v-text-field 
@@ -84,6 +84,13 @@
                           <v-card-actions class="tw-justify-end tw-flex tw-p-4">
                             <v-btn color="success" rounded="xl" variant="outlined"><div class="tw-normal-case" @click="login">Login</div></v-btn>
                           </v-card-actions>
+                          <template v-slot:loader="{ isActive }">
+                            <v-progress-linear
+                              :active="isActive"
+                              color="deep-purple"
+                              indeterminate
+                            ></v-progress-linear>
+                          </template>
                         </v-card>
                         <v-card v-if="authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
                           <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Account</v-card-title>
@@ -163,7 +170,8 @@
                         <template v-slot:activator="{ props }">
                           <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
                         </template>
-                        <v-card v-if="!authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
+                        <v-card v-if="!authStore.isLoggedIn" :loading.sync="isLoggingIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
+
                           <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Anmelden</v-card-title>
                           <v-card-text>
                             <v-text-field 
@@ -191,6 +199,13 @@
                           <v-card-actions class="tw-justify-end tw-flex tw-p-4">
                             <v-btn color="success" variant="outlined"><div class="tw-normal-case" @click="login" rounded="xl">Login</div></v-btn>
                           </v-card-actions>
+                          <template v-slot:loader="{ isActive }">
+                            <v-progress-linear
+                              :active="isActive"
+                              color="deep-purple"
+                              indeterminate
+                            ></v-progress-linear>
+                          </template>
                         </v-card>
                         <v-card v-if="authStore.isLoggedIn" style="background: rgb(50, 17, 102); padding: 0.5rem;">
                           <v-card-title class="account-card-bg tw-text-purple-50" style="padding-top: 0.8rem;">Account</v-card-title>
@@ -242,6 +257,7 @@ export default {
           authStore: useAuth(),
           instantSearchProducts: [],
           searchResultMenu: false,
+          isLoggingIn: false,
           loginPL: {
             clientMutationId: null,
             username: null,
@@ -273,13 +289,20 @@ export default {
           }
       },
       async login() {
-        const result = await login(this.loginPL);
-        this.loginPL = {
-          clientMutationId: null,
-          username: null,
-          password: null
+        debugger
+        this.isLoggingIn = true
+        try {
+          await login(this.loginPL);
+          this.loginPL = {
+            clientMutationId: null,
+            username: null,
+            password: null
+          }
+          this.isLoggingIn = false
+        } catch(ex) {
+          this.isLoggingIn = false
         }
-        return result
+
       },
       async searchProductsOnChange() {
         if(this.search !== '') {

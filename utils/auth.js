@@ -3,7 +3,7 @@ import { useSnackbar } from "@/store/snackbar";
 import LOGIN_USER_MUTATION from "@/apollo/mutations/LOGIN_USER_MUTATION.gql";
 import REGISTER_CUSTOMER_MUTATION from '@/apollo/mutations/REGISTER_CUSTOMER_MUTATION.gql'
 export async function login (payload) {
-
+  return new Promise((resolve, reject) => {
     const authStore = useAuth();
 
     const loginVariables = { input: payload };
@@ -24,14 +24,15 @@ export async function login (payload) {
       authStore.setCustomer(result.data.login.customer)
 
       snackbar.setMessage('Anmeldung erfolgreich', 'success')
+      resolve()
     })
     const resultErr = onError((err) => {
       debugger
       const snackbar = useSnackbar()
-      snackbar.setMessage(err.message, 'error')
+      snackbar.setMessage("Login fehlgeschlagen. Stellen sie sicher das, die Anmeldedaten korrekt sind.", 'error')
+      reject()
     })
-
-    return { resultDone, resultErr }
+  })
 };
 
 export async function registerCustomer(payload, router) {

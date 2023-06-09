@@ -58,7 +58,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       /**
        * Check for session header and update session in local storage accordingly.
        */
-      debugger
 
       const context = operation.getContext();
       if(response.data.login !== undefined) {

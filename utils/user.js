@@ -65,9 +65,9 @@ export async function updateUserShipping(customerInfo, userInfo) {
       const authStore = useAuth();
       const snackbar = useSnackbar()
 
-      authStore.setRefreshToken(result.data.login.refreshToken)
-      authStore.setCustomerJwt(result.data.login.customer.jwtAuthToken)
-      authStore.setToken(result.data.login.authToken)
+      authStore.setRefreshToken(result.data.updateCustomer.refreshToken)
+      authStore.setCustomerJwt(result.data.updateCustomer.customer.jwtAuthToken)
+      authStore.setToken(result.data.updateCustomer.authToken)
 
       authStore.setCustomer(customerInfo)
 
@@ -99,9 +99,9 @@ export async function updateUserBilling(customerInfo, userInfo) {
       const authStore = useAuth();
       const snackbar = useSnackbar()
 
-      authStore.setRefreshToken(result.data.login.refreshToken)
-      authStore.setCustomerJwt(result.data.login.customer.jwtAuthToken)
-      authStore.setToken(result.data.login.authToken)
+      authStore.setRefreshToken(result.data.updateCustomer.refreshToken)
+      authStore.setCustomerJwt(result.data.updateCustomer.customer.jwtAuthToken)
+      authStore.setToken(result.data.updateCustomer.authToken)
 
       authStore.setCustomer(customerInfo)
 

@@ -126,24 +126,7 @@ export default {
 </script>
 
 <style>
-@media (max-width: 767px) {
-  .CustomHitsItem {
-    padding: 10px;
-    width: 100%;
-  }
-}
 
-@media (min-width: 768px) {
-  .CustomHitsItem {
-    width: 47%;
-  }
-}
-
-@media (min-width: 1280px) {
-  .CustomHitsItem {
-    width: 32%;
-  }
-}
 .card-bg-color {
   /* background: rgb(26, 6, 58) !important; */
   background-color: rgb(76 29 149 / var(--tw-bg-opacity));
@@ -155,13 +138,38 @@ export default {
 .card-width {
   max-width: 340px;
 }
-@media (max-width: 1280px) {
-  .card-width {
-    max-width: 240px;
-  }
-  .card-height {
-    height: 24.5rem;
-  }
+.slide-group-wrapper {
+  overflow: hidden;
 }
 
+.hide-item {
+  display: none;
+}
+@media (max-width: 1536px) {
+    .card-height {
+        height: 25rem;
+    }
+}
+@media (max-width: 1280px) {
+    .card-width {
+        max-width: 240px;
+    }
+    .card-height {
+        height: 20.5rem;
+    }
+    .v-btn-toggle {
+        display: none;
+    }
+}
+@media (max-width: 960px) {
+    .card-width {
+        max-width: 200px;
+    }
+    .card-height {
+        height: 20.5rem;
+    }
+    .v-btn-toggle {
+        display: none;
+    }
+}
 </style>
