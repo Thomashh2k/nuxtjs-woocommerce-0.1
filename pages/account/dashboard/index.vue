@@ -8,6 +8,12 @@
             <p class="max-[1325px]:tw-hidden" >Person</p>
           </div>
         </v-list-item>
+        <v-list-item @click="tab = 'orders'">
+          <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'orders' ? 'text-yellow-darken-2' : ''">
+            <v-icon icon="mdi-truck-delivery-outline" class="tw-mr-2"></v-icon>
+            <p class="max-[1325px]:tw-hidden">Bestellungen</p>
+          </div>
+        </v-list-item>
         <v-list-item @click="tab = 'deliveryAddress'">
           <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'deliveryAddress' ? 'text-yellow-darken-2' : ''">
             <v-icon icon="mdi-truck-delivery-outline" class="tw-mr-2"></v-icon>
@@ -45,7 +51,17 @@
             </v-col>
             <v-col class="max-[960px]:tw-hidden"></v-col>
           </v-row>
-          <AddressForm  :address-info="customer.billing" @save="updateBillingInfo" />
+          <AddressForm  :address-info="customer.billing" :disabled="customer.billing.sameAsShipping" @save="updateBillingInfo">
+          <template v-slot:before-form>
+            <div class="tw-flex tw-justify-center">
+              <v-switch v-model="customer.billing.sameAsShipping" color="green" class="tw-text-purple-50">
+                <template v-slot:label>
+                  <span class="tw-text-purple-50 tw-text-center">Rechnungsanschrift ist gleich Lieferanschrift</span>
+                </template>
+              </v-switch>
+            </div>
+          </template>
+          </AddressForm>
         </v-window-item>
       </v-window>
   </div>

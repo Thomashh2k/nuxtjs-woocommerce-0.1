@@ -69,12 +69,14 @@
                             ></v-text-field>
                               <v-text-field
                                 v-model="loginPL.password"
-                                type="password"
+                                :type="showPassword ? 'text': 'password'"
+                                :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                                 density="compact"
                                 label="Password"
                                 bg-color="rgb(26, 6, 58)"
                                 color="rgb(250, 245, 255)"
                                 variant="solo"
+                                @click:append-inner="showPassword = !showPassword"
                               ></v-text-field>
                               <div class="tw-flex tw-flex-col">
                                 <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
@@ -182,22 +184,24 @@
                               bg-color="rgb(26, 6, 58)"
                               color="rgb(250, 245, 255)"
                             ></v-text-field>
-                              <v-text-field
-                                v-model="loginPL.password"
-                                type="password"
-                                density="compact"
-                                label="Password"
-                                bg-color="rgb(26, 6, 58)"
-                                color="rgb(250, 245, 255)"
-                                variant="solo"
-                              ></v-text-field>
-                              <div class="tw-flex tw-flex-col">
-                                <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
-                                <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
-                              </div>
+                            <v-text-field
+                              v-model="loginPL.password"
+                              :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                              :type="showPassword ? 'text': 'password'"
+                              density="compact"
+                              label="Password"
+                              bg-color="rgb(26, 6, 58)"
+                              color="rgb(250, 245, 255)"
+                              variant="solo"
+                              @click:append-inner="showPassword = !showPassword"
+                            ></v-text-field>
+                            <div class="tw-flex tw-flex-col">
+                              <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
+                              <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
+                            </div>
                           </v-card-text>
                           <v-card-actions class="tw-justify-end tw-flex tw-p-4">
-                            <v-btn color="success" variant="outlined"><div class="tw-normal-case" @click="login" rounded="xl">Login</div></v-btn>
+                            <v-btn color="success" variant="outlined" rounded="xl"><div class="tw-normal-case" @click="login">Login</div></v-btn>
                           </v-card-actions>
                           <template v-slot:loader="{ isActive }">
                             <v-progress-linear
@@ -258,6 +262,7 @@ export default {
           instantSearchProducts: [],
           searchResultMenu: false,
           isLoggingIn: false,
+          showPassword: false,
           loginPL: {
             clientMutationId: null,
             username: null,

@@ -7,11 +7,13 @@
                 @submit="submit"
                 class="lg:tw-p-2"
             >
+            <slot name="before-form"></slot>
                 <div class="tw-flex tw-flex-row">
                     <v-text-field
                         v-model="firstName.value.value"
                         :error-messages="firstName.errorMessage.value"
                         label="Vorname"
+                        :disabled="disabled"
                         class="tw-w-6/12 tw-mr-1"
                         variant="solo"
                         density="compact"
@@ -23,6 +25,7 @@
                         v-model="lastName.value.value"
                         :error-messages="lastName.errorMessage.value"
                         label="Nachname"
+                        :disabled="disabled"
                         class="tw-w-6/12 tw-ml-1"
                         variant="solo"
                         density="compact"
@@ -36,6 +39,7 @@
                         v-model="address1.value.value"
                         :error-messages="address1.errorMessage.value"
                         label="Straße"
+                        :disabled="disabled"
                         class="tw-w-10/12 tw-mr-1"
                         variant="solo"
                         density="compact"
@@ -47,6 +51,7 @@
                         v-model="address2.value.value"
                         :error-messages="address2.errorMessage.value"
                         label="Hausnummer"
+                        :disabled="disabled"
                         class="tw-w-2/12 tw-ml-1"
                         variant="solo"
                         density="compact"
@@ -59,6 +64,7 @@
                         v-model="postcode.value.value"
                         :error-messages="postcode.errorMessage.value"
                         label="Postleitzahl"
+                        :disabled="disabled"
                         class="tw-w-2/12 tw-mr-1"
                         variant="solo"
                         density="compact"
@@ -69,6 +75,7 @@
                         v-model="city.value.value"
                         :error-messages="city.errorMessage.value"
                         label="Stadt"
+                        :disabled="disabled"
                         class="tw-w-10/12 tw-ml-1"
                         variant="solo"
                         density="compact"
@@ -82,11 +89,13 @@
                     :error-messages="country.errorMessage.value"
                     :items="countryItems"
                     label="Land"
+                    :disabled="disabled"
                     variant="solo"
                     density="compact"
                     bg-color="rgb(26, 6, 58)"
                     color="rgb(250, 245, 255)"
                 />
+            <slot name="after-form"></slot>
             <div class="tw-flex tw-justify-center">
                 <v-btn
                     variant="outlined"
@@ -113,6 +122,10 @@ export default {
         addressInfo: {
             type: Object,
             required: true
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         },
         showSaveBtn: {
             type: Boolean,

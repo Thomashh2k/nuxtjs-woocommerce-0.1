@@ -32,7 +32,7 @@
                     <v-btn color="primary" class="tw-w-full tw-normal-case tw-my-1 tw-text-purple-50" style="text-transform: none;" variant="outlined" rounded="xl">
                         <div class="tw-text-purple-50">E-Mail ändern</div>
                     </v-btn>
-                    <v-btn color="primary" variant="outlined" class="tw-w-full tw-my-1 tw-normal-case tw-text-purple-50" style="text-transform: none;" rounded="xl">
+                    <v-btn color="primary" variant="outlined" class="tw-w-full tw-my-1 tw-normal-case tw-text-purple-50" style="text-transform: none;" rounded="xl" @click="sendResetPasswordLink">
                         <div class="tw-text-purple-50">Passwort ändern</div>
                     </v-btn>
                 </div>
@@ -54,6 +54,7 @@
 </template>
 <script>
 import { useField, useForm } from 'vee-validate';
+import { useSnackbar } from "@/store/snackbar";
 
 export default {
     emits: ['save'],
@@ -96,6 +97,12 @@ export default {
 
         return { submit, firstName, lastName}
     },
+    methods: {
+        sendResetPasswordLink() {
+            const snackbar = useSnackbar()
+            snackbar.setMessage('Es wurde ein Link an ihre E-Mail Addresse gesendet, womit sie ihr Passwort ändern können.', '#4c1d95')
+        }
+    }
 }
 </script>
 <style scoped>

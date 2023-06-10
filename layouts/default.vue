@@ -1,11 +1,11 @@
 <template>
-  <div class="tw-bg-violet-900">
+  <div class="tw-bg-violet-900 wrapper">
     <LayoutNavbar />
     <article class="main-body-part content" style="height: 100%; background: #1a063a;">
       <v-row>
         <v-col cols="1" sm="1" md="1" lg="1" xl="1"></v-col>
         <v-col cols="10" sm="10" md="10" lg="10" xl="10">
-          <slot />
+          <slot  />
         </v-col>
         <v-col cols="1" sm="1" md="1" lg="1" xl="1"></v-col>
       </v-row>
@@ -13,7 +13,7 @@
     <v-snackbar
       v-model="message"
       :timeout="3000"
-      :color="snackbar.getType === 'error' ? 'red' : 'green'"
+      :color="snackbar.getType === 'error' ? 'red' : snackbar.getType"
       multi-line
     >
     <div class="tw-text-purple-50" v-html="message">
@@ -29,7 +29,7 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <LayoutFooter id="footer" :class="footerIsBottom ? '' : 'stickToBottom'"  />
+    <LayoutFooter class="footer"  />
   </div>
 </template>
 <script>
@@ -46,7 +46,8 @@ export default {
     return {
       showSnackbar: false,
       msg: null,
-      footerIsBottom: true
+      footerIsBottom: true,
+      bottom: false
     }
   },
   watch: {
@@ -58,13 +59,19 @@ export default {
       }
     },
     $route(newVal, oldVal) {
-      if(newVal !== oldVal) {
+      this.$nextTick(() => {
         this.footerIsBottom = this.isFooterAtBottom()
-      }
+      })
     }
   },
-  created() {
-    this.footerIsBottom = this.isFooterAtBottom()
+  mounted() {
+    this.$nextTick(() => {
+      this.footerIsBottom = this.isFooterAtBottom()
+    })
+    window.addEventListener("resize", () => { this.footerIsBottom = this.isFooterAtBottom() })
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", () => { this.footerIsBottom = this.isFooterAtBottom() })
   },
   methods: {
     closeSnackbar() {
@@ -72,11 +79,10 @@ export default {
       this.snackbar.removeMessage();
     },
     isFooterAtBottom() {
-      if(process.client) {
-        return document.getElementById('footer').getBoundingClientRect().bottom <= window.innerHeight;
-      } else {
-        return true
-      }
+      const content = document.getElementsByClassName('main-body-part')[0].getBoundingClientRect().height
+      console.log('content: ', content , 'window.innerHeight: ', window.innerHeight)
+      return document.getElementsByClassName('main-body-part')[0].getBoundingClientRect().height >= window.innerHeight;
+      // return document.getElementById('footer').getBoundingClientRect().bottom <= window.innerHeight;
     }
   }
 }
@@ -84,10 +90,22 @@ export default {
 <style scoped>
 .content {
   padding-top: 75px;
+  flex: 1; /* Der Inhalt nimmt den verfügbaren Platz im flexiblen Layout ein */
+
+}
+.stickToBottom {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
-.stickToBottom {
-  bottom: 0;
-  position: absolute;
+.wrapper {
+  min-height: 100vh; /* Die minimale Höhe des Wrapper-Elements auf 100% der Viewport-Höhe setzen */
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  flex-shrink: 0; /* Der Footer wird nicht verkleinert, um den verfügbaren Platz zu teilen */
 }
 </style>

@@ -29,4 +29,5 @@ const todayDate = computed(() => new Date().getFullYear());
 .footer-gradient {
   background-image: linear-gradient(#1a063a, #4c1d95);
 }
+
 </style>

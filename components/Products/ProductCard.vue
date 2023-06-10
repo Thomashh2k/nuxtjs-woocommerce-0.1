@@ -182,4 +182,69 @@ export default {
             display: none;
         }
     }
+    /* PERCENTAGE */
+    /* .card-width {
+        max-width: 19%;
+        min-width: 19%;
+    }
+    @media (max-width: 2160px) {
+        .card-height {
+            height: 28rem;
+        }
+        .card-width {
+            max-width: 19%;
+            min-width: 19%;
+        }
+    }
+    @media screen and (max-width: 1920px) {
+        .card-width {
+            max-width: 19%;
+            min-width: 19%;
+        }
+        .card-height {
+            height: 28rem;
+        }
+    }
+    @media screen and (max-width: 1536px) { 
+        .card-width {
+            max-width: 25%;
+            min-width: 25%;
+        }
+        .card-height {
+            height: 24.5rem;
+        }
+    }
+    @media screen and (max-width: 1280px) { 
+        .card-width {
+            max-width: 25%;
+            min-width: 25%;
+        }
+        .card-height {
+            height: 24.5rem;
+        }
+    }
+    @media screen and (max-width: 960px) {
+        .card-width {
+            max-width: 28%;
+            min-width: 28%;
+        }
+        .card-height {
+            height: 20.5rem;
+        }
+        .v-btn-toggle {
+            display: none;
+        }
+    }
+    @media screen and (max-width: 640px) { 
+        .card-width {
+            max-width: 45%;
+            min-width: 45%;
+        }
+        .card-height {
+            height: 20.5rem;
+        }
+        .v-btn-toggle {
+            display: none;
+        }
+    } */
 </style>
