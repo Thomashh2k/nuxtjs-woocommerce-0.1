@@ -30,8 +30,12 @@
     </div>
     <v-window v-model="tab" class="tw-flex tw-justify-center tw-w-full tw-h-full tw-items-center">
         <v-window-item value="person" class="tw-w-full">
-          <h2  class="tw-text-xl tw-text-purple-50 tw-text-center max-[960px]:tw-p-8 min-[960px]:tw-pt-4">Account Daten</h2>
+          <h2 class="tw-text-xl tw-text-purple-50 tw-text-center max-[960px]:tw-p-8 min-[960px]:tw-pt-4">Account Daten</h2>
           <PersonForm class="max-[960px]:tw-p-8 min-[960px]:tw-pt-8" :user-info="userInfo"  @save="updateUserInfo"/>
+        </v-window-item>
+        <v-window-item value="orders" class="tw-w-full">
+          <h2 class="tw-text-xl tw-text-purple-50 tw-text-center max-[960px]:tw-p-8 min-[960px]:tw-pt-4">Bestellungen</h2>
+          <ListOrders class="max-[960px]:tw-p-8 min-[960px]:tw-pt-8"/>
         </v-window-item>
         <v-window-item value="deliveryAddress" class="tw-w-full">
           <v-row class="max-[960px]:tw-p-8 min-[960px]:tw-pt-4">
@@ -70,26 +74,23 @@
 import { mdiFile } from '@mdi/js'
 import PersonForm from '@/components/Account/forms/PersonForm.vue';
 import AddressForm from '@/components/Account/forms/AddressForm.vue';
-
+import ListOrders from '@/components/Account/ListOrders.vue';
 import { updateUserInfo, updateUserBilling, updateUserShipping } from '@/utils/user.js'
 import { useAuth } from '@/store/useAuth.js'
 
 export default {
   components: {
     PersonForm,
-    AddressForm
+    AddressForm,
+    ListOrders
   },
   setup() {
     debugger
-    const authStore = useAuth()
-    const customer = authStore.getCustomer
-    const userInfo = authStore.getUser
-    return { authStore, customer, userInfo }
-  },
-  data() {
-    return {
-      tab: 'person'
-    }
+    const authStore = useAuth();
+    const customer = authStore.getCustomer;
+    const userInfo = authStore.getUser;
+    const tab = 'person';
+    return { authStore, customer, userInfo, tab }
   },
   methods: {
     async updateShippingInfo($event) {

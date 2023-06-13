@@ -1,0 +1,32 @@
+query FETCH_ORDERS_QUERY($after: String = "", $before: String = "", $first: Int = 10, $last: Int = 10, $statuses: [OrderStatusEnum] = CANCELLED, $search: String = "", $order: OrderEnum = ASC) {
+  orders(
+    first: $first
+    before: $before
+    after: $after
+    last: $last
+    where: {statuses: $statuses, search: $search, orderby: {field: DATE, order: $order}}
+  ) {
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+    nodes {
+      currency
+      customerNote
+      date
+      dateCompleted
+      datePaid
+      discountTotal(format: RAW)
+      id
+      needsPayment
+      needsProcessing
+      paymentMethod
+      paymentMethodTitle
+      status
+      total(format: RAW)
+      transactionId
+    }
+  }
+}

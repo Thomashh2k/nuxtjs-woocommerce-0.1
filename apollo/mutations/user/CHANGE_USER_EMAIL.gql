@@ -1,0 +1,5 @@
+mutation MyMutation($email: String = "", $id: ID = "") {
+  updateUser(input: {id: $id, email: $email}) {
+    clientMutationId
+  }
+}

@@ -1,10 +1,14 @@
 import FETCH_CUSTOMER_DATA from '@/apollo/queries/FETCH_CUSTOMER_DATA.gql'
 
-import SEND_PASSWORD_RESET_EMAIL from '@/apollo/mutations/user/SEND_PASSWORD_RESET_EMAIL.gql'
 import UPDATE_USER_INFO from '@/apollo/mutations/user/UPDATE_USER_INFO.gql'
 import UPDATE_USER_BILLING from '@/apollo/mutations/user/UPDATE_USER_BILLING.gql'
 import UPDATE_USER_SHIPPING from '@/apollo/mutations/user/UPDATE_USER_SHIPPING.gql'
-import UPDATE_USER_PASSWORD from '@/apollo/mutations/user/UPDATE_USER_PASSWORD.gql'
+
+import SEND_CHANGE_USER_PASSWORD from '@/apollo/mutations/user/resetPassword/SEND_CHANGE_USER_PASSWORD.gql'
+import SEND_RESET_PASSWORD_EMAIL from '@/apollo/mutations/user/resetPassword/SEND_RESET_PASSWORD_EMAIL.gql'
+
+import CHANGE_USER_PASSWORD from '@/apollo/mutations/user/CHANGE_USER_PASSWORD.gql'
+import CHANGE_USER_EMAIL from '@/apollo/mutations/user/CHANGE_USER_EMAIL.gql'
 import { useSnackbar } from "@/store/snackbar";
 import { useAuth } from '@/store/useAuth.js'
 
@@ -17,7 +21,6 @@ export async function updateUserInfo(userInfo) {
         lastName: userInfo.lastName,
       },
     };
-    console.log(userInfoVar)
     const { mutate, onError, onDone } = useMutation(UPDATE_USER_INFO, {
       variables: userInfoVar
     });
@@ -110,6 +113,65 @@ export async function updateUserBilling(customerInfo, userInfo) {
     })
 }
 
-export async function updateUserPassword() {
-    
+export async function updateEmail(id, email) {
+  const changeEmail = {
+    id: id,
+    email: email
+  };
+  const { mutate, onError, onDone } = useMutation(CHANGE_USER_EMAIL, {
+    variables: changeEmail
+  });
+
+  mutate(changeEmail);
+  
+  onError((err) => {
+    const snackbar = useSnackbar()
+    snackbar.setMessage(err.message, 'error')
+  })
+  onDone((result) => {
+    const snackbar = useSnackbar()
+
+    snackbar.setMessage('E-Mail wurde aktualisiert', 'success');
+  })
+}
+
+export async function updatePassword(id, password) {
+  const changePassword = {
+    id: id,
+    password: password
+  };
+  const { mutate, onError, onDone } = useMutation(CHANGE_USER_PASSWORD, {
+    variables: changePassword
+  });
+
+  mutate(changePassword);
+  
+  onError((err) => {
+    const snackbar = useSnackbar()
+    snackbar.setMessage(err.message, 'error')
+  })
+  onDone((result) => {
+    const snackbar = useSnackbar()
+
+    snackbar.setMessage('Passwort wurde aktualisiert', 'success');
+  })
+}
+
+export async function sendResetPasswordLink(username) {
+  const resetPasswordVar = {
+    input: {
+      username: username,
+    }
+  };
+  const { mutate, onError, onDone } = useMutation(SEND_RESET_PASSWORD_EMAIL, {
+    variables: resetPasswordVar
+  });
+
+  mutate(userInfoVar);
+  
+  onError((err) => {
+    const snackbar = useSnackbar()
+    snackbar.setMessage(err.message, 'error')
+  })
+  onDone((result) => {})
 }
