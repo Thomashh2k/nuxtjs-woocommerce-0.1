@@ -3,11 +3,11 @@
     <LayoutNavbar />
     <article class="main-body-part content" style="height: 100%; background: #1a063a;">
       <v-row>
-        <v-col cols="1" sm="1" md="1" lg="1" xl="1"></v-col>
-        <v-col cols="10" sm="10" md="10" lg="10" xl="10">
+        <v-col sm="1" md="1" lg="1" xl="1"></v-col>
+        <v-col cols="12" sm="10" md="10" lg="10" xl="10">
           <slot  />
         </v-col>
-        <v-col cols="1" sm="1" md="1" lg="1" xl="1"></v-col>
+        <v-col sm="1" md="1" lg="1" xl="1"></v-col>
       </v-row>
     </article>
     <v-snackbar

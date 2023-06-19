@@ -12,7 +12,7 @@
                 <v-skeleton-loader
                     v-for="index in productsLength" :key="productsLength"
                     class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
-                    type="image, article"
+                    type="image, list-item, list-item, actions"
                 ></v-skeleton-loader>
             </v-window-item>
         </v-window>
@@ -26,7 +26,7 @@
                 <v-skeleton-loader
                     v-for="index in productsLength" :key="productsLength"
                     class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
-                    type="image, article"
+                    type="image, list-item, list-item, actions"
                 ></v-skeleton-loader>
             </v-window-item>
         </v-window>
@@ -40,7 +40,7 @@
                 <v-skeleton-loader
                     v-for="index in productsLength" :key="productsLength"
                     class="card-bg-color card-height card-width lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mr-4 md:tw-mr-3 sm:tw-mr-3 max-[1280px]:tw-mr-2 hover:shadow-2xl"
-                    type="image, article"
+                    type="image, list-item, list-item, actions"
                 ></v-skeleton-loader>
             </v-window-item>
         </v-window>

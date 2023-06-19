@@ -50,9 +50,9 @@
                         transition="slide-y-transition"
                         :close-on-content-click="false"
                         location="bottom"
+                        open-on-hover
                         width="300"
                         >
-                        <!-- open-on-hover -->
                         <template v-slot:activator="{ props }">
                           <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
                         </template>
@@ -67,21 +67,21 @@
                               bg-color="rgb(26, 6, 58)"
                               color="rgb(250, 245, 255)"
                             ></v-text-field>
-                              <v-text-field
-                                v-model="loginPL.password"
-                                :type="showPassword ? 'text': 'password'"
-                                :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                                density="compact"
-                                label="Password"
-                                bg-color="rgb(26, 6, 58)"
-                                color="rgb(250, 245, 255)"
-                                variant="solo"
-                                @click:append-inner="showPassword = !showPassword"
-                              ></v-text-field>
-                              <div class="tw-flex tw-flex-col">
-                                <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
-                                <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
-                              </div>
+                            <v-text-field
+                              v-model="loginPL.password"
+                              :type="showPassword ? 'text': 'password'"
+                              :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                              density="compact"
+                              label="Password"
+                              bg-color="rgb(26, 6, 58)"
+                              color="rgb(250, 245, 255)"
+                              variant="solo"
+                              @click:append-inner="showPassword = !showPassword"
+                            ></v-text-field>
+                            <div class="tw-flex tw-flex-col">
+                              <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
+                              <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
+                            </div>
                           </v-card-text>
                           <v-card-actions class="tw-justify-end tw-flex tw-p-4">
                             <v-btn color="success" rounded="xl" variant="outlined"><div class="tw-normal-case" @click="login">Login</div></v-btn>
@@ -166,9 +166,9 @@
                         transition="slide-y-transition"
                         :close-on-content-click="false"
                         location="bottom"
+                        open-on-hover
                         width="300"
                         >
-                        <!-- open-on-hover -->
                         <template v-slot:activator="{ props }">
                           <v-btn variant="text" icon="mdi-account" v-bind="props"></v-btn>
                         </template>

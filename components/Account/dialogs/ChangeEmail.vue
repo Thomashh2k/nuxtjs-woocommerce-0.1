@@ -56,17 +56,17 @@ export default {
             validationSchema: {
                 newEmail(value) {
                     if (!value) return 'Neue E-Mail ist ein Pflichtfeld'
-                    if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
-                    if(repeatNewEmail !== value) return 'E-Mail Addressen stimmen nicht überein.'
+                    if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return 'Es muss eine gültige E-Mail eingegeben werden.'
+                    if(repeatNewEmail.value.value !== value) return 'E-Mail Addressen stimmen nicht überein.'
 
-                    return 'Es muss eine gültige E-Mail eingegeben werden.'
+                    return true
                 },
                 repeatNewEmail(value) {
-                    if (!value) return 'Neues E-Mail wiederholen ist ein Pflichtfeld.'
-                    if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
-                    if(newEmail !== value) return 'Passwörter stimmen nicht überein.'
+                    if (!value) return 'Neue E-Mail wiederholen ist ein Pflichtfeld.'
+                    if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return 'Es muss eine gültige E-Mail eingegeben werden.'
+                    if(newEmail.value.value !== value) return 'E-Mail Addressen stimmen nicht überein.'
 
-                    return 'Es muss eine gültige E-Mail eingegeben werden.'
+                    return true
                 }
             }
         })

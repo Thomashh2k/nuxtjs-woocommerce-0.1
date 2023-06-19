@@ -2,7 +2,6 @@
   <v-card class="account-card-bg">
     <v-tabs
     v-if="!$route.path.includes('register')"
-      v-model="tab"
       class="tw-bg-violet-900"
     >
       <v-tab to="/account/dashboard">
@@ -20,9 +19,7 @@
       </div> -->
     </v-tabs>
     <v-card-text style="margin: unset; padding: unset">
-      <v-window v-model="tab">
-          <NuxtPage/>
-      </v-window>
+      <NuxtPage/>
     </v-card-text>
   </v-card>
 </template>

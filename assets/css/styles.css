@@ -17,3 +17,7 @@
 .v-window__container {
   width: 100% !important;
 }
+
+/* div, span {
+  @apply tw-text-purple-50;
+} */

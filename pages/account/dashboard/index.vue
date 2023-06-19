@@ -1,61 +1,59 @@
 <template>
-  <div class="tw-flex tw-flex-row">
-    <div class="tw-w-1/6 max-[1325px]:tw-w-16">
-      <v-list nav class="card-bg tw-flex tw-flex-col tw-h-full">
-        <v-list-item  @click="tab = 'person'">
-          <div class="tw-text-purple-50 tw-normal-case  tw-flex" :class="tab === 'person' ? 'text-yellow-darken-2' : ''">
-            <v-icon icon="mdi-account" class="tw-mr-2"></v-icon>
-            <p class="max-[1325px]:tw-hidden" >Person</p>
-          </div>
-        </v-list-item>
-        <v-list-item @click="tab = 'orders'">
-          <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'orders' ? 'text-yellow-darken-2' : ''">
-            <v-icon icon="mdi-truck-delivery-outline" class="tw-mr-2"></v-icon>
-            <p class="max-[1325px]:tw-hidden">Bestellungen</p>
-          </div>
-        </v-list-item>
-        <v-list-item @click="tab = 'deliveryAddress'">
-          <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'deliveryAddress' ? 'text-yellow-darken-2' : ''">
-            <v-icon icon="mdi-truck-delivery-outline" class="tw-mr-2"></v-icon>
-            <p class="max-[1325px]:tw-hidden">Lieferanschrift</p>
-          </div>
-        </v-list-item>
-        <v-list-item @click="tab = 'billAddress'">
-          <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'billAddress' ? 'text-yellow-darken-2' : ''">
-            <v-icon icon="mdi-file" class="tw-mr-2"></v-icon>
-            <p class="max-[1325px]:tw-hidden">Rechnungsanschrift</p>
-          </div>
-        </v-list-item>
-      </v-list>
-    </div>
-    <v-window v-model="tab" class="tw-flex tw-justify-center tw-w-full tw-h-full tw-items-center">
-        <v-window-item value="person" class="tw-w-full">
-          <h2 class="tw-text-xl tw-text-purple-50 tw-text-center max-[960px]:tw-p-8 min-[960px]:tw-pt-4">Account Daten</h2>
-          <PersonForm class="max-[960px]:tw-p-8 min-[960px]:tw-pt-8" :user-info="userInfo"  @save="updateUserInfo"/>
+  <div class="tw-flex">
+    <v-tabs v-model="tab" direction="vertical">
+      <v-tab value="person">
+        <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'person' ? 'text-yellow-darken-2' : ''">
+          <v-icon icon="mdi-account" class="tw-mr-2"></v-icon>
+          <p class="max-[1325px]:tw-hidden" >Person</p>
+        </div>
+      </v-tab>
+      <v-tab value="orders">
+        <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'orders' ? 'text-yellow-darken-2' : ''">
+          <v-icon icon="mdi-truck-delivery-outline" class="tw-mr-2"></v-icon>
+          <p class="max-[1325px]:tw-hidden">Bestellungen</p>
+        </div>
+      </v-tab>
+      <v-tab value="deliveryAddress">
+        <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'deliveryAddress' ? 'text-yellow-darken-2' : ''">
+          <v-icon icon="mdi-truck-delivery-outline" class="tw-mr-2"></v-icon>
+          <p class="max-[1325px]:tw-hidden">Lieferanschrift</p>
+        </div>
+      </v-tab>
+      <v-tab value="billAddress">
+        <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'billAddress' ? 'text-yellow-darken-2' : ''">
+          <v-icon icon="mdi-file" class="tw-mr-2"></v-icon>
+          <p class="max-[1325px]:tw-hidden">Rechnungsanschrift</p>
+        </div>
+      </v-tab>
+    </v-tabs>
+    <v-window v-model="tab" class="tw-w-full">
+        <v-window-item :value="'person'">
+          <h2 class="tw-text-xl tw-text-purple-50 tw-text-center max-[1325px]:tw-p-8 min-[1325px]:tw-pt-4">Account Daten</h2>
+          <PersonForm class="max-[1325px]:tw-p-8 min-[1325px]:tw-pt-8" :user-info="userInfo"  @save="updateUserInfo"/>
         </v-window-item>
-        <v-window-item value="orders" class="tw-w-full">
-          <h2 class="tw-text-xl tw-text-purple-50 tw-text-center max-[960px]:tw-p-8 min-[960px]:tw-pt-4">Bestellungen</h2>
-          <ListOrders class="max-[960px]:tw-p-8 min-[960px]:tw-pt-8"/>
+        <v-window-item :value="'orders'">
+          <h2 class="tw-text-xl tw-text-purple-50 tw-text-center max-[1325px]:tw-p-8 min-[1325px]:tw-pt-4">Bestellungen</h2>
+          <ListOrders class="max-[1325px]:tw-p-8 min-[1325px]:tw-pt-8"/>
         </v-window-item>
-        <v-window-item value="deliveryAddress" class="tw-w-full">
-          <v-row class="max-[960px]:tw-p-8 min-[960px]:tw-pt-4">
-            <v-col class="max-[960px]:tw-hidden"></v-col>
+        <v-window-item :value="'deliveryAddress'">
+          <v-row class="max-[1325px]:tw-p-8 min-[1325px]:tw-pt-4">
+            <v-col class="max-[1325px]:tw-hidden"></v-col>
             <v-col cols="12" md="8">
               <h2  class="tw-text-xl tw-text-purple-50 tw-text-center">Lieferanschrift</h2>
             </v-col>
-            <v-col class="max-[960px]:tw-hidden"></v-col>
+            <v-col class="max-[1325px]:tw-hidden"></v-col>
           </v-row>
           <AddressForm  :address-info="customer.shipping" @save="updateShippingInfo" />
         </v-window-item>
-        <v-window-item value="billAddress" class="tw-w-full">
-          <v-row class="max-[960px]:tw-p-8 min-[960px]:tw-pt-4">
-            <v-col class="max-[960px]:tw-hidden"></v-col>
+        <v-window-item :value="'billAddress'">
+          <v-row class="max-[1325px]:tw-m-8 min-[1325px]:tw-pt-4">
+            <v-col class="max-[1325px]:tw-hidden"></v-col>
             <v-col cols="12" md="8">
               <h2 class="tw-text-xl tw-text-purple-50  tw-text-center">Rechnungsanschrift</h2>
             </v-col>
-            <v-col class="max-[960px]:tw-hidden"></v-col>
+            <v-col class="max-[1325px]:tw-hidden"></v-col>
           </v-row>
-          <AddressForm  :address-info="customer.billing" :disabled="customer.billing.sameAsShipping" @save="updateBillingInfo">
+          <AddressForm :address-info="customer.billing" :disabled="customer.billing.sameAsShipping" @save="updateBillingInfo">
           <template v-slot:before-form>
             <div class="tw-flex tw-justify-center">
               <v-switch v-model="customer.billing.sameAsShipping" color="green" class="tw-text-purple-50">
@@ -67,7 +65,7 @@
           </template>
           </AddressForm>
         </v-window-item>
-      </v-window>
+    </v-window>
   </div>
 </template>
 <script>
@@ -89,9 +87,11 @@ export default {
     const authStore = useAuth();
     const customer = authStore.getCustomer;
     const userInfo = authStore.getUser;
-    const tab = 'person';
-    return { authStore, customer, userInfo, tab }
+    return { authStore, customer, userInfo}
   },
+   data: () => ({
+      tab: 'person',
+  }),
   methods: {
     async updateShippingInfo($event) {
       this.customer.shipping = $event

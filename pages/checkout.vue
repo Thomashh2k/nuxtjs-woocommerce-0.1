@@ -34,7 +34,7 @@
               />
             </v-window-item>
             <v-window-item value="payment">
-              <PaymentForm class="tw-w-full tw-h-full" @checked-out="checkedout"/>
+              <PaymentForm class="tw-w-full tw-h-full" :order-data="{}" @checked-out="checkedout"/>
             </v-window-item>
           </v-window>
         </v-card-text>
@@ -49,6 +49,7 @@ import { ref, reactive } from 'vue';
 import PaymentForm from '@/components/Checkout/PaymentForm';
 import CartContents from '@/components/Checkout/CartContents';
 import { checkout } from "@/utils/functions";
+import { useAuth } from '@/store/useAuth.js'
 
 const checkoutForm = ref(null)
 export default {
@@ -75,25 +76,32 @@ export default {
   data() {
     return {
       tab: 'cart',
-      addressInfo: null
+      addressInfo: null,
+      authStore: useAuth(),
     }
   },
   watch: {
-    tab(newV, oldV) {
+    async tab(newV, oldV) {
       debugger
-      if(this._suppressWatcher) {
-        this._suppressWatcher = false
+      if(this._suppressWatchers) {
+        this._suppressWatchers = false
         return
       }
-      if(this.$refs.checkoutForm !== undefined) {
-        this.$refs.checkoutForm.submitCheckout()
-        if(this.addressInfo === null || this.$refs.checkoutForm.hasFormErrors) {
-          this._suppressWatcher = true
-          this.tab = newV == 'payments' ? 'shipping' : newV
+      if(oldV === 'shipping') {
+        const formValues = await this.$refs.checkoutForm.submitForm()
+        if(this.authStore.isLoggedIn) {
+         if(formValues.addressValues === undefined) {
+          this.tab = 'shipping'
+          this._suppressWatchers = true
+         }
+        } else {
+          if(formValues.addressValues === undefined || formValues.notLoggedInVal === undefined) {
+            this.tab = 'shipping'
+            this._suppressWatchers = true
+          }
         }
-      } else {
-        this._suppressWatcher = true
-        this.tab = 'shipping'
+        console.log('order-data: ' + values)
+        debugger
       }
     }
   },
@@ -102,7 +110,6 @@ export default {
       this.addressInfo = $event
     },
     checkedout($event, tId){
-      checkout(addressInfo, $event, tId, undefined, undefined, this.$router)
     },
   }
 }

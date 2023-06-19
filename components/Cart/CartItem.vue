@@ -2,6 +2,7 @@
     <v-menu 
         transition="slide-y-transition"
         :close-on-content-click="false"
+        open-on-hover
         location="bottom"
         width="300"
     >

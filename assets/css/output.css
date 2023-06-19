@@ -719,6 +719,10 @@ video {
   margin-top: 1.5rem;
 }
 
+.tw-mt-10 {
+  margin-top: 2.5rem;
+}
+
 .tw-block {
   display: block;
 }

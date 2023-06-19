@@ -1,7 +1,7 @@
 <template>
     <v-row>
-        <v-col class="max-[960px]:tw-hidden"></v-col>
-        <v-col cols="12" md="8" class="md:tw-p-8">
+        <v-col v-if="showCols" class="max-[960px]:tw-hidden"></v-col>
+        <v-col cols="12" :md="showCols ? 8 : 12" class="md:tw-p-8">
             <v-form
                 ref="addressForm"
                 @submit="submit"
@@ -96,7 +96,7 @@
                     color="rgb(250, 245, 255)"
                 />
             <slot name="after-form"></slot>
-            <div class="tw-flex tw-justify-center">
+            <div v-if="showSaveBtn" class="tw-flex tw-justify-center">
                 <v-btn
                     variant="outlined"
                     color="success"
@@ -109,7 +109,7 @@
             </div>
         </v-form>
         </v-col>
-        <v-col class="max-[960px]:tw-hidden"></v-col>
+        <v-col v-if="showCols" class="max-[960px]:tw-hidden"></v-col>
     </v-row>
 </template>
 <script>
@@ -123,13 +123,17 @@ export default {
             type: Object,
             required: true
         },
+        showCols: {
+            type: Boolean,
+            default: true
+        },
         disabled: {
             type: Boolean,
             default: false
         },
         showSaveBtn: {
             type: Boolean,
-            default: false
+            default: true
         }
     },
     setup(props, context) {
@@ -190,7 +194,6 @@ export default {
         const postcode = useField('postcode')
         const city = useField('city')
         const country = useField('country')
-        debugger
         firstName.value.value = props.addressInfo.firstName
         lastName.value.value = props.addressInfo.lastName
 
@@ -201,8 +204,8 @@ export default {
         country.value.value = props.addressInfo.country
 
         const submit = handleSubmit(values => {
-            debugger
             context.emit('save', values)
+            return values
         })
         return { firstName, lastName, address1, address2, postcode, city, country, submit }
     },

@@ -47,6 +47,10 @@ export default {
     totalPrice: {
       type: String,
       required: true
+    },
+    orderData: {
+      type: Object,
+      required: true
     }
   },
   emits: ['checkedOut'],
@@ -70,7 +74,8 @@ export default {
       if(!this.agreedToAGB || !this.agreedToCookies || !this.agreedToNewsletter) {
         return false
       }
-      this.$emit('checkedOut', this.paymentMethod, tId)
+      checkout(addressInfo, this.paymentMethod, tId, undefined, undefined, this.$router)
+
     }
   }
 }
