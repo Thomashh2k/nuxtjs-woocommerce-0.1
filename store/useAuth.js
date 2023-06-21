@@ -55,7 +55,10 @@ export const useAuth = defineStore("userState", {
     },
     logout() {
       this.jwt = ''
+      this.refreshJwt = ''
+      this.customerJwt = ''
       this.user = {}
+      this.customer = {}
     }
   },
   getters: {

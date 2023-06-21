@@ -62,7 +62,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       const context = operation.getContext();
       if(response.data.login !== undefined) {
         authorization.value = response.data.login.authToken
-        woocommerceSession.value = response.data.login.customer.jwtAuthToken
+        // woocommerceSession.value = response.data.login.customer.jwtAuthToken
 
       }
       const {
@@ -74,6 +74,12 @@ export default defineNuxtPlugin((nuxtApp) => {
       if (process.client && session) {
         if (session !== cookie.value) {
           cookie.value = session;
+        }
+      }
+      const returnedHeader = headers.get('woocommerce-session');
+      if (returnedHeader) {
+        if ( localStorage.getItem('woo-session') !== returnedHeader ) {
+          cookie.value = headers.get('woocommerce-session');
         }
       }
       return response;

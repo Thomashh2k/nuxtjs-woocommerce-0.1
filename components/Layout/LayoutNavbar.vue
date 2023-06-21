@@ -315,7 +315,6 @@ export default {
         }
       },
       redirectToSearchPage() {
-        
         if(this.search !== '') {
           if(this.search !== this.$route.query.q) {
             console.log('push')

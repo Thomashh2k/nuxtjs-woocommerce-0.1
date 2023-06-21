@@ -1,52 +1,47 @@
 <template>
   <v-row>
-    <v-col md="1"></v-col>
-    <v-col cols="12" md="10">
-      <v-card class="account-card-bg">
-        <v-tabs
-          v-model="tab"
-          class="tw-bg-violet-900"
-          align-tabs="center"
-          >
-          <!-- :direction="window.screen.width < 600 ? 'vertical' : 'horizontal'" -->
-          <v-tab value="cart">
-            <div class="tw-text-purple-50 tw-normal-case" >Warenkorb</div>
-          </v-tab>
-          <v-tab value="shipping">
-            <div class="tw-text-purple-50 tw-normal-case">Versand</div>
-          </v-tab>
-          <v-tab value="payment">
-            <div class="tw-text-purple-50 tw-normal-case">Bezahlen</div>
-          </v-tab>
-        </v-tabs>
-        <v-card-text style="margin: unset; padding: unset">
-          <v-window v-model="tab">
-            <v-window-item value="cart">
-              <CartContents class="tw-w-full" :address-info="addressInfo" :tab-pos="tab" @reset-tab="tab = $event" style="height: 87%;"/>
-            </v-window-item>
-            <v-window-item value="shipping">
+    <v-col cols="12">
+      <v-card class="account-card-bg ">
+        <v-card-text>
+          <div class="max-[960px]:tw-flex tw-hidden">
+            <v-row>
+              <v-col>
+                <CartContents class="tw-w-full " :address-info="addressInfo" :tab-pos="tab" @reset-tab="tab = $event" style="height: 87%;"/> -->
+              </v-col>
+            </v-row>
+          </div>
+          <v-row>
+            <v-col cols="12" sm="12" md="6" xl="6">
               <CheckoutForm 
                 ref="checkoutForm"
-                class="tw-w-full tw-h-full"
-                :tab-pos="tab"
-                @updated-address-info="updatedAddressInfo"
-                @reset-tab="tab = $event"
               />
-            </v-window-item>
-            <v-window-item value="payment">
-              <PaymentForm class="tw-w-full tw-h-full" :order-data="{}" @checked-out="checkedout"/>
-            </v-window-item>
-          </v-window>
+              <v-radio-group v-model="paymentMethod" class="tw-text-purple-50" color="#4c1d95">
+                <v-radio label="Banküberweisung" value="bacs"></v-radio>
+                <v-radio label="Klarna" value="klarna"></v-radio>
+                <v-radio label="Paypal" value="ppcp-gateway"></v-radio>
+              </v-radio-group>
+              <Checkboxes ref="checkboxForm" :order-data="orderData" @checked-out="checkedout"/>
+              <div class="tw-w-full tw-flex tw-justify-center">
+                <PaypalButton v-if="paymentMethod === 'ppcp-gateway'" :is-valid-to-click="checkoutIsValid" @onPay="submitOrder" @click="createOrderData"/>
+                <v-btn v-if="paymentMethod === 'bacs'" color="green" variant="outlined" @click="submitOrder()" >
+                  <div class="tw-normal-case">Bestellen</div>
+                </v-btn>
+              </div>
+            </v-col>
+            <v-col cols="12" sm="12" md="6" xl="6">
+              <CartContents class="tw-w-full max-[960px]:tw-hidden" :address-info="addressInfo" :tab-pos="tab" @reset-tab="tab = $event" style="height: 87%;"/>
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-card>
     </v-col>
-    <v-col md="1"></v-col>
   </v-row>
 </template>
 
 <script>
 import { ref, reactive } from 'vue';
-import PaymentForm from '@/components/Checkout/PaymentForm';
+import PaypalButton from '@/components/Checkout/Payments/PaypalButton.vue'
+import Checkboxes from '@/components/Checkout/Checkboxes';
 import CartContents from '@/components/Checkout/CartContents';
 import { checkout } from "@/utils/functions";
 import { useAuth } from '@/store/useAuth.js'
@@ -55,7 +50,8 @@ const checkoutForm = ref(null)
 export default {
   name: 'checkout',
   components: {
-    PaymentForm,
+    Checkboxes,
+    PaypalButton,
     CartContents
   },
   setup() {
@@ -75,33 +71,19 @@ export default {
   },
   data() {
     return {
-      tab: 'cart',
+      paymentMethod: 'bacs',
       addressInfo: null,
+      orderData: null,
+      aggreed: null,
       authStore: useAuth(),
     }
   },
-  watch: {
-    async tab(newV, oldV) {
-      debugger
-      if(this._suppressWatchers) {
-        this._suppressWatchers = false
-        return
-      }
-      if(oldV === 'shipping') {
-        const formValues = await this.$refs.checkoutForm.submitForm()
-        if(this.authStore.isLoggedIn) {
-         if(formValues.addressValues === undefined) {
-          this.tab = 'shipping'
-          this._suppressWatchers = true
-         }
-        } else {
-          if(formValues.addressValues === undefined || formValues.notLoggedInVal === undefined) {
-            this.tab = 'shipping'
-            this._suppressWatchers = true
-          }
-        }
-        console.log('order-data: ' + values)
-        debugger
+  computed: {
+    checkoutIsValid() {
+      if((this.orderData !== null && this.orderData !== undefined) && (this.aggreed !== null && this.aggreed !== undefined)) {
+        return true
+      } else {
+        return false
       }
     }
   },
@@ -109,7 +91,18 @@ export default {
     updatedAddressInfo ($event) {
       this.addressInfo = $event
     },
-    checkedout($event, tId){
+    async createOrderData() {
+
+      this.orderData = await this.$refs.checkoutForm.submitForm()
+      this.aggreed = await this.$refs.checkboxForm.submitCheckboxes()
+
+    },
+    async submitOrder() {
+      await this.createOrderData()
+      if(this.aggreed) {
+        debugger
+        await checkout(this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod, this.$router)
+      }
     },
   }
 }

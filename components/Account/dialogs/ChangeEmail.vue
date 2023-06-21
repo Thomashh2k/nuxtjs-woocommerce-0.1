@@ -74,7 +74,6 @@ export default {
         const newEmail = useField('newEmail')
         const repeatNewEmail = useField('repeatNewEmail')
 
-
         const submit = handleSubmit(async (values) => {
             const auth = useAuth()
             await updateEmail(auth.getUser.id, values.newEmail)

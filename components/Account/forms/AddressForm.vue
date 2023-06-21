@@ -202,12 +202,31 @@ export default {
         postcode.value.value = props.addressInfo.postcode
         city.value.value = props.addressInfo.city
         country.value.value = props.addressInfo.country
+        if(country.value.value === null || country.value.value === undefined || country.value.value === '') {
+            country.value.value = 'DE'
+        }
 
         const submit = handleSubmit(values => {
             context.emit('save', values)
             return values
         })
         return { firstName, lastName, address1, address2, postcode, city, country, submit }
+    },
+    watch: {
+        addressInfo: {
+            handler: function (val) {
+                debugger
+                this.firstName.value.value = val.firstName
+                this.lastName.value.value = val.lastName
+
+                this.address1.value.value = val.address1
+                this.address2.value.value = val.address2
+                this.postcode.value.value = val.postcode
+                this.city.value.value = val.city
+                this.country.value.value = val.country
+            },
+            deep: true
+        }
     },
     data() {
         return {

@@ -1,13 +1,12 @@
 <template>
-  <section class="tw-container tw-p-4 tw-py-2 tw-mx-auto">
-        <v-form @submit="submit">
-          <div class="tw-mx-auto">
-            <AddressForm ref="addressForm" :address-info="customer.shipping" :show-save-btn="false" :show-cols="false"/>
+  <section class="tw-container tw-py-2 tw-mx-auto">
+    <v-form @submit="submit">
+      <div class="tw-mx-auto">
             <div v-if="!authStore.isLoggedIn">
               <v-text-field
                 v-model="email.value.value"
                 label="E-Mail"
-                class="tw-m-2"
+                class="tw-mx-2"
                 :error-messages="email.errorMessage.value"
                 variant="solo"
                 density="compact"
@@ -17,7 +16,7 @@
               <v-text-field
                 v-model="emailRepeat.value.value"
                 label="E-Mail wiederholen"
-                class="tw-m-2"
+                class="tw-mx-2"
                 :error-messages="emailRepeat.errorMessage.value"
                 variant="solo"
                 density="compact"
@@ -27,7 +26,7 @@
               <v-text-field
                 v-model="phone.value.value" 
                 label="Telefon"
-                class="tw-m-2"
+                class="tw-mx-2"
                 :error-messages="phone.errorMessage.value"
                 variant="solo"
                 density="compact"
@@ -35,6 +34,15 @@
                 color="rgb(250, 245, 255)"
               />
             </div>
+            <AddressForm ref="shippingForm" :address-info="customer.shipping" :show-save-btn="false" :show-cols="false"/>
+            <div class="tw-flex tw-justify-items-center">
+              <v-switch v-model="useDifferentBillingAddress"  class="tw-pl-2">
+                <template v-slot:label>
+                  <span class="tw-text-purple-50">Abweichende Rechnungsadresse verwenden</span>
+                </template>
+              </v-switch>
+            </div>
+            <AddressForm v-if="useDifferentBillingAddress" ref="billingForm" :address-info="customer.billing" :show-save-btn="false" :show-cols="false"/>
           </div>
         </v-form>
   </section>
@@ -43,15 +51,12 @@
 <script>
 import { useField, useForm } from "vee-validate";
 import { useAuth } from '@/store/useAuth.js'
-import { uid } from "uid";
-
-import CHECKOUT_MUTATION from "@/apollo/mutations/CHECKOUT_MUTATION.gql";
+import { storeToRefs } from 'pinia'
 import AddressForm from "../Account/forms/AddressForm.vue";
-import { validationScheme } from '@/components/Checkout/validation';
-import { computed } from 'vue'
 export default {
   data() {
     return {
+      useDifferentBillingAddress: false,
       countryItems: [
         {title: 'Deutschland', value: 'DE'},
         {title: 'Österreich', value: 'AT'},
@@ -61,32 +66,6 @@ export default {
   },
   components: {
     AddressForm,
-  },
-  emits: ['updatedAddressInfo', 'resetTab', 'onDataFilledOut'],
-  props: {
-    tabPos: {
-      type: String,
-      required: true
-    }
-  },
-  watch: {
-    // async tabPos(newVal, oldVal) { 
-    //   debugger
-    //   const formValues = await this.submitForm()
-    //   if(this.authStore.isLoggedIn) {
-    //     if(formValues.addressValues === undefined) {
-    //       if(newVal === 'payment') {
-    //         this.$emit('resetTab', 'shipping')
-    //       }
-    //     }
-    //   } else {
-    //     if(formValues.addressValues === undefined || formValues.notLoggedInVal === undefined) {
-    //       if(newVal === 'payment') {
-    //         this.$emit('resetTab', 'shipping')
-    //       }
-    //     }
-    //   }
-    // }
   },
   setup(props, context) {
     const { handleSubmit, handleReset } = useForm({
@@ -119,29 +98,43 @@ export default {
     const email = useField('email')
     const emailRepeat = useField('emailRepeat')
     const phone = useField('phone')
-    const customer = authStore.getCustomer;
+    const { getCustomer } = storeToRefs(authStore);
+    const customer = getCustomer
 
     const submit = handleSubmit(values => {
-      context.emit('updatedAddressInfo', values)
       return values
     })
 
 
     return { email, emailRepeat, phone, submit, authStore, customer }
   },
+  watch: {
+    getCustomer(newV) {
+      this.customer = newV
+    }
+  },
   methods: {
     async submitForm() {
       debugger
       if(this.authStore.isLoggedIn) {
-        const addressValues = await this.$refs.addressForm.submit()
-        this.$emit('onDataFilledOut', addressValues)
-        return { addressValues }
+        const shippingAddress = await this.$refs.shippingForm.submit()
+        let billingAddress
+        if(this.useDifferentBillingAddress) {
+          billingAddress = await this.$refs.shippingForm.submit()
+        } else {
+          billingAddress = shippingAddress
+        }
+        return { shippingAddress, billingAddress }
 
       } else {
-        const addressValues = await this.$refs.addressForm.submit()
+        const shippingAddress = await this.$refs.shippingForm.submit()
+        if(this.useDifferentBillingAddress) {
+          billingAddress = await this.$refs.shippingForm.submit()
+        } else {
+          billingAddress = shippingAddress
+        }
         const notLoggedInVal = await this.submit()
-        this.$emit('onDataFilledOut', {addressValues, notLoggedInVal})
-        return {addressValues, notLoggedInVal}
+        return {shippingAddress, billingAddress, notLoggedInVal}
       }
     }
   }

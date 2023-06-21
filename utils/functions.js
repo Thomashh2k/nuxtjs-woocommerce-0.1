@@ -110,6 +110,7 @@ export function getCookie(cName) {
 }
 export async function addProductToCart (product) {
   const cart = useCart();
+  cart.addToCart(product);
   const productId = product.databaseId;
   const quantity = 1;
   const addToCartvariables = {
@@ -125,6 +126,7 @@ export async function addProductToCart (product) {
 
   onError((err) => {
     const snackbar = useSnackbar()
+    cart.removeProductFromCart(product);
     if(err.message.includes('<a href="http://localhost:8080" class="button wc-forward">Warenkorb anzeigen</a> Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
       snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.', 'error')
     } else {
@@ -132,8 +134,6 @@ export async function addProductToCart (product) {
     }
   })
   onDone((result) => {
-    
-    cart.addToCart(product);
     cart.addCartId(result.data.addToCart.cartItem.key);
     cart.addCartDetails(result.data.addToCart.cart);
   })
@@ -160,20 +160,14 @@ export function removeProductFromCart (content) {
   })
 }
 
-export async function checkout(shipping, paymentMethod, transactionId, shippingMethod, billing, router) {
+export async function checkout(shipping, billing, paymentMethod) {
   shipping.address1 = shipping.address
-  delete shipping.zipCode
-  delete shipping.address
-  if(billing == undefined) {
-    billing = shipping
-  }
+  debugger
   const checkoutVariables = {
     input: {
       shipping: shipping,
       billing: billing,
-      transactionId: transactionId,
       paymentMethod: paymentMethod,
-      shippingMethod: shippingMethod,
     }
   };
   const { mutate, onError, onDone } = useMutation(CHECKOUT_MUTATION, {

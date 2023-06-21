@@ -4,7 +4,7 @@
         v-model:items-per-page="itemsPerPage"
         :headers="headers"
         :items-length="totalItems"
-        :items="serverItems"
+        :items="orders"
         :loading="loading"
         show-expand
         color="primary"
@@ -47,6 +47,7 @@
 <script>
 import * as labsComponents from 'vuetify/labs/components';
 import {mdiChevronUp, mdiChevronDown} from '@mdi/js';
+import { getOrders } from '@/utils/order'
 
 export default {
     name: 'ListOrders',
@@ -74,7 +75,7 @@ export default {
                 { title: 'Kosten insgesammt', key: 'total', align: 'end' },
                 { title: '', key: 'data-table-expand' }
             ],
-            serverItems: [
+            orders: [
                 { id: 1, status: 'In Bearbeitung', date: '2021-01-01', dateCompleted: '2021-01-01', paymentMethodTitle: 'PayPal', total: '100€' },
                 { id: 2, status: 'In Bearbeitung', date: '2021-01-01', dateCompleted: '2021-01-01', paymentMethodTitle: 'Klarna', total: '100€' },
                 { id: 3, status: 'Zugestellt', date: '2021-01-01', dateCompleted: '2021-01-01', paymentMethodTitle: 'PayPal', total: '100€' },
@@ -83,6 +84,9 @@ export default {
             loading: false,
             totalItems: 0,
         }
+    },
+    created() {
+      this.orders = getOrders('', 10)
     }
 }
 </script>

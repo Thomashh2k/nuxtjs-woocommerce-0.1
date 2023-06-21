@@ -3,13 +3,16 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
 import {loadScript} from '@paypal/paypal-js';
 import {onMounted, defineEmits} from 'vue';
 import { useCart } from "@/store/useCart";
 
 const cart = useCart();
 
-const emit = defineEmits(['onPay'])
+const emit = defineEmits(['onPay', 'click'])
+const props = defineProps(['isValidToClick'])
+
 onMounted(async() => {
     try {
         const paypal = await loadScript({
@@ -36,7 +39,23 @@ onMounted(async() => {
                     }],
                 });
             },
+            // onInit: function(data, actions) {
+            //     debugger
+            //     if(props.isValidToClick) {
+            //         actions.enable();
+            //     }
+            //     watch(() => props.isValidToClick, (newValue) => {
+            //         if(newValue) {
+            //             actions.enable();
+            //         } else {
+            //             actions.disable();
+            //         }
+            //     });
+            // },
             onApprove: (data, actions) => onPaid(data, actions),
+            onClick: function () {
+                emit('click')
+            },
             style: {
                 // Adapt to your needs
                 layout: 'vertical',
@@ -55,11 +74,10 @@ onMounted(async() => {
     }
 });
 const onPaid = function(data, actions) {
+    debugger
     
-    console.log('data')
-    console.log(data)
     actions.order.capture().then(function(orderData) {
-        
+        debugger
         console.log('orderData')
         console.log(orderData)
         emit('onPay', { orderData, data})
