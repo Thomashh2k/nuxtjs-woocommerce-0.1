@@ -96,7 +96,7 @@ export default {
     methods: {
         productsGroupLength() {
             let _productsGroupLength = 0
-            debugger
+            
             const slideGroupWrapper = this.$refs.section;
             const visibleWidth = slideGroupWrapper.getBoundingClientRect().width;
             let totalWidth = 0

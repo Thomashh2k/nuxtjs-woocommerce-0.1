@@ -112,7 +112,7 @@ onBeforeUnmount(() => {
 })
 
 function redirectToCategory(cat) {
-  debugger
+  
   if(props.isSearchPage) {
     router.push({path: '/search/' + cat.slug, query: { id: cat.id, q: props.searchQuery }})
     categoriesStore.setActiveCategory(cat)
@@ -131,7 +131,7 @@ const breadcrumbCatItems = computed(() => {
     items.push(_item)
   }
   items.push({ title: currentCategory?.value.name })
-  debugger
+  
   return items
 })
 

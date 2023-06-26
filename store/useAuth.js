@@ -54,6 +54,37 @@ export const useAuth = defineStore("userState", {
       this.customer = customer
     },
     logout() {
+      Object.assign(state, {
+        user: {
+          email: null,
+          firstName: null,
+          lasstName: null,
+          freshlyRegistered: false
+        },
+        customer: {
+          billing: {
+            address1: '',
+            address2: '',
+            city: '',
+            country: '',
+            firstName: '',
+            lastName: '',
+            postcode: ''
+          },
+          shipping: {
+            address1: '',
+            address2: '',
+            city: '',
+            country: '',
+            firstName: '',
+            lastName: '',
+            postcode: ''
+          },
+          orders: {
+      
+          }
+        }
+      })
       this.jwt = ''
       this.refreshJwt = ''
       this.customerJwt = ''
@@ -64,6 +95,9 @@ export const useAuth = defineStore("userState", {
   getters: {
     getToken() {
       return this.jwt
+    },
+    getRefreshToken() {
+      return this.refreshJwt
     },
     getUser() {
       return this.user

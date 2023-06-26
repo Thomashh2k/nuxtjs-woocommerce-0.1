@@ -159,7 +159,7 @@ export default {
                 },
                 address2(value) {
                     if (!value) return 'Hausnummer ist ein Pflichtfeld.'
-                    if (value?.length >= 2) return true
+                    if (value?.length >= 1) return true
 
                     return 'Hausnummer muss mindestens zwei Buchstaben enthalten.'
                 },
@@ -176,7 +176,7 @@ export default {
                     return 'Stadt muss mindestens zwei Buchstaben enthalten.'
                 },
                 // country(value) {
-                //     debugger
+                //     
                 //     if (!value) return 'Stadt ist ein Pflichtfeld.'
                 //     if (value?.length >= 2) return true
 
@@ -215,7 +215,7 @@ export default {
     watch: {
         addressInfo: {
             handler: function (val) {
-                debugger
+                
                 this.firstName.value.value = val.firstName
                 this.lastName.value.value = val.lastName
 

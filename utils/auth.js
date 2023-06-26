@@ -1,7 +1,9 @@
 import { useAuth } from "@/store/useAuth";
 import { useSnackbar } from "@/store/snackbar";
 import LOGIN_USER_MUTATION from "@/apollo/mutations/LOGIN_USER_MUTATION.gql";
+import REFRESH_AUTH_TOKEN from "@/apollo/mutations/REFRESH_AUTH_TOKEN.gql";
 import REGISTER_CUSTOMER_MUTATION from '@/apollo/mutations/REGISTER_CUSTOMER_MUTATION.gql'
+
 export async function login (payload) {
   return new Promise((resolve, reject) => {
     const authStore = useAuth();
@@ -10,7 +12,7 @@ export async function login (payload) {
     const { mutate, onDone, onError} = useMutation(LOGIN_USER_MUTATION, { variables: loginVariables });
     mutate(payload);
     const resultDone = onDone((result) => {
-      debugger
+      
       const snackbar = useSnackbar()
 
       if(result.data.login.customer.billing.firstName === null) {
@@ -27,7 +29,7 @@ export async function login (payload) {
       resolve()
     })
     const resultErr = onError((err) => {
-      debugger
+      
       const snackbar = useSnackbar()
       snackbar.setMessage("Login fehlgeschlagen. Stellen sie sicher das, die Anmeldedaten korrekt sind.", 'error')
       reject()
@@ -76,4 +78,51 @@ export async function registerCustomer(payload, router) {
     snackbar.setMessage(err.message, 'error')
   })
 
+}
+
+export function checkExpired(accessToken) {
+  debugger
+  if (process.client) {  
+    const expIndex = 'exp'
+    const decodedToken = parseJwt(accessToken)
+    /*  
+        Expiry time is in seconds with our example data, 
+        we need milliseconds (might be different in other implementations) so we do *1000
+    */
+    const expiresAt = new Date((decodedToken[expIndex]) * 1000)
+    const now = new Date()
+    if (now < expiresAt) {
+        //  Not expired
+        return false;
+    } else {
+        //  Expired
+        return true;
+    }
+  }
+}
+
+export async function refreshAuthToken(refreshToken) {
+  debugger
+  const refreshVariables = { jwtRefreshToken: refreshToken };
+  const { mutate, onDone, onError} = useMutation(REFRESH_AUTH_TOKEN, { variables: refreshVariables });
+  mutate(refreshVariables);
+  const resultDone = onDone((result) => {
+    const authStore = useAuth();
+    authStore.setToken(result.data.refreshAuthToken.authToken)
+    authStore.setRefreshToken(result.data.refreshAuthToken.refreshToken)
+  })
+  const resultErr = onError((err) => {
+    return err
+  })
+}
+
+function parseJwt (token) {
+  debugger
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
 }

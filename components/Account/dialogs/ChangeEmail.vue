@@ -34,7 +34,7 @@
                         </div>    
                     </v-btn>
                     <v-btn color="success" variant="outlined" rounded="xl" @click="submit" >
-                        <div class="tw-normal-case">
+                        <div class="tw-normal-case text-success">
                             Speichern
                         </div>
                     </v-btn>

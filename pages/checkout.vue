@@ -92,15 +92,15 @@ export default {
       this.addressInfo = $event
     },
     async createOrderData() {
-
       this.orderData = await this.$refs.checkoutForm.submitForm()
+      
       this.aggreed = await this.$refs.checkboxForm.submitCheckboxes()
 
     },
     async submitOrder() {
       await this.createOrderData()
       if(this.aggreed) {
-        debugger
+        
         await checkout(this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod, this.$router)
       }
     },

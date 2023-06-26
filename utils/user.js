@@ -13,7 +13,7 @@ import { useSnackbar } from "@/store/snackbar";
 import { useAuth } from '@/store/useAuth.js'
 
 export async function updateUserInfo(userInfo) {
-  debugger
+  
   const userInfoVar = {
       input: {
         id: userInfo.id,

@@ -37,7 +37,7 @@ export async function pageSearchProducts(search, first, after = null, before = n
           const pageInfo = data.products.pageInfo;  
           // define a function to load the next page of results
           const loadMore = async (nextPage, pI, ipp, exclude) => {
-            debugger
+            
             let resp = null;
             resp = await result.fetchMore({
               variables: {
@@ -87,7 +87,7 @@ export function pageCategorySearchProducts(search, itemsPerPage, cursor, exclude
           const pageInfo = data.products.pageInfo;  
           // define a function to load the next page of results
           const loadMore = async (nextPage, pI, ipp, exclude) => {
-            debugger
+            
             let resp = null;
             resp = await result.fetchMore({
               variables: {

@@ -18,6 +18,9 @@
   width: 100% !important;
 }
 
-/* div, span {
+/* div:not(.text-red), span:not(.text-red) {
+  @apply tw-text-purple-50;
+}
+div:not(.text-success), span:not(.text-success) {
   @apply tw-text-purple-50;
 } */

@@ -115,10 +115,10 @@ export default {
   },
   methods: {
     async submitForm() {
-      debugger
+      
+      let billingAddress
       if(this.authStore.isLoggedIn) {
         const shippingAddress = await this.$refs.shippingForm.submit()
-        let billingAddress
         if(this.useDifferentBillingAddress) {
           billingAddress = await this.$refs.shippingForm.submit()
         } else {

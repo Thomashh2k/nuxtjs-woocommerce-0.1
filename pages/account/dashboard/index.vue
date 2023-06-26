@@ -83,7 +83,7 @@ export default {
     ListOrders
   },
   setup() {
-    debugger
+    
     const authStore = useAuth();
     const customer = authStore.getCustomer;
     const userInfo = authStore.getUser;
@@ -102,7 +102,7 @@ export default {
       await updateUserBilling(this.customer, this.userInfo)
     },
     async updateUserInfo($event) {
-      debugger
+      
       this.userInfo.firstName = $event.firstName
       this.userInfo.lastName = $event.lastName
       // this.userInfo.email = $event.email

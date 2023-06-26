@@ -101,7 +101,7 @@
                             <v-btn color="primary" rounded="xl" variant="outlined" to="/account/dashboard/orders" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;"><div class="tw-text-purple-50">Bestellungen</div></v-btn>
                           </v-card-text>
                           <v-card-actions class="tw-justify-center tw-flex tw-p-4">
-                            <v-btn color="red" rounded="xl" variant="outlined" @click="authStore.logout()"><div class="tw-normal-case">Logout</div></v-btn>
+                            <v-btn color="red" rounded="xl" variant="outlined" @click="authStore.logout()"><div class="tw-normal-case text-red">Logout</div></v-btn>
                           </v-card-actions>
                         </v-card>
                       </v-menu>
@@ -294,7 +294,7 @@ export default {
           }
       },
       async login() {
-        debugger
+        
         this.isLoggingIn = true
         try {
           await login(this.loginPL);

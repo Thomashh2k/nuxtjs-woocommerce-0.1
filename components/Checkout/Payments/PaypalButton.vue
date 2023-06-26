@@ -40,7 +40,7 @@ onMounted(async() => {
                 });
             },
             // onInit: function(data, actions) {
-            //     debugger
+            //     
             //     if(props.isValidToClick) {
             //         actions.enable();
             //     }
@@ -74,10 +74,10 @@ onMounted(async() => {
     }
 });
 const onPaid = function(data, actions) {
-    debugger
+    
     
     actions.order.capture().then(function(orderData) {
-        debugger
+        
         console.log('orderData')
         console.log(orderData)
         emit('onPay', { orderData, data})

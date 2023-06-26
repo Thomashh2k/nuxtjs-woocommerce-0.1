@@ -3,7 +3,6 @@
         v-model:expanded="expanded"
         v-model:items-per-page="itemsPerPage"
         :headers="headers"
-        :items-length="totalItems"
         :items="orders"
         :loading="loading"
         show-expand
@@ -20,25 +19,46 @@
         </th>
       </tr>
     </template>
-    <template v-slot:item="{ item }">
+    <template v-slot:item="{ item, isExpanded, toggleExpand }">
       <tr class="tw-text-purple-50">
         <td>{{ item.columns.id }}</td>
-        <td>{{ item.columns.status }}</td>
-        <td>{{ item.columns.date }}</td>
-        <td>{{ item.columns.dateCompleted }}</td>
+        <td>
+          <v-chip v-if="item.columns.status === 'FAILED'" color="error" variant="elevated">
+            <span class="tw-text-purple-50">
+              {{ item.columns.status }}
+            </span>
+          </v-chip>
+        </td>
+        <td>{{ _moment(item.columns.date).format('DD.MM.yyyy HH:mm') }}</td>
+        <td>{{ item.columns.dateCompleted ? item.columns.dateCompleted : '---' }}</td>
         <td>{{ item.columns.paymentMethodTitle }}</td>
-        <td>{{ item.columns.total }}</td>
+        <td>{{ item.columns.total + ' €' }}</td>
+        <td> 
+          <v-btn
+            variant="text"
+            :icon="isExpanded ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+            @click="toggleExpand"
+          ></v-btn>
+      </td>
       </tr>
-    </template>
-    <template v-slot:item.data-table-expand="{ expand, isExpanded }">
-        <v-icon dense>
-            {{ !isExpanded ? mdiChevronDown : mdiChevronUp }}
-        </v-icon>
     </template>
     <template v-slot:expanded-row="{ columns, item }">
       <tr>
         <td :colspan="columns.length">
-          More info about {{ item }}
+          <div v-for="pItem in item.selectable.lineItems.nodes" class="tw-flex tw-flex-row">
+            <img :src="pItem.product.node.image.sourceUrl" class="tw-h-20" />
+            <div class="tw-flex tw-flex-col tw-self-start tw-pl-4">
+              <span class="tw-text-purple-50">{{ pItem.product.node.name }}</span>
+              <span class="tw-text-purple-50">{{ pItem.total + ' €' }}</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </template>
+    <template v-slot:no-data>
+      <tr class="tw-flex tw-justify-center" style="background: rgb(50, 17, 102)">
+        <td colspan="7" class="tw-text-purple-50">
+          Keine Bestellungen verfügbar
         </td>
       </tr>
     </template>
@@ -48,6 +68,7 @@
 import * as labsComponents from 'vuetify/labs/components';
 import {mdiChevronUp, mdiChevronDown} from '@mdi/js';
 import { getOrders } from '@/utils/order'
+import moment from 'moment';
 
 export default {
     name: 'ListOrders',
@@ -75,18 +96,17 @@ export default {
                 { title: 'Kosten insgesammt', key: 'total', align: 'end' },
                 { title: '', key: 'data-table-expand' }
             ],
-            orders: [
-                { id: 1, status: 'In Bearbeitung', date: '2021-01-01', dateCompleted: '2021-01-01', paymentMethodTitle: 'PayPal', total: '100€' },
-                { id: 2, status: 'In Bearbeitung', date: '2021-01-01', dateCompleted: '2021-01-01', paymentMethodTitle: 'Klarna', total: '100€' },
-                { id: 3, status: 'Zugestellt', date: '2021-01-01', dateCompleted: '2021-01-01', paymentMethodTitle: 'PayPal', total: '100€' },
-                { id: 4, status: 'Zugestellt', date: '2021-01-01', dateCompleted: '2021-01-01', paymentMethodTitle: 'PayPal', total: '100€' },
-            ],
-            loading: false,
-            totalItems: 0,
+            orders: [],
+            _moment: moment,
+            loading: true,
         }
     },
-    created() {
-      this.orders = getOrders('', 10)
+    async created() {
+      this.loading = true
+      const resp = await getOrders({search: '', first: 10})
+      this.orders = resp.nodes
+      
+      this.loading = false
     }
 }
 </script>

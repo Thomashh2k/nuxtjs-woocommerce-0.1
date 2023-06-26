@@ -4,8 +4,9 @@ import {
   InMemoryCache,
   ApolloClient,
 } from "@apollo/client/core";
-
+import { useAuth } from "~/store/useAuth";
 import { provideApolloClient } from "@vue/apollo-composable";
+import { refreshAuthToken, checkExpired } from "~/utils/auth";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const cookie = useCookie("woo-session", {
@@ -26,12 +27,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     uri: "http://localhost:8080/graphql",
   });
 
-  const middleware = new ApolloLink((operation, forward) => {
+  const middleware = new ApolloLink(async (operation, forward) => {
     /**
      * If session data exist in local storage, set value as session header.
      */
     // if (process.client && authorization.value) {
-    //   debugger
+    //   
     //   operation.setContext(async ({ context: { headers: currentHeaders } = {} }) => {
     //     return {
     //       headers: {
@@ -43,6 +44,11 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   });
     // }
     if (process.client && cookie.value && operation.operationName !== 'LoginUser') {
+      
+      if (checkExpired(cookie.value)) {
+        const authStore = useAuth()
+        const newAccessToken = await refreshAuthToken(authStore.refreshToken);
+      }
       operation.setContext(() => ({
          headers: {
            "woocommerce-session": `Session ${cookie.value}`,

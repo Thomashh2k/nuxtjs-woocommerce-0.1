@@ -162,7 +162,7 @@ export function removeProductFromCart (content) {
 
 export async function checkout(shipping, billing, paymentMethod) {
   shipping.address1 = shipping.address
-  debugger
+  
   const checkoutVariables = {
     input: {
       shipping: shipping,

@@ -1,17 +1,13 @@
-query FETCH_ORDERS_QUERY($after: String = "", $before: String = "", $first: Int = 10, $last: Int = 10, $statuses: [OrderStatusEnum] = CANCELLED, $search: String = "", $order: OrderEnum = ASC) {
+# $statuses: [OrderStatusEnum] = CANCELLED,
+#statuses: $statuses,
+query FETCH_ORDERS_QUERY($after: String = "", $before: String = "", $first: Int = 10, $last: Int = 10, $search: String = "", $order: OrderEnum = ASC) {
   orders(
     first: $first
     before: $before
     after: $after
     last: $last
-    where: {statuses: $statuses, search: $search, orderby: {field: DATE, order: $order}}
+    where: {  search: $search, orderby: {field: DATE, order: $order} }
   ) {
-    pageInfo {
-      endCursor
-      hasNextPage
-      hasPreviousPage
-      startCursor
-    }
     nodes {
       currency
       customerNote
@@ -27,6 +23,26 @@ query FETCH_ORDERS_QUERY($after: String = "", $before: String = "", $first: Int 
       status
       total(format: RAW)
       transactionId
+      lineItems {
+        nodes {
+          quantity
+          productId
+          orderId
+          product {
+            node {
+              name
+              title(format: RENDERED)
+              image {
+                sourceUrl
+                link
+              }
+            }
+          }
+          subtotal
+          total
+        }
+      }
+      shippingTotal(format: RAW)
     }
   }
 }

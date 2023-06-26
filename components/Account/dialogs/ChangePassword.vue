@@ -83,7 +83,7 @@ export default {
 
 
         const submit = handleSubmit(async (values) => {
-            debugger
+            
             const auth = useAuth()
             await updatePassword(auth.getUser.id, values.newPassword)
             values.newPassword = ''
@@ -108,7 +108,7 @@ export default {
     },
     watch: {
         show: function (val) {
-            debugger
+            
             this.showModal = val;
         }
     },

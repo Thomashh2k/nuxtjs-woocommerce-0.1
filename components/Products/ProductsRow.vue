@@ -30,7 +30,7 @@ export default {
     ProductCard
   },
   mounted() {
-    debugger
+    
     if(process.client) {
       this.setProductsPages()
       window.addEventListener("resize", () => { this.setProductsPages() })
