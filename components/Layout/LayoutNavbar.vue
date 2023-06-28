@@ -101,7 +101,7 @@
                             <v-btn color="primary" rounded="xl" variant="outlined" to="/account/dashboard/orders" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;"><div class="tw-text-purple-50">Bestellungen</div></v-btn>
                           </v-card-text>
                           <v-card-actions class="tw-justify-center tw-flex tw-p-4">
-                            <v-btn color="red" rounded="xl" variant="outlined" @click="authStore.logout()"><div class="tw-normal-case text-red">Logout</div></v-btn>
+                            <v-btn color="red" rounded="xl" variant="outlined" @click="logout()"><div class="tw-normal-case text-red">Logout</div></v-btn>
                           </v-card-actions>
                         </v-card>
                       </v-menu>
@@ -218,7 +218,7 @@
                             <v-btn color="primary" rounded="xl" variant="outlined" to="/account/dashboard/orders" class="tw-w-full tw-normal-case tw-m-1" style="text-transform: none;"><div class="tw-text-purple-50">Bestellungen</div></v-btn>
                           </v-card-text>
                           <v-card-actions class="tw-justify-center tw-flex tw-p-4">
-                            <v-btn color="red" rounded="xl" variant="outlined" @click="authStore.logout()"><div class="tw-normal-case">Logout</div></v-btn>
+                            <v-btn color="red" rounded="xl" variant="outlined" @click="logout()"><div class="tw-normal-case">Logout</div></v-btn>
                           </v-card-actions>
                         </v-card>
                       </v-menu>
@@ -308,6 +308,17 @@ export default {
           this.isLoggingIn = false
         }
 
+      },
+      async logout() {
+        await this.authStore.logout()
+        const cookie = useCookie("woo-session");
+        const refreshToken = useCookie("refreshToken");
+        const authorization = useCookie("authorization");
+        const woocommerceSession = useCookie("woocommerce-session");
+        cookie.value = null;
+        authorization.value = null;
+        refreshToken.value = null;
+        woocommerceSession.value = null;
       },
       async searchProductsOnChange() {
         if(this.search !== '') {

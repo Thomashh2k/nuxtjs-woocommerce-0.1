@@ -110,7 +110,7 @@ export function getCookie(cName) {
 }
 export async function addProductToCart (product) {
   const cart = useCart();
-  cart.addToCart(product);
+  const addTempRes = cart.addTemporary(product);
   const productId = product.databaseId;
   const quantity = 1;
   const addToCartvariables = {
@@ -126,7 +126,7 @@ export async function addProductToCart (product) {
 
   onError((err) => {
     const snackbar = useSnackbar()
-    cart.removeProductFromCart(product);
+    cart.removeItem(product);
     if(err.message.includes('<a href="http://localhost:8080" class="button wc-forward">Warenkorb anzeigen</a> Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
       snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.', 'error')
     } else {
@@ -134,19 +134,20 @@ export async function addProductToCart (product) {
     }
   })
   onDone((result) => {
-    cart.addCartId(result.data.addToCart.cartItem.key);
-    cart.addCartDetails(result.data.addToCart.cart);
+    cart.addDetails(result.data.addToCart.cart);
+    cart.addAfterSuccess(result.data.addToCart.cartItem.key, addTempRes);
   })
 
 
 };
 
-export function removeProductFromCart (content) {
+export function removeProductFromCart (product) {
   const cart = useCart();
-  cart.removeProductFromCart(content);
+  cart.removeItem(product);
+  debugger
   
   const removeItemsVariables = {
-    cartKey: [cart.getCartId],
+    itemKey: product.key
   };
   const { mutate, onError } = useMutation(REMOVE_ITEM_FROM_CART, {
     variables: removeItemsVariables
@@ -181,8 +182,28 @@ export async function checkout(shipping, billing, paymentMethod) {
     snackbar.setMessage(err.message, 'error')
   })
   onDone((res) => {
+    const cart = useCart();
+    cart.clear();
     const orderReceivedStore = useOrderReceived();
     orderReceivedStore.setOrder(res.data.checkout.order)
     navigateTo('/order-received')
   })
 } 
+
+export function getOrderStatus (status) {
+  if(status === 'FAILED') {
+    return 'Fehlgeschlagen'
+  } else if(status === 'COMPLETED') {
+    return 'Abgeschlossen'
+  } else if(status === 'PROCESSING') {
+    return 'In Bearbeitung'
+  } else if(status === 'PENDING'){
+    return 'Ausstehend'
+  } else if(status === 'REFUNDED') {
+    return 'Rückerstattet'
+  } else if(status === 'CANCELLED') {
+    return 'Abgebrochen'
+  } else if(status === 'ON_HOLD') {
+    return 'In Wartestellung'
+  }
+}

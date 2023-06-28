@@ -1,5 +1,5 @@
-mutation MyMutation($cartKey: [ID] = "") {
-  removeItemsFromCart(input: {keys: $cartKey}) {
+mutation MyMutation($itemKey: [ID] = "") {
+  removeItemsFromCart(input: {keys: $itemKey}) {
     clientMutationId
   }
 }

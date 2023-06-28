@@ -2,8 +2,10 @@ import {
   createHttpLink,
   ApolloLink,
   InMemoryCache,
+  from,
   ApolloClient,
 } from "@apollo/client/core";
+import { onError } from '@apollo/client/link/error';
 import { useAuth } from "~/store/useAuth";
 import { provideApolloClient } from "@vue/apollo-composable";
 import { refreshAuthToken, checkExpired } from "~/utils/auth";
@@ -14,6 +16,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     sameSite: "lax",
   });
   const authorization = useCookie("authorization", {
+    maxAge: 86_400,
+    sameSite: "lax",
+  });
+  const refreshToken = useCookie("refreshToken", {
     maxAge: 86_400,
     sameSite: "lax",
   });
@@ -43,8 +49,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   }
     //   });
     // }
-    if (process.client && cookie.value && operation.operationName !== 'LoginUser') {
-      
+    if (process.client && cookie.value) {
       if (checkExpired(cookie.value)) {
         const authStore = useAuth()
         const newAccessToken = await refreshAuthToken(authStore.refreshToken);
@@ -52,7 +57,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       operation.setContext(() => ({
          headers: {
            "woocommerce-session": `Session ${cookie.value}`,
-           "Authorization": `Bearer ${authorization.value}`,
+          //  "Authorization": `Bearer ${authorization.value}`,
          },
        }));
     }
@@ -64,7 +69,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       /**
        * Check for session header and update session in local storage accordingly.
        */
-
       const context = operation.getContext();
       if(response.data.login !== undefined) {
         authorization.value = response.data.login.authToken
@@ -76,10 +80,12 @@ export default defineNuxtPlugin((nuxtApp) => {
       } = context;
 
       const session = headers.get("woocommerce-session") || headers.get("Authorization") || cookie.value;
+      // const refreshToken = headers.get("") || headers.get("") || authStore.refreshToken
 
       if (process.client && session) {
         if (session !== cookie.value) {
           cookie.value = session;
+          // TODO SET REFESH TOKEN in store and cookie
         }
       }
       const returnedHeader = headers.get('woocommerce-session');
@@ -91,13 +97,35 @@ export default defineNuxtPlugin((nuxtApp) => {
       return response;
     })
   );
-
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors) {
+      graphQLErrors.forEach(({ message }) => {
+        console.error('GraphQL Error:', message);
+        if(message.includes('expired') || message.includes('Invalid')) {
+          // ON EXPIRED TOKEN 
+          const newAccessToken = refreshAuthToken(authStore.refreshToken);
+          // Hier kannst du den Fehler behandeln oder andere Aktionen ausführen
+        }
+      });
+    }
+  
+    if (networkError) {
+      console.error('Network Error:', networkError);
+      // Hier kannst du den Netzwerkfehler behandeln oder andere Aktionen ausführen
+    }
+  });
   // Cache implementation
   const cache = new InMemoryCache();
-
+  const link = ApolloLink.from([
+    middleware,
+    afterware,
+    errorLink,
+    httpLink,
+  ])
   // Create the apollo client
   const apolloClient = new ApolloClient({
-    link: middleware.concat(afterware.concat(httpLink)),
+    link: link,
+    // link: link,
     cache,
   });
 

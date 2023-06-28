@@ -23,7 +23,7 @@ onMounted(async() => {
         await paypal.Buttons({
             createOrder: function(data, actions) {
                 
-                const totalPriceS = cart.getCartDetails.total.replace('&nbsp;€', '')
+                const totalPriceS = cart.getDetails.total.replace('&nbsp;€', '')
                 const totalPriceN = Number(totalPriceS.replace(',', '.'))
                 // Momentan funktioniert die Bestellung nicht
                 // Das kann an verschiedene Gründe liegen, daher sollten wir uns noch darum kümmern

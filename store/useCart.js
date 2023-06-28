@@ -1,56 +1,80 @@
 import { defineStore } from "pinia";
 
 const state = {
-  cart: [],
-  cartDetails: null,
-  cartId: null,
+  details: null,
+  items: [],
 };
 
 export const useCart = defineStore("cartState", {
   state: () => state,
   actions: {
-    addToCart(product) {
-      
-      const foundProductInCartIndex = this.cart.findIndex(
+    addTemporary(product) {
+      let _index = 0
+      debugger
+      const foundProductInCartIndex = this.items.findIndex(
         (cf) => product.slug === cf.slug
       );
 
       if (foundProductInCartIndex > -1) {
-        this.cart.push(product);
-        this.cart[foundProductInCartIndex].quantity += 1;
+
+        // Change to .splice() to make it reactive
+        this.items[foundProductInCartIndex] = {
+          quantity: this.items[foundProductInCartIndex].quantity += 1,
+          product: this.items[foundProductInCartIndex].product,
+          key: this.items[foundProductInCartIndex].key
+        }
+        return foundProductInCartIndex
       } else {
-        product.quantity = 1;
-        this.cart.push(product);
+        let temp = {
+          key: null,
+          quantity: 1,
+          product: product,
+        }
+        _index = this.items.push(temp);
       }
+      // potentially retrun bug
+      // return { index: _index-1, new: true }
+      return _index-1
     },
-    addCartDetails(details) {
-      this.cartDetails = details
+    addAfterSuccess(key, addTempRes) {
+      // debugger
+      // if(addTempRes.new) {
+        this.items[addTempRes] = {
+          key: key,
+          quantity: this.items[addTempRes].quantity,
+          product: this.items[addTempRes].product
+        }
+      // } else {
+      //   this.items[addTempRes.index] = {
+      //     key: key,
+      //     quantity: this.items[addTempRes.index].quantity,
+      //     product: this.items[addTempRes.index].product
+      //   }
+      // }
     },
-    addCartId(cartId) {
-      this.cartId = cartId
+    addDetails(details) {
+      this.details = details
     },
-    removeProductFromCart(product) {
-      this.cart.splice(this.cart.indexOf(el => el.key === product.key), 1);
+    removeItem(product) {
+      this.items.splice(this.items.indexOf(el => el.key === product.key), 1);
     },
-    clearCart() {
-      this.cart.length = 0;
+    clear() {
+      this.details = null
+      this.items = []
     },
   },
   getters: {
     getCartQuantity() {
-      return this.cart.reduce((total, product) => total + product.quantity, 0);
+      return this.items.reduce((total, product) => total + product.quantity, 0);
     },
-    getCartItems() {
-      return this.cart
+    getItems() {
+      return this.items
     },
-    getCartDetails() {
-      return this.cartDetails
-    },
-    getCartId() {
-      return this.cartId
+    getDetails() {
+      return this.details
     },
     getCartTotal() {
-      return this.cart.reduce(
+      return this.items.reduce(
         (total, item) => {
           // Remove '&nbsp;€' because we need a Number not a string
           const noSpecialCharacter = item.price.replace('&nbsp;€', "")

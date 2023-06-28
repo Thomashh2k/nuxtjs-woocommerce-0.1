@@ -6,7 +6,7 @@ export async function getOrders({ search, first, after = null, before = null, la
 
     return new Promise((resolve, reject) => {
         const result = useQuery(FETCH_ORDERS_QUERY, orderVar, {
-            fetchPolicy: 'cache-and-network',
+            // fetchPolicy: 'cache-and-network',
         });
         
         result.onError((err) => {

@@ -27,7 +27,17 @@
                         @change="lastName.value.value = lastName.value.value.charAt(0).toUpperCase() + lastName.value.value.slice(1)"
                     />
                 </div>
-
+                <v-text-field
+                        v-model="userName.value.value"
+                        :error-messages="userName.errorMessage.value"
+                        density="compact"
+                        label="Benutzername"
+                        :disabled="true"
+                        class="tw-ml-1 tw-mb-2 tw-w-full"
+                        bg-color="rgb(26, 6, 58)"
+                        color="rgb(250, 245, 255)"
+                        variant="solo"
+                    />
                 <div class="tw-mb-8">
                     <v-btn color="primary" class="tw-w-full tw-normal-case tw-my-1 tw-text-purple-50" style="text-transform: none;" variant="outlined" rounded="xl" @click="showEmailDialog = true">
                         <div class="tw-text-purple-50">E-Mail ändern</div>
@@ -90,20 +100,28 @@ export default {
                     if (value?.length >= 2) return true
 
                     return 'Nachname muss mindestens zwei Buchstaben enthalten.'
+                },
+                userName(value) {
+                    if (!value) return 'Benuztername ist ein Pflichtfeld.'
+                    if (value?.length >= 5) return true
+
+                    return 'Nachname muss mindestens 18 Buchstaben enthalten.'
                 }
             }
         })
         const firstName = useField('firstName')
         const lastName = useField('lastName')
+        const userName = useField('userName')
 
         firstName.value.value = props.userInfo.firstName
         lastName.value.value = props.userInfo.lastName
+        userName.value.value = props.userInfo.username
 
         const submit = handleSubmit(values => {
             context.emit('save', values)
         })
 
-        return { submit, firstName, lastName}
+        return { submit, firstName, lastName, userName}
     },
     data() {
         return {

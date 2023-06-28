@@ -18,10 +18,8 @@ export async function login (payload) {
       if(result.data.login.customer.billing.firstName === null) {
         result.data.login.customer.billing = result.data.login.customer.shipping
       }
-      authStore.setToken(result.data.login.authToken)
+      debugger
       authStore.setRefreshToken(result.data.login.refreshToken)
-      authStore.setCustomerJwt(result.data.login.customer.jwtAuthToken)
-      authStore.setToken(result.data.login.authToken)
       authStore.setUser(result.data.login.user)
       authStore.setCustomer(result.data.login.customer)
 
@@ -103,7 +101,7 @@ export function checkExpired(accessToken) {
 
 export async function refreshAuthToken(refreshToken) {
   debugger
-  const refreshVariables = { jwtRefreshToken: refreshToken };
+  const refreshVariables = { refreshToken: refreshToken };
   const { mutate, onDone, onError} = useMutation(REFRESH_AUTH_TOKEN, { variables: refreshVariables });
   mutate(refreshVariables);
   const resultDone = onDone((result) => {

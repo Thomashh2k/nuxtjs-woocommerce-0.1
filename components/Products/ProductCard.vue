@@ -106,10 +106,7 @@ export default {
       return product.image ? product.image.sourceUrl : config.placeholderImage;
     },
     async addToCart (product) {
-      const result = await addProductToCart(product);
-      if(result !== false) {
-        errMsg = result.message
-      }
+      await addProductToCart(product);
     }
 }
 }

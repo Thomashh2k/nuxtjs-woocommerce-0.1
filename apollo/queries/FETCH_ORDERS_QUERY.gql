@@ -1,11 +1,8 @@
 # $statuses: [OrderStatusEnum] = CANCELLED,
 #statuses: $statuses,
-query FETCH_ORDERS_QUERY($after: String = "", $before: String = "", $first: Int = 10, $last: Int = 10, $search: String = "", $order: OrderEnum = ASC) {
+query FETCH_ORDERS_QUERY( $first: Int = 10, $search: String = "", $order: OrderEnum = ASC) {
   orders(
     first: $first
-    before: $before
-    after: $after
-    last: $last
     where: {  search: $search, orderby: {field: DATE, order: $order} }
   ) {
     nodes {
@@ -15,7 +12,7 @@ query FETCH_ORDERS_QUERY($after: String = "", $before: String = "", $first: Int 
       dateCompleted
       datePaid
       discountTotal(format: RAW)
-      id
+      databaseId
       needsPayment
       needsProcessing
       paymentMethod
@@ -30,6 +27,8 @@ query FETCH_ORDERS_QUERY($after: String = "", $before: String = "", $first: Int 
           orderId
           product {
             node {
+              databaseId
+              slug
               name
               title(format: RENDERED)
               image {

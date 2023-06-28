@@ -6,12 +6,9 @@
 </template>
 
 <script setup>
-import { useCart } from "@/store/useCart";
 
-const cart = useCart();
 
 onBeforeMount(() => {
-  cart.clearCart();
 });
 
 useHead({

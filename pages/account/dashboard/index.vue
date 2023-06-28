@@ -9,7 +9,7 @@
       </v-tab>
       <v-tab value="orders">
         <div class="tw-text-purple-50 tw-normal-case tw-flex" :class="tab === 'orders' ? 'text-yellow-darken-2' : ''">
-          <v-icon icon="mdi-truck-delivery-outline" class="tw-mr-2"></v-icon>
+          <v-icon icon="mdi-package-variant-closed" class="tw-mr-2"></v-icon>
           <p class="max-[1325px]:tw-hidden">Bestellungen</p>
         </div>
       </v-tab>

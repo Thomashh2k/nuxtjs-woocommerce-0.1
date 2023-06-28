@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 
+
 const state = {
   user: {
     email: null,
     firstName: null,
-    lasstName: null,
+    lastName: null,
+    username: null,
     freshlyRegistered: false
   },
   customer: {
@@ -30,22 +32,14 @@ const state = {
 
     }
   },
-  jwt: '',
   refreshJwt: '',
-  customerJwt: '',
 };
 
 export const useAuth = defineStore("userState", {
   state: () => state,
   actions: {
-    setToken(token) {
-      this.jwt = token
-    },
     setRefreshToken(token) {
       this.refreshJwt = token
-    },
-    setCustomerJwt(token) {
-      this.customerJwt = token
     },
     setUser(user) {
         this.user = user
@@ -54,11 +48,13 @@ export const useAuth = defineStore("userState", {
       this.customer = customer
     },
     logout() {
+      debugger
       Object.assign(state, {
         user: {
           email: null,
           firstName: null,
-          lasstName: null,
+          lastName: null,
+          username: null,
           freshlyRegistered: false
         },
         customer: {
@@ -82,7 +78,8 @@ export const useAuth = defineStore("userState", {
           },
           orders: {
       
-          }
+          },
+          refreshJwt: ''
         }
       })
       this.jwt = ''
@@ -92,10 +89,10 @@ export const useAuth = defineStore("userState", {
       this.customer = {}
     }
   },
+  watch: {
+
+  },
   getters: {
-    getToken() {
-      return this.jwt
-    },
     getRefreshToken() {
       return this.refreshJwt
     },
@@ -115,7 +112,9 @@ export const useAuth = defineStore("userState", {
       return this.customer.orders
     },
     isLoggedIn() {
-      return this.jwt !== ''
+      debugger
+      const isLoggedIn = this.refreshJwt !== ''
+      return isLoggedIn
     }
   },
   persist: true,

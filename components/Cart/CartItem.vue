@@ -22,27 +22,27 @@
                     key="item.databaseId"
                     class="tw-flex tw-flex-row tw-p-1 tw-cursor-pointer tw-decoration-purple-50 hover:tw-underline" 
                     :to="{
-                        path: '/product/' + item.slug,
-                        query: { id: item.databaseId },
+                        path: '/product/' + item.product.slug,
+                        query: { id: item.product.databaseId },
                 }">
 
                     <div >
-                        <v-img style="width:70px; height: 90px;" :src="item.image.sourceUrl"></v-img>
+                        <v-img style="width:70px; height: 90px;" :src="item.product.image.sourceUrl"></v-img>
                     </div>
                     <div id="prodInfo" class="tw-text-purple-50 tw-ml-4">
-                        <h6>{{ item.name }}</h6>
-                        <div v-if="item.onSale" class="tw-flex tw-justify-center tw-mt-2">
+                        <h6>{{ item.product.name }}</h6>
+                        <div v-if="item.product.onSale" class="tw-flex tw-justify-center tw-mt-2">
                             <div class="tw-line-through">
-                                <span v-if="item.variations" v-html="filteredVariantPrice(item.price, 'right')"></span>
-                                <span v-else v-html="item.regularPrice"></span>
+                                <span v-if="item.product.variations" v-html="filteredVariantPrice(item.product.price, 'right')"></span>
+                                <span v-else v-html="item.product.regularPrice"></span>
                             </div>
                             <div class="">
-                                <span v-if="item.variations" v-html="filteredVariantPrice(item.price)"></span>
-                                <span v-else v-html="item.salePrice"></span>
+                                <span v-if="item.product.variations" v-html="filteredVariantPrice(item.product.price)"></span>
+                                <span v-else v-html="item.product.salePrice"></span>
                             </div>
                         </div>
                         <div v-else>
-                            <p class="tw-mt-2 tw-text-sm" v-html="item.price"></p>
+                            <p class="tw-mt-2 tw-text-sm" v-html="item.product.price"></p>
                         </div>
                     </div>
                 </NuxtLink>
@@ -66,7 +66,7 @@ export default {
         return {
             mdiCartOutline,
             cart: _cart,
-            cartItems: _cart.getCartItems
+            cartItems: _cart.getItems
         }
     },
 }

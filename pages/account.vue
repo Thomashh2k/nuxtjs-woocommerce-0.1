@@ -4,19 +4,6 @@
     v-if="!$route.path.includes('register')"
       class="tw-bg-violet-900"
     >
-      <v-tab to="/account/dashboard">
-        <div class="tw-text-purple-50 tw-normal-case">Persöhnliche Daten</div>
-      </v-tab>
-      <v-tab to="/account/dashboard/orders">
-        <div class="tw-text-purple-50 tw-normal-case">Bestellungen</div>
-      </v-tab>
-      <v-tab value="three">
-        <div class="tw-text-purple-50 tw-normal-case">Item Three</div>
-      </v-tab>
-      <!-- <v-spacer />
-      <div class="tw-flex tw-items-center tw-mr-4">
-        <v-btn color="red" variant="outlined" @click="logout"><div class="tw-normal-case">Logout</div></v-btn>
-      </div> -->
     </v-tabs>
     <v-card-text style="margin: unset; padding: unset">
       <NuxtPage/>
@@ -42,6 +29,14 @@ export default {
   methods: {
     logout() {
       this.authStore.logout()
+      const cookie = useCookie("woo-session");
+      const authorization = useCookie("authorization");
+      const woocommerceSession = useCookie("woocommerce-session");
+      const refreshToken = useCookie("refreshToken");
+      cookie.value = null;
+      authorization.value = null;
+      woocommerceSession.value = null;
+      refreshToken.value = null;
       this.$router.push('/')
     }
   }

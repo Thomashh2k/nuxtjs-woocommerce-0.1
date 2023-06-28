@@ -11,15 +11,15 @@ mutation($productId: Int!, $quantity: Int! ) {
     }
     cartItem {
       key
-      product {
-        node {
-          name
-          databaseId
-          image {
-            sourceUrl
-          }
-        }
-      }
+      # product {
+      #   node {
+      #     name
+      #     databaseId
+      #     image {
+      #       sourceUrl
+      #     }
+      #   }
+      # }
     }
   }
 }

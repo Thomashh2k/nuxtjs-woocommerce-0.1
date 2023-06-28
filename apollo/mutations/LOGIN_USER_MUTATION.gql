@@ -9,6 +9,7 @@ mutation LoginUser ($input: LoginInput!) {
       id
       firstName
       lastName
+      username
       email
     },
     customer {
