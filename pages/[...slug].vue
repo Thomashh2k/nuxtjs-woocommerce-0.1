@@ -29,6 +29,10 @@ export default {
             this.$router.push('/')
         }
         const result = await getPage(this.$route.params.slug[0])
+        debugger
+        if(result.pageBy === null) {
+            this.$router.push('/404')
+        }
         this.page.date =  moment(result.pageBy.date).format('DD.MM.yyyy HH:mm')
         this.page.databaseId = result.pageBy.databaseId
         this.page.title = result.pageBy.title

@@ -49,10 +49,24 @@
     </NuxtLink>
     <v-card-actions style="z-index: 10;" >
         <div class="tw-w-full xxxs:tw-hidden xxs:tw-hidden xs:tw-hidden md:tw-hidden lg:tw-flex tw-justify-center">
-            <v-btn-toggle color="success" variant="outlined" rounded="xl" class="lg:tw-h-4 lg:tw-pt-2">
+            <!-- <v-btn-toggle color="success" variant="outlined" rounded="xl" class="lg:tw-h-4 lg:tw-pt-2">
                 <v-btn style="border: 2px solid rgb(76, 175, 80); color: rgb(76, 175, 80); border-right: unset;" :disabled="product.stockStatus === 'OUT_OF_STOCK'" icon="mdi-cart-plus" @click="addToCart(product)" />
                 <v-btn style="border: 2px solid rgb(76, 175, 80); color: rgb(76, 175, 80); border-left: unset; margin-inline-start: unset;" :disabled="product.stockStatus === 'OUT_OF_STOCK'" icon="mdi-cash-register" @click="addToCart(product)" />
-            </v-btn-toggle>
+            </v-btn-toggle> -->
+            <v-row>
+                <v-col>
+                    <div class="tw-flex tw-flex-col">
+                        <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" @click="addToCart(product)" />
+                    </div>
+                </v-col>
+                <v-col>
+                    <div class="tw-flex tw-flex-col">
+                        <div class="tw-flex tw-justify-end">
+                            <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cash-register" @click="addToCart(product)" />
+                        </div>
+                    </div>
+                </v-col>
+            </v-row>
         </div>
         <div class="xxxs:tw-hidden xxs:tw-hidden xs:tw-hidden tw-w-full md:tw-flex lg:tw-hidden">
             <v-row>

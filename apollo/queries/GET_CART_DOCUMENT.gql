@@ -1,0 +1,5 @@
+query GET_CART_DOCUMENT {
+  customer {
+    sessionToken
+  }
+}

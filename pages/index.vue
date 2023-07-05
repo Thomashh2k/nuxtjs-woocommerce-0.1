@@ -44,7 +44,7 @@
                 ></v-skeleton-loader>
             </v-window-item>
         </v-window>
-        <h1 v-if="onSaleProducts.nodes.length === 0" class="tw-text-purple-50 tw-text-xl tw-py-4 tw-text-center">
+        <h1 v-if="onSaleProducts.nodes.length === 0 && !isLoading" class="tw-text-purple-50 tw-text-xl tw-py-4 tw-text-center">
             Leider haben wir keine Angebote momentan.
         </h1>
     </div>

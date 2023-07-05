@@ -48,7 +48,6 @@ export const useAuth = defineStore("userState", {
       this.customer = customer
     },
     logout() {
-      debugger
       Object.assign(state, {
         user: {
           email: null,
@@ -112,7 +111,6 @@ export const useAuth = defineStore("userState", {
       return this.customer.orders
     },
     isLoggedIn() {
-      debugger
       const isLoggedIn = this.refreshJwt !== ''
       return isLoggedIn
     }

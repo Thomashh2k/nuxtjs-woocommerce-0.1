@@ -1,50 +1,50 @@
 <template>
   <section class="tw-container tw-py-2 tw-mx-auto">
     <v-form @submit="submit">
-      <div class="tw-mx-auto">
-            <div v-if="!authStore.isLoggedIn">
-              <v-text-field
-                v-model="email.value.value"
-                label="E-Mail"
-                class="tw-mx-2"
-                :error-messages="email.errorMessage.value"
-                variant="solo"
-                density="compact"
-                bg-color="rgb(26, 6, 58)"
-                color="rgb(250, 245, 255)"
-              />
-              <v-text-field
-                v-model="emailRepeat.value.value"
-                label="E-Mail wiederholen"
-                class="tw-mx-2"
-                :error-messages="emailRepeat.errorMessage.value"
-                variant="solo"
-                density="compact"
-                bg-color="rgb(26, 6, 58)"
-                color="rgb(250, 245, 255)"
-              />
-              <v-text-field
-                v-model="phone.value.value" 
-                label="Telefon"
-                class="tw-mx-2"
-                :error-messages="phone.errorMessage.value"
-                variant="solo"
-                density="compact"
-                bg-color="rgb(26, 6, 58)"
-                color="rgb(250, 245, 255)"
-              />
-            </div>
-            <AddressForm ref="shippingForm" :address-info="customer.shipping" :show-save-btn="false" :show-cols="false"/>
-            <div class="tw-flex tw-justify-items-center">
-              <v-switch v-model="useDifferentBillingAddress"  class="tw-pl-2">
-                <template v-slot:label>
-                  <span class="tw-text-purple-50">Abweichende Rechnungsadresse verwenden</span>
-                </template>
-              </v-switch>
-            </div>
-            <AddressForm v-if="useDifferentBillingAddress" ref="billingForm" :address-info="customer.billing" :show-save-btn="false" :show-cols="false"/>
-          </div>
-        </v-form>
+      <div>
+        <div v-if="!authStore.isLoggedIn">
+          <v-text-field
+            v-model="email.value.value"
+            label="E-Mail"
+            class="tw-mb-2"
+            :error-messages="email.errorMessage.value"
+            variant="solo"
+            density="compact"
+            bg-color="rgb(26, 6, 58)"
+            color="rgb(250, 245, 255)"
+          />
+          <v-text-field
+            v-model="emailRepeat.value.value"
+            label="E-Mail wiederholen"
+            :error-messages="emailRepeat.errorMessage.value"
+            class="tw-mb-2"
+            variant="solo"
+            density="compact"
+            bg-color="rgb(26, 6, 58)"
+            color="rgb(250, 245, 255)"
+          />
+          <v-text-field
+            v-model="phone.value.value" 
+            label="Telefon"
+            :error-messages="phone.errorMessage.value"
+            class="tw-mb-2"
+            variant="solo"
+            density="compact"
+            bg-color="rgb(26, 6, 58)"
+            color="rgb(250, 245, 255)"
+          />
+        </div>
+        <AddressForm ref="shippingForm" class="tw-mx-auto" :address-info="customer.shipping" :show-save-btn="false" :show-cols="false"/>
+        <div class="tw-flex tw-justify-items-center">
+          <v-switch v-model="useDifferentBillingAddress"  class="tw-pl-2">
+            <template v-slot:label>
+              <span class="tw-text-purple-50">Abweichende Rechnungsadresse verwenden</span>
+            </template>
+          </v-switch>
+        </div>
+        <AddressForm v-if="useDifferentBillingAddress" ref="billingForm" :address-info="customer.billing" :show-save-btn="false" :show-cols="false"/>
+      </div>
+    </v-form>
   </section>
 </template>
 
@@ -54,6 +54,7 @@ import { useAuth } from '@/store/useAuth.js'
 import { storeToRefs } from 'pinia'
 import AddressForm from "../Account/forms/AddressForm.vue";
 export default {
+  name: 'CheckoutForm',
   data() {
     return {
       useDifferentBillingAddress: false,

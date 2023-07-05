@@ -85,12 +85,19 @@
       </tr>
     </template>
     <template v-slot:no-data>
-      <tr class="tw-flex tw-justify-center" style="background: rgb(50, 17, 102)">
+      <tr class="tw-flex tw-justify-center "  style="background: rgb(50, 17, 102)">
         <td colspan="7" class="tw-text-purple-50">
           Keine Bestellungen verfügbar
         </td>
       </tr>
     </template>
+    <!-- <template v-slot:loader>
+      <tr class="tw-flex tw-justify-center" style="background: rgb(50, 17, 102)">
+        <td colspan="7" class="tw-text-purple-50">
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </td>
+      </tr>
+    </template> -->
     </v-data-table-server>
 </template>
 <script>
@@ -147,12 +154,6 @@ export default {
       this.loading = true
       const resp = await getOrders({search: '', first: 10})
       this.orders = resp.nodes
-      // for(let i = 0; i < this.orders.length; i++) {
-      //   this.orders[i].date = moment(resp.nodes[i].date).format('DD.MM.yyyy HH:mm')
-      //   this.orders[i].dateCompleted = resp.nodes[i].dateCompleted ? resp.nodes[i].dateCompleted : '---'
-      //   this.orders[i].total = resp.nodes[i].total + ' €'
-      // }
-      
       this.loading = false
     }
 }

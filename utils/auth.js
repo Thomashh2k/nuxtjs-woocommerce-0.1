@@ -27,7 +27,7 @@ export async function login (payload) {
       resolve()
     })
     const resultErr = onError((err) => {
-      
+      debugger
       const snackbar = useSnackbar()
       snackbar.setMessage("Login fehlgeschlagen. Stellen sie sicher das, die Anmeldedaten korrekt sind.", 'error')
       reject()
@@ -79,7 +79,6 @@ export async function registerCustomer(payload, router) {
 }
 
 export function checkExpired(accessToken) {
-  debugger
   if (process.client) {  
     const expIndex = 'exp'
     const decodedToken = parseJwt(accessToken)
@@ -100,14 +99,13 @@ export function checkExpired(accessToken) {
 }
 
 export async function refreshAuthToken(refreshToken) {
-  debugger
   const refreshVariables = { refreshToken: refreshToken };
   const { mutate, onDone, onError} = useMutation(REFRESH_AUTH_TOKEN, { variables: refreshVariables });
   mutate(refreshVariables);
   const resultDone = onDone((result) => {
     const authStore = useAuth();
-    authStore.setToken(result.data.refreshAuthToken.authToken)
-    authStore.setRefreshToken(result.data.refreshAuthToken.refreshToken)
+    // authStore.setToken(result.data.refreshAuthToken.authToken)
+    return result.data.refreshAuthToken.authToken
   })
   const resultErr = onError((err) => {
     return err

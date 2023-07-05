@@ -1,9 +1,9 @@
 # $statuses: [OrderStatusEnum] = CANCELLED,
 #statuses: $statuses,
-query FETCH_ORDERS_QUERY( $first: Int = 10, $search: String = "", $order: OrderEnum = ASC) {
+query FETCH_ORDERS_QUERY( $first: Int = 10, $order: OrderEnum = ASC) {
   orders(
     first: $first
-    where: {  search: $search, orderby: {field: DATE, order: $order} }
+    where: { orderby: {field: DATE, order: $order} }
   ) {
     nodes {
       currency

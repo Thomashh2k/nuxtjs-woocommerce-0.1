@@ -17,7 +17,9 @@
 .v-window__container {
   width: 100% !important;
 }
-
+td {
+  background: rgb(50, 17, 102) !important
+}
 /* div:not(.text-red), span:not(.text-red) {
   @apply tw-text-purple-50;
 }

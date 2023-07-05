@@ -167,7 +167,7 @@ export async function sendResetPasswordLink(username) {
     variables: resetPasswordVar
   });
 
-  mutate(userInfoVar);
+  mutate(resetPasswordVar);
   
   onError((err) => {
     const snackbar = useSnackbar()

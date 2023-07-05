@@ -9,7 +9,7 @@ export const useSnackbar = defineStore("useSnackbar", {
   state: () => state,
   actions: {
     setMessage( msg, type ) {
-      
+        console.error(msg)
         this.message = msg
         this.type = type
     },
