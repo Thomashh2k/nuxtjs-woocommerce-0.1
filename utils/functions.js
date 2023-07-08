@@ -6,7 +6,7 @@ import { useSnackbar } from "@/store/snackbar";
 import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
 import REMOVE_ITEM_FROM_CART from "@/apollo/mutations/REMOVE_ITEM_FROM_CART.gql";
 import CHECKOUT_MUTATION from "@/apollo/mutations/CHECKOUT_MUTATION.gql";
-import { string } from "yup";
+import ONECLICK_CHECKOUT_MUTATION from "@/apollo/mutations/ONECLICK_CHECKOUT_MUTATION.gql";
 
 /**
  * Strips HTML from the inputted string
@@ -162,7 +162,7 @@ export function removeProductFromCart (product) {
 }
 
 export async function checkout(shipping, billing, paymentMethod) {
-  shipping.address1 = shipping.address
+  // shipping.address1 = shipping.address
   
   const checkoutVariables = {
     input: {
@@ -186,6 +186,35 @@ export async function checkout(shipping, billing, paymentMethod) {
     cart.clear();
     const orderReceivedStore = useOrderReceived();
     orderReceivedStore.setOrder(res.data.checkout.order)
+    navigateTo('/order-received')
+  })
+}
+
+export async function oneClickCheckout(productID, shipping, billing, paymentMethod) {
+  // shipping.address1 = shipping.address
+  
+  const checkoutVariables = {
+    input: {
+      productId: productID,
+      quantity: 1,
+      shipping: shipping,
+      billing: billing,
+      paymentMethod: paymentMethod,
+    }
+  };
+  const { mutate, onError, onDone } = useMutation(ONECLICK_CHECKOUT_MUTATION, {
+    variables: checkoutVariables
+  });
+
+  mutate(checkoutVariables);
+
+  onError((err) => {
+    const snackbar = useSnackbar()
+    snackbar.setMessage(err.message, 'error')
+  })
+  onDone((res) => {
+    const orderReceivedStore = useOrderReceived();
+    orderReceivedStore.setOrder(res.data.oneClickCheckout.order)
     navigateTo('/order-received')
   })
 } 

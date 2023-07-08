@@ -9,7 +9,7 @@ import { onError } from '@apollo/client/link/error';
 import { useAuth } from "~/store/useAuth";
 import { provideApolloClient } from "@vue/apollo-composable";
 import { checkExpired } from '@/utils/auth'
-import { GraphQLClient } from 'graphql-request'
+// import { GraphQLClient } from 'graphql-request'
 import REFRESH_AUTH_TOKEN from "@/apollo/mutations/REFRESH_AUTH_TOKEN.gql";
 import GET_CART_DOCUMENT from "@/apollo/queries/GET_CART_DOCUMENT.gql";
 

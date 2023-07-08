@@ -20,7 +20,7 @@
                 <v-radio label="Klarna" value="klarna"></v-radio>
                 <v-radio label="Paypal" value="ppcp-gateway"></v-radio>
               </v-radio-group>
-              <Checkboxes ref="checkboxForm" :order-data="orderData" @checked-out="checkedout"/>
+              <Checkboxes ref="checkboxForm" :order-data="orderData"/>
               <div class="tw-w-full tw-flex tw-justify-center">
                 <PaypalButton v-if="paymentMethod === 'ppcp-gateway'" :is-valid-to-click="checkoutIsValid" @onPay="submitOrder" @click="createOrderData"/>
                 <v-btn v-if="paymentMethod === 'bacs'" color="green" variant="outlined" @click="submitOrder()" >
@@ -101,7 +101,7 @@ export default {
       await this.createOrderData()
       if(this.aggreed) {
         
-        await checkout(this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod, this.$router)
+        await checkout(this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod)
       }
     },
   }

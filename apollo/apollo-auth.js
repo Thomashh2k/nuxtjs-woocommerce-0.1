@@ -56,6 +56,7 @@ export async function fetchAuthToken() {
   
     try {
 
+
       const newAccessToken = await refreshAuthToken(refreshToken);
       const authToken = newAccessToken;
 

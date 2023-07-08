@@ -36,7 +36,7 @@
                     :error-messages="address1.errorMessage.value"
                     label="Straße"
                     :disabled="disabled"
-                    class="tw-w-10/12 tw-mr-1 tw-mb-2"
+                    class="tw-w-8/12 tw-mr-1 tw-mb-2"
                     variant="solo"
                     density="compact"
                     bg-color="rgb(26, 6, 58)"
@@ -48,7 +48,7 @@
                     :error-messages="address2.errorMessage.value"
                     label="Hausnummer"
                     :disabled="disabled"
-                    class="tw-w-2/12 tw-ml-1 tw-mb-2"
+                    class="tw-w-4/12 tw-ml-1 tw-mb-2"
                     variant="solo"
                     density="compact"
                     bg-color="rgb(26, 6, 58)"
@@ -61,7 +61,7 @@
                     :error-messages="postcode.errorMessage.value"
                     label="Postleitzahl"
                     :disabled="disabled"
-                    class="tw-w-2/12 tw-mr-1 tw-mb-2"
+                    class="tw-w-4/12 tw-mr-1 tw-mb-2"
                     variant="solo"
                     density="compact"
                     bg-color="rgb(26, 6, 58)"
@@ -72,7 +72,7 @@
                     :error-messages="city.errorMessage.value"
                     label="Stadt"
                     :disabled="disabled"
-                    class="tw-w-10/12 tw-ml-1 tw-mb-2"
+                    class="tw-w-8/12 tw-ml-1 tw-mb-2"
                     variant="solo"
                     density="compact"
                     bg-color="rgb(26, 6, 58)"
@@ -106,6 +106,7 @@
     </v-form>
 </template>
 <script>
+import { useAuth } from '@/store/useAuth.js'
 import { useField, useForm } from 'vee-validate';
 
 export default {
@@ -151,16 +152,16 @@ export default {
                     return 'Straße muss mindestens zwei Buchstaben enthalten.'
                 },
                 address2(value) {
-                    if (!value) return 'Hausnummer ist ein Pflichtfeld.'
+                    if (!value) return 'Hausnr. ist ein Pflichtfeld.'
                     if (value?.length >= 1) return true
 
-                    return 'Hausnummer muss mindestens zwei Buchstaben enthalten.'
+                    return 'Hausnr. muss mindestens zwei Buchstaben enthalten.'
                 },
                 postcode(value) {
-                    if (!value) return 'Postleitzahl ist ein Pflichtfeld.'
+                    if (!value) return 'PLZ ist ein Pflichtfeld.'
                     if (value?.length >= 2) return true
 
-                    return 'Postleitzahl muss mindestens zwei Buchstaben enthalten.'
+                    return 'PLZ muss mindestens zwei Buchstaben enthalten.'
                 },
                 city(value) {
                     if (!value) return 'Stadt ist ein Pflichtfeld.'
@@ -187,14 +188,17 @@ export default {
         const postcode = useField('postcode')
         const city = useField('city')
         const country = useField('country')
-        firstName.value.value = props.addressInfo.firstName
-        lastName.value.value = props.addressInfo.lastName
-
-        address1.value.value = props.addressInfo.address1
-        address2.value.value = props.addressInfo.address2
-        postcode.value.value = props.addressInfo.postcode
-        city.value.value = props.addressInfo.city
-        country.value.value = props.addressInfo.country
+        const authStore = useAuth()
+        if(authStore.isLoggedIn) {
+            firstName.value.value = props.addressInfo.firstName
+            lastName.value.value = props.addressInfo.lastName
+    
+            address1.value.value = props.addressInfo.address1
+            address2.value.value = props.addressInfo.address2
+            postcode.value.value = props.addressInfo.postcode
+            city.value.value = props.addressInfo.city
+            country.value.value = props.addressInfo.country
+        }
         if(country.value.value === null || country.value.value === undefined || country.value.value === '') {
             country.value.value = 'DE'
         }
@@ -232,3 +236,6 @@ export default {
     }
 }
 </script>
+<style scoped>
+
+</style>

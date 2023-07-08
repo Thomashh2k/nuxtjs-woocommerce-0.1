@@ -58,16 +58,16 @@
                       In den Warenkorb
                     </div>
                   </v-btn>
+                  <NuxtLink :to="{ path: '/one-click-checkout', query: { id: data.product.databaseId, slug: data.product.slug }}">
                     <v-btn
-                    @click="addProductToCart(data.product)"
                     class="tw-border-2"
-
                     :loading="isLoading"
                   >
                   <div class="tw-normal-case tw-text-lg">
                       Sofort Kaufen
                     </div>
                   </v-btn>
+                  </NuxtLink>
                 </v-btn-group>
               </div>
               <br />

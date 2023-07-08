@@ -43,6 +43,7 @@ export async function registerCustomer(payload, router) {
       firstName: payload.firstName.charAt(0).toUpperCase() + payload.firstName.slice(1),
       lastName: payload.lastName.charAt(0).toUpperCase() + payload.lastName.slice(1),
       email: payload.email,
+      username: payload.email,
       password: payload.password,
       shipping: {
         // address1: payload.address.charAt(0).toUpperCase() + payload.address.slice(1),
