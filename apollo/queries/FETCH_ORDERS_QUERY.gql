@@ -1,10 +1,7 @@
 # $statuses: [OrderStatusEnum] = CANCELLED,
 #statuses: $statuses,
-query FETCH_ORDERS_QUERY( $first: Int = 10, $order: OrderEnum = ASC) {
-  orders(
-    first: $first
-    where: { orderby: {field: DATE, order: $order} }
-  ) {
+query FETCH_ORDERS_QUERY($first: Int = 10, $order: OrderEnum = ASC) {
+  orders(first: $first, where: {orderby: {field: DATE, order: $order}}) {
     nodes {
       currency
       customerNote
@@ -42,6 +39,24 @@ query FETCH_ORDERS_QUERY( $first: Int = 10, $order: OrderEnum = ASC) {
         }
       }
       shippingTotal(format: RAW)
+      billing {
+        address1
+        address2
+        city
+        country
+        firstName
+        lastName
+        postcode
+      }
+      shipping {
+        address1
+        address2
+        city
+        country
+        firstName
+        lastName
+        postcode
+      }
     }
   }
 }

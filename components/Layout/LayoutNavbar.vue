@@ -63,7 +63,7 @@
                               v-model="loginPL.username"
                               variant="solo"
                               density="compact"
-                              label="E-Mail"
+                              label="E-Mail oder Benutzername"
                               bg-color="rgb(26, 6, 58)"
                               color="rgb(250, 245, 255)"
                             ></v-text-field>
@@ -180,7 +180,7 @@
                               v-model="loginPL.username"
                               variant="solo"
                               density="compact"
-                              label="E-Mail"
+                              label="E-Mail oder Benutzername"
                               bg-color="rgb(26, 6, 58)"
                               color="rgb(250, 245, 255)"
                             ></v-text-field>
@@ -313,7 +313,7 @@ export default {
         await this.authStore.logout()
         const cookie = useCookie("woo-session");
         const refreshToken = useCookie("refreshToken");
-        const authorization = useCookie("authorization");
+        const authorization = useCookie("wp-auth");
         const woocommerceSession = useCookie("woocommerce-session");
         cookie.value = null;
         authorization.value = null;

@@ -163,7 +163,7 @@ export function removeProductFromCart (product) {
 
 export async function checkout(shipping, billing, paymentMethod) {
   // shipping.address1 = shipping.address
-  
+  debugger
   const checkoutVariables = {
     input: {
       shipping: shipping,
@@ -192,7 +192,7 @@ export async function checkout(shipping, billing, paymentMethod) {
 
 export async function oneClickCheckout(productID, shipping, billing, paymentMethod) {
   // shipping.address1 = shipping.address
-  
+  debugger
   const checkoutVariables = {
     input: {
       productId: productID,
@@ -213,6 +213,7 @@ export async function oneClickCheckout(productID, shipping, billing, paymentMeth
     snackbar.setMessage(err.message, 'error')
   })
   onDone((res) => {
+    debugger
     const orderReceivedStore = useOrderReceived();
     orderReceivedStore.setOrder(res.data.oneClickCheckout.order)
     navigateTo('/order-received')

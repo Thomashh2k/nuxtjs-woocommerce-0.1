@@ -20,7 +20,7 @@ export default {
   methods: {
     logout() {
       this.authStore.logout()
-      const authorization = useCookie("authorization");
+      const authorization = useCookie("wp-auth");
       const woocommerceSession = useCookie("woocommerce-session");
       cookie.value = null;
       authorization.value = null;

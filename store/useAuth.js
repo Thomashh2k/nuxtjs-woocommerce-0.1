@@ -33,6 +33,7 @@ const state = {
     }
   },
   refreshJwt: '',
+  jwt: ''
 };
 
 export const useAuth = defineStore("userState", {
@@ -40,6 +41,9 @@ export const useAuth = defineStore("userState", {
   actions: {
     setRefreshToken(token) {
       this.refreshJwt = token
+    },
+    setAuthToken(token) {
+      this.jwt = token
     },
     setUser(user) {
         this.user = user
@@ -78,7 +82,8 @@ export const useAuth = defineStore("userState", {
           orders: {
       
           },
-          refreshJwt: ''
+          refreshJwt: '',
+          jwt: ''
         }
       })
       this.jwt = ''
@@ -94,6 +99,9 @@ export const useAuth = defineStore("userState", {
   getters: {
     getRefreshToken() {
       return this.refreshJwt
+    },
+    getAuthToken() {
+      return this.jwt
     },
     getUser() {
       return this.user

@@ -73,8 +73,8 @@ export const useCart = defineStore("cartState", {
     getDetails() {
       return this.details
     },
-    getCartTotal() {
-      return this.items.reduce(
+    getCartTotal: (state) => {
+      return state.items.reduce(
         (total, item) => {
           // Remove '&nbsp;€' because we need a Number not a string
           const noSpecialCharacter = item.price.replace('&nbsp;€', "")

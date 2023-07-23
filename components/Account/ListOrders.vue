@@ -64,21 +64,45 @@
     <template v-slot:expanded-row="{ columns, item }">
       <tr class="">
         <td :colspan="columns.length">
-          <div>
-            <!-- <ul class="list-none">
-              <li class="tw-text-purple-50">Warenwert Gesammt: {{ priceToNumber(item.selectable.total) + ' €' }}</li>
-              <li class="tw-text-purple-50">Versandkosten Gesammt: {{ priceToNumber(item.selectable.shippingTotal) + ' €' }}</li>
-              <li>Milk</li>
-            </ul>  
-            <v-divider /> -->
-            <div v-for="pItem in item.selectable.lineItems.nodes" class="">
-              <NuxtLink class="tw-flex tw-flex-row" :to="{path: '/product/' + pItem.product.node.slug, query: { id:  pItem.product.node.databaseId }}">
-                <img :src="pItem.product.node.image.sourceUrl" class="tw-h-25 tw-w-20 tw-my-2" />
-                <div class="tw-flex tw-flex-col tw-self-start tw-pl-4 tw-mt-1">
-                  <span class="tw-text-purple-50 hover:tw-underline">{{ pItem.product.node.name }}</span>
-                  <span class="tw-text-purple-50 hover:tw-underline">{{ pItem.total + ' €' }}</span>
-                </div>
-              </NuxtLink>
+          <div class="tw-flex tw-flex-row">
+            <div class="tw-w-1/2">
+              <div v-for="pItem in item.selectable.lineItems.nodes">
+                <NuxtLink class="tw-flex tw-flex-row" :to="{path: '/product/' + pItem.product.node.slug, query: { id:  pItem.product.node.databaseId }}">
+                  <img :src="pItem.product.node.image.sourceUrl" class="tw-h-25 tw-w-20 tw-my-2" />
+                  <div class="tw-flex tw-flex-col tw-self-start tw-pl-4 tw-mt-1">
+                    <span class="tw-text-purple-50 hover:tw-underline">{{ pItem.product.node.name }}</span>
+                    <span class="tw-text-purple-50 hover:tw-underline">{{ pItem.total + ' €' }}</span>
+                  </div>
+                </NuxtLink>
+              </div>
+            </div>
+            <div class="tw-w-1/2">
+                <v-sheet style="background: #1a063a;">
+                  <div class="tw-flex tw-flex-row">
+                    <div class="tw-w-1/2">
+                      <h1 class="tw-text-purple-50 tw-text-center">Lieferaddresse</h1>
+                      <div class="tw-flex te-flex-col tw-justify-center">
+                        <div class="tw-flex tw-flex-col tw-text-purple-50">
+                          <p>{{ item.raw.shipping.firstName + ' ' + item.raw.shipping.lastName }}</p>
+                          <p>{{ item.raw.shipping.address1 + ' ' + item.raw.shipping.address2 }}</p>
+                          <p>{{ item.raw.shipping.postcode + ' ' + item.raw.shipping.city }}</p>
+                          <p>{{ getCountryNameByCode(item.raw.shipping.country) }}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tw-w-1/2">
+                      <h1 class="tw-text-purple-50 tw-text-center">Rechnungsaddresse</h1>
+                      <div class="tw-flex te-flex-col tw-justify-center">
+                        <div class="tw-flex tw-flex-col tw-text-purple-50">
+                          <p>{{ item.raw.billing.firstName + ' ' + item.raw.billing.lastName }}</p>
+                          <p>{{ item.raw.billing.address1 + ' ' + item.raw.billing.address2 }}</p>
+                          <p>{{ item.raw.billing.postcode + ' ' + item.raw.billing.city }}</p>
+                          <p>{{ getCountryNameByCode(item.raw.billing.country) }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </v-sheet>
             </div>
           </div>
         </td>
@@ -151,10 +175,24 @@ export default {
         }
     },
     async created() {
+      debugger
       this.loading = true
       const resp = await getOrders({search: '', first: 10})
       this.orders = resp.nodes
       this.loading = false
+    },
+    methods: {
+      getCountryNameByCode(code) {
+        if(code === 'DE') {
+          return 'Deutschland'
+        } else if (code === 'AT') {
+          return 'Österreich'
+        } else if (code === 'CH') {
+          return 'Schweiz'
+        } else {
+          return 'Nicht verfügbar'
+        }
+      }
     }
 }
 </script>

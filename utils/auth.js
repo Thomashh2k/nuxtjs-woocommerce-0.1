@@ -20,6 +20,8 @@ export async function login (payload) {
       }
       debugger
       authStore.setRefreshToken(result.data.login.refreshToken)
+      authStore.setAuthToken(result.data.login.authToken)
+
       authStore.setUser(result.data.login.user)
       authStore.setCustomer(result.data.login.customer)
 

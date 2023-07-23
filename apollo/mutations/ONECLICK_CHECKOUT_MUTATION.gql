@@ -1,6 +1,6 @@
-mutation ONECLICK_CHECKOUT($productId: Int = 1, $quantity: Int = 10, $shipping: CustomerAddressInput = {}, $paymentMethod: String = "", $billing: CustomerAddressInput = {}) {
+mutation ONECLICK_CHECKOUT($input: OneClickCheckoutInput = {}) {
   oneClickCheckout(
-    input: {productId: $productId, quantity: $quantity, shipping: $shipping, paymentMethod: $paymentMethod, billing: $billing}
+    input: $input
   ) {
     order {
       needsPayment

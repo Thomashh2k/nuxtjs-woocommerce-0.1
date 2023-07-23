@@ -14,7 +14,7 @@ import REFRESH_AUTH_TOKEN from "@/apollo/mutations/REFRESH_AUTH_TOKEN.gql";
 import GET_CART_DOCUMENT from "@/apollo/queries/GET_CART_DOCUMENT.gql";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const authorization = useCookie("authorization", {
+  const authorization = useCookie("wp-auth", {
     maxAge: 86_400,
     sameSite: "lax",
   });
@@ -38,8 +38,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   async function getAuthToken() {
       let authToken = authorization.value;
-      debugger
-      if (authToken === undefined || checkExpired(authToken)) {
+      if (!authToken || checkExpired(authToken)) {
         authToken = await fetchAuthToken();
       }
       return authToken;
@@ -56,7 +55,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     try {
   
       const graphQLClient = new GraphQLClient("http://localhost:8080/graphql");
-      debugger
       const results = await graphQLClient.request(REFRESH_AUTH_TOKEN, {refreshToken: refreshToken});
       authToken = results?.refreshJwtAuthToken?.authToken;
   
@@ -66,22 +64,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     } catch (err) {
       console.error(err);
     }
-  
-    // Save token.
-    authorization.value = authToken
-    // if (tokenSetter) {
-    //   clearInterval(tokenSetter);
-    // }
-    // tokenSetter = setInterval(
-    //   async () => {
-    //     if (!hasCredentials()) {
-    //       clearInterval(tokenSetter);
-    //       return;
-    //     }
-    //     fetchAuthToken();
-    //   },
-    //   Number(process.env.AUTH_KEY_TIMEOUT || 30000),
-    // );
   
     return authToken;
   }
@@ -142,10 +124,16 @@ export default defineNuxtPlugin((nuxtApp) => {
       debugger
       if (authToken) {
         headers.Authorization = `Bearer ${authToken}`;
+        const useAuthStore = useAuth();
+        useAuthStore.setAuthToken(authToken);
+        authorization.value = authToken;
+
       }
   
       if (sessionToken) {
         headers['woocommerce-session'] = `Session ${sessionToken}`;
+        woocommerceSession.value = sessionToken;
+
       }
   
       if (authToken || sessionToken) {

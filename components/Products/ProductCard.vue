@@ -92,14 +92,14 @@
             <v-row>
                 <v-col>
                     <div class="tw-flex tw-flex-col tw-bottom-0">
-                        <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="x-small" icon="mdi-cart-plus" @click="addToCart(product)" />
+                        <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="small" icon="mdi-cart-plus" @click="addToCart(product)" />
                     </div>
                 </v-col>
                 <v-col>
                     <div class="tw-flex tw-flex-col tw-mb-2">
                         <div class="tw-flex tw-justify-end">
                             <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
-                                <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="x-small" icon="mdi-cash-register" />
+                                <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="small" icon="mdi-cash-register" />
                             </NuxtLink>
                         </div>
                     </div>

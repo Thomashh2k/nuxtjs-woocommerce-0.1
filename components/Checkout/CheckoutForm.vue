@@ -103,6 +103,8 @@ export default {
     const customer = getCustomer
 
     const submit = handleSubmit(values => {
+      debugger
+      values.email = email.value.value
       return values
     })
 
@@ -125,6 +127,8 @@ export default {
         } else {
           billingAddress = shippingAddress
         }
+        shippingAddress.email = this.authStore.getUser.email
+        billingAddress.email = this.authStore.getUser.email
         return { shippingAddress, billingAddress }
 
       } else {
@@ -135,6 +139,8 @@ export default {
           billingAddress = shippingAddress
         }
         const notLoggedInVal = await this.submit()
+        shippingAddress.email = notLoggedInVal.email
+        billingAddress.email = notLoggedInVal.email
         return {shippingAddress, billingAddress, notLoggedInVal}
       }
     }

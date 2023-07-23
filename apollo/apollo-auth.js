@@ -33,7 +33,7 @@ export function createSessionLink() {
 
 
 function hasCredentials() {
-    const authorization = useCookie("authorization");
+    const authorization = useCookie("wp-auth");
     const authToken = authorization.value;
     const useAuthStore = useAuth();
     const refreshToken = useAuthStore.refreshJwt;
@@ -68,7 +68,7 @@ export async function fetchAuthToken() {
     }
   
     // Save token.
-    const authorization = useCookie("authorization");
+    const authorization = useCookie("wp-auth");
     authorization.value = authToken
     if (tokenSetter) {
       clearInterval(tokenSetter);

@@ -2,8 +2,8 @@
   <div>
     <!-- <v-card style="background: rgb(50, 17, 102)"> -->
       <!-- <v-card-text v-if="cartItems?.length"> -->
-      <h1 class="tw-h-10 tw-p-6 tw-text-3xl tw-font-bold tw-text-center tw-text-purple-50">Warenkorb</h1>
-      <section class="tw-mt-10 tw-overflow-y-auto" style="height: 15%;">
+      <h1 class="tw-h-10 tw-mt-2.5 tw-text-3xl tw-font-bold tw-text-center tw-text-purple-50">Warenkorb</h1>
+      <section class="tw-mt-10 tw-overflow-y-auto" :style="'height:' + props.scrollHeight">
         <div 
             v-for="item in cartItems"
             key="item.databaseId"
@@ -80,7 +80,7 @@ import { removeProductFromCart, priceToNumber, numberToPrice } from "@/utils/fun
 import { useCart } from "@/store/useCart";
 
 const cart = useCart();
-const props = defineProps(['tabPos', 'addressInfo'])
+const props = defineProps(['tabPos', 'addressInfo', 'scrollHeight'])
 // watch(tabPos, (newVal, oldVal) => {
 //       
 //       if(this.addressInfo === null) {

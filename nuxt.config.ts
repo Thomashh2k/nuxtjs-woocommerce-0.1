@@ -12,6 +12,7 @@ export default defineNuxtConfig({
   buildModules: ['@nuxt/typescript-build'],
   modules: [
     "@pinia/nuxt",
+    // '@nuxtjs/axios',
     "@pinia-plugin-persistedstate/nuxt",
     "@nuxtjs/apollo",
     // '@sidebase/nuxt-auth',
@@ -54,6 +55,14 @@ export default defineNuxtConfig({
       charset: "utf-16",
       viewport: "width=500, initial-scale=1",
       meta: [{ name: "description", content: "Nuxt 3 - Woocommerce" }],
+      script: [
+        {
+          src: 'https://x.klarnacdn.net/kp/lib/v1/api.js',
+          type:'text/javascript',
+          crossorigin: "anonymous",
+          async: true
+        }
+      ]
     },
     // global transition
     pageTransition: { name: "page", mode: "out-in" },
