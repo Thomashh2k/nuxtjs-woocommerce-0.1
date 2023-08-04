@@ -44,9 +44,9 @@ export function persoChecksum(id) {
     const splits = id.toUpperCase().split(" ");
 
     const checksums = [];
-    const persoType = persoType(id);
+    const type = persoType(id);
 
-    if (persoType === 'unknown') {
+    if (type === 'unknown') {
         return false;
     }
 
@@ -57,6 +57,7 @@ export function persoChecksum(id) {
 
     // Überprüfung der Checksummen
     for (let i = 0; i < checksums.length; i++) {
+        if(i === 3) debugger
         const checksum = checksums[i];
         if (!checkNumber(checksum[0], checksum[1])) {
         return false;
@@ -122,9 +123,9 @@ export function persoInfo(id) {
     return returnObj;
 }
 
-function test() {
-if (typeof window !== "undefined" && window.location.search.includes("check")) {
-  const perso_id = `${document.getElementById("ida").value} ${document.getElementById("idb").value} ${document.getElementById("idc").value} ${document.getElementById("idd").value}`;
+export function get_perso_data(persoInput) {
+  debugger
+  const perso_id = `${persoInput.ida} ${persoInput.idb} ${persoInput.idc} ${persoInput.idd}`;
 
   if (persoChecksum(perso_id)) {
     console.log("Personalausweisnummer korrekt!");
@@ -144,5 +145,4 @@ if (typeof window !== "undefined" && window.location.search.includes("check")) {
   } else {
     console.log("Personalausweisnummer falsch!");
   }
-}
 }

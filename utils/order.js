@@ -6,22 +6,23 @@ export async function getOrders({ search, first, after = null, before = null, la
     const orderVar = { search, first, after, before, last, exclude, order: 'ASC' };
 
     return new Promise((resolve, reject) => {
-        const authorization = useCookie("wp-auth");
-        const authStore = useAuth();
-        const result = useQuery(FETCH_ORDERS_QUERY, orderVar,{
-            // This should be Fixed somehow because this should be handled by plugins/apollo.js
-            context: { headers: { authorization: `Bearer ${authorization.value || authStore.getAuthToken}` } }
-        });
-        result.start();
-        result.onError((err) => {
+      debugger
+      const { $apolloClient, $wpAuth } = useNuxtApp()
+        const result = $apolloClient.query({
+          query: FETCH_ORDERS_QUERY,
+          variables: orderVar,
+          context: { headers: { authorization: `Bearer ${$wpAuth.value}` } }
+        }).then((result) => {
+
+          const data = result?.data;
+          resolve(data.orders);
+
+        }).catch((error) => {
+
             const snackbar = useSnackbar()
-            snackbar.setMessage(err.message, 'error')
-        })
-
-        result.onResult((res) => {
-            const data = res?.data;
-            resolve(data.orders);
-
+            snackbar.setMessage(error.message, 'error')
+            reject(error)
+            
         });
     });
 }

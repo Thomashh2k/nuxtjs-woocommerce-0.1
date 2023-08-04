@@ -2,7 +2,7 @@
   <v-row>
     <v-col lg="1"></v-col>
     <v-col cols="12" lg="10">
-      <v-card class="account-card-bg ">
+      <v-card class="account-card-bg">
         <v-card-text>
           <div class="max-[960px]:tw-flex tw-hidden">
             <v-row>
@@ -44,6 +44,7 @@
       </v-card>
     </v-col>
     <v-col lg="1"></v-col>
+    <!-- <AgeVerificationDialog v-model="ageVerficationNeeded" /> -->
   </v-row>
 </template>
 
@@ -53,6 +54,7 @@ import PaypalButton from '@/components/Checkout/Payments/PaypalButton.vue'
 import Checkboxes from '@/components/Checkout/Checkboxes';
 import CartContents from '@/components/Checkout/CartContents';
 import SelectedProduct from '@/components/OneClickCheckout/SelectedProduct';
+import AgeVerificationDialog from '~/components/Checkout/AgeVerificationDialog.vue';
 import { oneClickCheckout, priceToNumber } from "@/utils/functions";
 import { useAuth } from '@/store/useAuth.js'
 import GET_SINGLE_PRODUCT_QUERY from "@/apollo/queries/GET_SINGLE_PRODUCT_QUERY.gql";
@@ -64,6 +66,7 @@ export default {
     components: {
         Checkboxes,
         SelectedProduct,
+        AgeVerificationDialog,
         PaypalButton,
         CartContents
     },
@@ -76,6 +79,7 @@ export default {
         stripe: null,
         stripeElement: null,
         stripeClientSecret: null,
+        // ageVerficationNeeded: true,
         product: {
           image: {
             sourceUrl: ''

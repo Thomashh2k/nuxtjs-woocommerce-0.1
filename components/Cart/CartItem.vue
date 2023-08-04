@@ -62,11 +62,12 @@ import { useCart } from "@/store/useCart";
 
 export default {
     data() {
+        debugger
         const _cart = useCart()
         return {
             mdiCartOutline,
             cart: _cart,
-            cartItems: _cart.getItems
+            cartItems: _cart.getItems,
         }
     },
 }

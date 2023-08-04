@@ -1,12 +1,10 @@
 import { defineStore } from "pinia";
 
-const state = {
-  details: null,
-  items: [],
-};
-
 export const useCart = defineStore("cartState", {
-  state: () => state,
+  state: () => ({
+    details: null,
+    items: [],
+  }),
   actions: {
     addTemporary(product) {
       let _index = 0
@@ -73,19 +71,20 @@ export const useCart = defineStore("cartState", {
     getDetails() {
       return this.details
     },
-    getCartTotal: (state) => {
-      return state.items.reduce(
-        (total, item) => {
-          // Remove '&nbsp;€' because we need a Number not a string
-          const noSpecialCharacter = item.price.replace('&nbsp;€', "")
-          // Replace commas with dots because javascript is too stupid for commas...
-          const noCommas = noSpecialCharacter.replace(',', ".")
-          // Convert to Number
-          const number = Number(noCommas) * item.quantity
-          return total + Number(number) * item.quantity
-        },
-        0
-      );
+    getCartTotal() {
+      let total = 0;
+    
+      for (const item of this.items) { // Hier wurde "items" zu "this.items" geändert
+        // Remove '&nbsp;€' because we need a Number not a string
+        const noSpecialCharacter = item.product.price.replace('&nbsp;€', ''); // Auch "item.price" wurde zu "item.product.price" geändert, da "price" unter "product" gespeichert ist
+        // Replace commas with dots because javascript is too stupid for commas...
+        const noCommas = noSpecialCharacter.replace(',', '.');
+        // Convert to Number
+        const number = Number(noCommas) * item.quantity;
+        total += number;
+      }
+    
+      return total;
     },
   },
   persist: true,

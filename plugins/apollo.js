@@ -9,7 +9,7 @@ import { onError } from '@apollo/client/link/error';
 import { useAuth } from "~/store/useAuth";
 import { provideApolloClient } from "@vue/apollo-composable";
 import { checkExpired } from '@/utils/auth'
-// import { GraphQLClient } from 'graphql-request'
+import { GraphQLClient } from 'graphql-request'
 import REFRESH_AUTH_TOKEN from "@/apollo/mutations/REFRESH_AUTH_TOKEN.gql";
 import GET_CART_DOCUMENT from "@/apollo/queries/GET_CART_DOCUMENT.gql";
 
@@ -22,6 +22,15 @@ export default defineNuxtPlugin((nuxtApp) => {
     maxAge: 86_400,
     sameSite: "lax",
   });
+
+  const targetErrors = [
+    'The iss do not match with this server',
+    'invalid-secret-key | Expired token',
+    'invalid-secret-key | Signature verification failed',
+    'Expired token',
+    'Wrong number of segments',
+  ];
+
   let tokenSetter;
   const config = useRuntimeConfig();
   const httpLink = createHttpLink({
@@ -37,6 +46,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   async function getAuthToken() {
+      debugger
       let authToken = authorization.value;
       if (!authToken || checkExpired(authToken)) {
         authToken = await fetchAuthToken();
@@ -82,6 +92,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   async function fetchSessionToken() {
     const headers = {};
+    debugger
     const authToken = await getAuthToken();
     if (authToken) {
       headers.Authorization = `Bearer ${authToken}`;
@@ -100,13 +111,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         throw new Error('Failed to retrieve a new session token');
       }
     } catch (err) {
-      const targetErrors = [
-        'The iss do not match with this server',
-        'invalid-secret-key | Expired token',
-        'invalid-secret-key | Signature verification failed',
-        'Expired token',
-        'Wrong number of segments',
-      ];
       const hasTokenError = targetErrors.includes(err);
       if(hasTokenError) {
         await fetchAuthToken();
@@ -150,7 +154,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       /**
        * Check for session header and update session in local storage accordingly. 
        */
-      debugger
 
       const context = operation.getContext();
       const { response: { headers } } = context;
@@ -166,13 +169,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     })
   );
  const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-  const targetErrors = [
-    'The iss do not match with this server',
-    'invalid-secret-key | Expired token',
-    'invalid-secret-key | Signature verification failed',
-    'Expired token',
-    'Wrong number of segments',
-  ];
   let observable;
   if (graphQLErrors?.length) {
     graphQLErrors.map(({ debugMessage, message }) => {
@@ -216,14 +212,14 @@ export default defineNuxtPlugin((nuxtApp) => {
   const cache = new InMemoryCache();
   const link = ApolloLink.from([
     middleware,
-    afterware,
     errorLink,
+    afterware,
     httpLink,
   ])
+  debugger
   // Create the apollo client
   const apolloClient = new ApolloClient({
     link: link,
-    // link: link,
     cache,
   });
 
@@ -232,6 +228,15 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook("apollo:auth", ({ token }) => {
     token.value = woocommerceSession.value;
   });
+
+  return {
+    provide: {
+      apolloClient: apolloClient,
+      getAuthToken: getAuthToken,
+      wpAuth: authorization,
+      woocommerceSession: woocommerceSession,
+    }
+  }
 });
 
 
