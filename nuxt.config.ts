@@ -75,7 +75,7 @@ export default defineNuxtConfig({
     tokenName: "woocommerce-session",
     clients: {
       default: {
-        httpEndpoint: 'http://localhost:8080/graphql',
+        httpEndpoint: process.env.PUBLIC_GRAPHQL_URL,
         httpLinkOptions: {
           credentials: "include",
         },

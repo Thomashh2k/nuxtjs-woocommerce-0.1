@@ -9,7 +9,7 @@ import { onError } from '@apollo/client/link/error';
 import { useAuth } from "~/store/useAuth";
 import { provideApolloClient } from "@vue/apollo-composable";
 import { checkExpired } from '@/utils/auth'
-import { GraphQLClient } from 'graphql-request'
+// import { GraphQLClient } from 'graphql-request'
 import REFRESH_AUTH_TOKEN from "@/apollo/mutations/REFRESH_AUTH_TOKEN.gql";
 import GET_CART_DOCUMENT from "@/apollo/queries/GET_CART_DOCUMENT.gql";
 
@@ -34,7 +34,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   let tokenSetter;
   const config = useRuntimeConfig();
   const httpLink = createHttpLink({
-    uri: "http://localhost:8080/graphql",
+    uri: process.env.PUBLIC_GRAPHQL_URL,
   });
 
   async function getSessionToken(forceFetch = false) {
@@ -64,7 +64,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   
     try {
   
-      const graphQLClient = new GraphQLClient("http://localhost:8080/graphql");
+      const graphQLClient = new GraphQLClient(process.env.PUBLIC_GRAPHQL_URL);
       const results = await graphQLClient.request(REFRESH_AUTH_TOKEN, {refreshToken: refreshToken});
       authToken = results?.refreshJwtAuthToken?.authToken;
   
@@ -100,7 +100,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   
     let sessionToken;
     try {
-      const graphQLClient = new GraphQLClient("http://localhost:8080/graphql");
+      const graphQLClient = new GraphQLClient(process.env.PUBLIC_GRAPHQL_URL);
       debugger
   
       const cartData = await graphQLClient.request(GET_CART_DOCUMENT, {}, headers)

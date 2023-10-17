@@ -177,17 +177,8 @@ export async function checkout(shipping, billing, paymentMethod) {
 
   mutate(checkoutVariables);
 
-  onError((err) => {
-    const snackbar = useSnackbar()
-    snackbar.setMessage(err.message, 'error')
-  })
-  onDone((res) => {
-    const cart = useCart();
-    cart.clear();
-    const orderReceivedStore = useOrderReceived();
-    orderReceivedStore.setOrder(res.data.checkout.order)
-    navigateTo('/order-received')
-  })
+  return { onDone, onError }
+
 }
 
 export async function oneClickCheckout(productID, shipping, billing, paymentMethod) {
@@ -208,16 +199,7 @@ export async function oneClickCheckout(productID, shipping, billing, paymentMeth
 
   mutate(checkoutVariables);
 
-  onError((err) => {
-    const snackbar = useSnackbar()
-    snackbar.setMessage(err.message, 'error')
-  })
-  onDone((res) => {
-    debugger
-    const orderReceivedStore = useOrderReceived();
-    orderReceivedStore.setOrder(res.data.oneClickCheckout.order)
-    navigateTo('/order-received')
-  })
+  return { onDone, onError }
 } 
 
 export function getOrderStatus (status) {
