@@ -24,7 +24,7 @@ export default {
         }
     },
     async created() {
-        
+        debugger
         if(this.$route.params.slug[0].includes('index') || this.$route.params.slug[0].includes('/') || this.$route.params.slug[0].includes('')) {
             this.$router.push('/')
         }
