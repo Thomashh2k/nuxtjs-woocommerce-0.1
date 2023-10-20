@@ -9,7 +9,7 @@
 </template>
 <script>
 import { getPage } from '@/utils/getPage';
-import { useSnackbar } from '@/utils/snackbar';
+import { useSnackbar } from '@/store/snackbar';
 import moment from 'moment';
 
 export default {
