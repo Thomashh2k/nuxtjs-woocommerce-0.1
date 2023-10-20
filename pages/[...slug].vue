@@ -25,7 +25,7 @@ export default {
     },
     async created() {
         
-        if(this.$route.params.slug[0].includes('index')) {
+        if(this.$route.params.slug[0].includes('index') || this.$route.params.slug[0].includes('/') || this.$route.params.slug[0].includes('')) {
             this.$router.push('/')
         }
         const result = await getPage(this.$route.params.slug[0])
