@@ -24,14 +24,11 @@ export default {
         }
     },
     async created() {
-        debugger
-        if(this.$route.params.slug[0].includes('index') || this.$route.params.slug[0].includes('/') || this.$route.params.slug[0].includes('')) {
-            this.$router.push('/')
-        }
         const result = await getPage(this.$route.params.slug[0])
-        debugger
         if(result.pageBy === null) {
-            this.$router.push('/404')
+            const snackbar = useSnackbar()
+            snackbar.setMessage(`Die Seite ${this.$route.params.slug[0]} konnte nicht gefunden werden`, 'error')
+            this.$router.push('/')
         }
         this.page.date =  moment(result.pageBy.date).format('DD.MM.yyyy HH:mm')
         this.page.databaseId = result.pageBy.databaseId
