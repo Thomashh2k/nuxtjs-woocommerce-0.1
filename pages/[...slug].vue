@@ -30,7 +30,7 @@ export default {
         if(result.pageBy === null) {
             const snackbar = useSnackbar()
             snackbar.setMessage(`Die Seite ${this.$route.params.slug[0]} konnte nicht gefunden werden...`, 'error')
-            this.$router.push('/')
+            this.$router.push('/404')
         }
         this.page.date =  moment(result.pageBy.date).format('DD.MM.yyyy HH:mm')
         this.page.databaseId = result.pageBy.databaseId
