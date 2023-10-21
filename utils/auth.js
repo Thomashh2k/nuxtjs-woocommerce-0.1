@@ -4,12 +4,16 @@ import LOGIN_USER_MUTATION from "@/apollo/mutations/LOGIN_USER_MUTATION.gql";
 import REFRESH_AUTH_TOKEN from "@/apollo/mutations/REFRESH_AUTH_TOKEN.gql";
 import REGISTER_CUSTOMER_MUTATION from '@/apollo/mutations/REGISTER_CUSTOMER_MUTATION.gql'
 
+
 export async function login (payload) {
   return new Promise((resolve, reject) => {
     const authStore = useAuth();
 
     const loginVariables = { input: payload };
-    const { mutate, onDone, onError} = useMutation(LOGIN_USER_MUTATION, { variables: loginVariables });
+
+    const { $useMutate } = useNuxtApp()
+
+    const { mutate, onDone, onError} = $useMutate(LOGIN_USER_MUTATION, { variables: loginVariables });
     mutate(payload);
     const resultDone = onDone((result) => {
       
@@ -59,7 +63,9 @@ export async function registerCustomer(payload, router) {
       }
   }};
 
-  const { mutate, onDone, onError } = useMutation(REGISTER_CUSTOMER_MUTATION, { variables: registerVariables });
+  const { $useMutate } = useNuxtApp()
+
+  const { mutate, onDone, onError } = $useMutate(REGISTER_CUSTOMER_MUTATION, { variables: registerVariables });
   mutate(payload);
 
  onDone((result) => {
@@ -103,7 +109,10 @@ export function checkExpired(accessToken) {
 
 export async function refreshAuthToken(refreshToken) {
   const refreshVariables = { refreshToken: refreshToken };
-  const { mutate, onDone, onError} = useMutation(REFRESH_AUTH_TOKEN, { variables: refreshVariables });
+  
+  const { $useMutate } = useNuxtApp()
+
+  const { mutate, onDone, onError} = $useMutate(REFRESH_AUTH_TOKEN, { variables: refreshVariables });
   mutate(refreshVariables);
   const resultDone = onDone((result) => {
     const authStore = useAuth();

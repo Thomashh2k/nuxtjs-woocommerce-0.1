@@ -53,6 +53,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
       return authToken;
   }
+
   async function fetchAuthToken() {
     const useAuthStore = useAuth();
     const refreshToken = useAuthStore.refreshJwt;
@@ -119,6 +120,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   
     return sessionToken;
   }
+
   const middleware = new ApolloLink(async (operation, forward) => {
     operation.setContext(async ({ context: { headers: currentHeaders } = {} }) => {
       const headers = { ...currentHeaders };
@@ -168,26 +170,27 @@ export default defineNuxtPlugin((nuxtApp) => {
       return response;
     })
   );
- const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-  let observable;
-  if (graphQLErrors?.length) {
-    graphQLErrors.map(({ debugMessage, message }) => {
-      if (targetErrors.includes(message) || targetErrors.includes(debugMessage)) {
-        observable = new Observable((observer) => {
-          getSessionToken(true)
-            .then((sessionToken) => {
-              operation.setContext(({ headers = {} }) => {
-                const nextHeaders = headers;
 
-                if (sessionToken) {
-                  nextHeaders['woocommerce-session'] = `Session ${sessionToken}`;
-                } else {
-                  delete nextHeaders['woocommerce-session'];
-                }
+  const errorLink = onError(({ graphQLErrors, operation, forward }) => {
+    let observable;
+    if (graphQLErrors?.length) {
+      graphQLErrors.map(({ debugMessage, message }) => {
+        if (targetErrors.includes(message) || targetErrors.includes(debugMessage)) {
+          observable = new Observable((observer) => {
+            getSessionToken(true)
+              .then((sessionToken) => {
+                operation.setContext(({ headers = {} }) => {
+                  const nextHeaders = headers;
 
-                return {
-                  headers: nextHeaders,
-                };
+                  if (sessionToken) {
+                    nextHeaders['woocommerce-session'] = `Session ${sessionToken}`;
+                  } else {
+                    delete nextHeaders['woocommerce-session'];
+                  }
+
+                  return {
+                    headers: nextHeaders,
+                  };
               });
             })
             .then(() => {
@@ -203,10 +206,10 @@ export default defineNuxtPlugin((nuxtApp) => {
             });
         });
       }
-    });
-  }
-  return observable;
-});
+      });
+    }
+    return observable;
+  });
 
   // Cache implementation
   const cache = new InMemoryCache();
@@ -216,7 +219,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     afterware,
     httpLink,
   ])
-  debugger
   // Create the apollo client
   const apolloClient = new ApolloClient({
     link: link,
@@ -224,14 +226,34 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   provideApolloClient(apolloClient);
-
+  
   nuxtApp.hook("apollo:auth", ({ token }) => {
     token.value = woocommerceSession.value;
   });
+  const useQuery = async (query, variables = {}) => {
+    try {
+      const response = await apolloClient.query({ query, variables });
+      return response.data;
+    } catch (error) {
+      console.error('Fehler bei der GraphQL-Abfrage:', error);
+      throw error;
+    }
+  };
 
+  const useMutate = async (mutation, variables = {}) => {
+    try {
+      const response = await apolloClient.mutate({ mutation, variables });
+      return response.data;
+    } catch (error) {
+      console.error('Fehler bei der GraphQL-Mutation:', error);
+      throw error;
+    }
+  };
   return {
     provide: {
       apolloClient: apolloClient,
+      useMutate: useMutate,
+      useQuery: useQuery,
       getAuthToken: getAuthToken,
       wpAuth: authorization,
       woocommerceSession: woocommerceSession,

@@ -12,6 +12,8 @@ import CHANGE_USER_EMAIL from '@/apollo/mutations/user/CHANGE_USER_EMAIL.gql'
 import { useSnackbar } from "@/store/snackbar";
 import { useAuth } from '@/store/useAuth.js'
 
+
+
 export async function updateUserInfo(userInfo) {
   
   const userInfoVar = {
@@ -21,7 +23,11 @@ export async function updateUserInfo(userInfo) {
         lastName: userInfo.lastName,
       },
     };
-    const { mutate, onError, onDone } = useMutation(UPDATE_USER_INFO, {
+
+    const { $useMutate } = useNuxtApp()
+
+
+    const { mutate, onError, onDone } = $useMutate(UPDATE_USER_INFO, {
       variables: userInfoVar
     });
   
@@ -53,8 +59,10 @@ export async function updateUserShipping(customerInfo, userInfo) {
         shipping: customerInfo.shipping,
       },
     };
-    console.log(shippingVar)
-    const { mutate, onError, onDone } = useMutation(UPDATE_USER_SHIPPING, {
+
+    const { $useMutate } = useNuxtApp()
+
+    const { mutate, onError, onDone } = $useMutate(UPDATE_USER_SHIPPING, {
       variables: shippingVar
     });
   
@@ -87,8 +95,10 @@ export async function updateUserBilling(customerInfo, userInfo) {
         billing: customerInfo.billing,
       },
     };
-    console.log(billingVar)
-    const { mutate, onError, onDone } = useMutation(UPDATE_USER_BILLING, {
+
+    const { $useMutate } = useNuxtApp()
+
+    const { mutate, onError, onDone } = $useMutate(UPDATE_USER_BILLING, {
       variables: billingVar
     });
   
@@ -118,7 +128,11 @@ export async function updateEmail(id, email) {
     id: id,
     email: email
   };
-  const { mutate, onError, onDone } = useMutation(CHANGE_USER_EMAIL, {
+
+  const { $useMutate } = useNuxtApp()
+
+
+  const { mutate, onError, onDone } = $useMutate(CHANGE_USER_EMAIL, {
     variables: changeEmail
   });
 
@@ -140,7 +154,11 @@ export async function updatePassword(id, password) {
     id: id,
     password: password
   };
-  const { mutate, onError, onDone } = useMutation(CHANGE_USER_PASSWORD, {
+
+  const { $useMutate } = useNuxtApp()
+
+
+  const { mutate, onError, onDone } = $useMutate(CHANGE_USER_PASSWORD, {
     variables: changePassword
   });
 
@@ -163,7 +181,11 @@ export async function sendResetPasswordLink(username) {
       username: username,
     }
   };
-  const { mutate, onError, onDone } = useMutation(SEND_RESET_PASSWORD_EMAIL, {
+
+  const { $useMutate } = useNuxtApp()
+
+
+  const { mutate, onError, onDone } = $useMutate(SEND_RESET_PASSWORD_EMAIL, {
     variables: resetPasswordVar
   });
 

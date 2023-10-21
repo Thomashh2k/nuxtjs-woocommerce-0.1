@@ -8,6 +8,9 @@ import REMOVE_ITEM_FROM_CART from "@/apollo/mutations/REMOVE_ITEM_FROM_CART.gql"
 import CHECKOUT_MUTATION from "@/apollo/mutations/CHECKOUT_MUTATION.gql";
 import ONECLICK_CHECKOUT_MUTATION from "@/apollo/mutations/ONECLICK_CHECKOUT_MUTATION.gql";
 
+
+
+
 /**
  * Strips HTML from the inputted string
  * @param {String} description Input text to strip HTML from
@@ -117,8 +120,10 @@ export async function addProductToCart (product) {
     productId,
     quantity
   };
+
+  const { $useMutate } = useNuxtApp()
   
-  const { mutate, onError, onDone } = useMutation(ADD_TO_CART_MUTATION, {
+  const { mutate, onError, onDone } = $useMutate(ADD_TO_CART_MUTATION, {
     variables: addToCartvariables
   });
 
@@ -149,7 +154,10 @@ export function removeProductFromCart (product) {
   const removeItemsVariables = {
     itemKey: product.key
   };
-  const { mutate, onError } = useMutation(REMOVE_ITEM_FROM_CART, {
+
+  const { $useMutate } = useNuxtApp()
+
+  const { mutate, onError } = $useMutate(REMOVE_ITEM_FROM_CART, {
     variables: removeItemsVariables
   });
 
@@ -171,7 +179,10 @@ export async function checkout(shipping, billing, paymentMethod) {
       paymentMethod: paymentMethod,
     }
   };
-  const { mutate, onError, onDone } = useMutation(CHECKOUT_MUTATION, {
+
+  const { $useMutate } = useNuxtApp()
+
+  const { mutate, onError, onDone } = $useMutate(CHECKOUT_MUTATION, {
     variables: checkoutVariables
   });
 
@@ -183,7 +194,6 @@ export async function checkout(shipping, billing, paymentMethod) {
 
 export async function oneClickCheckout(productID, shipping, billing, paymentMethod) {
   // shipping.address1 = shipping.address
-  debugger
   const checkoutVariables = {
     input: {
       productId: productID,
@@ -193,7 +203,10 @@ export async function oneClickCheckout(productID, shipping, billing, paymentMeth
       paymentMethod: paymentMethod,
     }
   };
-  const { mutate, onError, onDone } = useMutation(ONECLICK_CHECKOUT_MUTATION, {
+
+  const { $useMutate } = useNuxtApp()
+
+  const { mutate, onError, onDone } = $useMutate(ONECLICK_CHECKOUT_MUTATION, {
     variables: checkoutVariables
   });
 
