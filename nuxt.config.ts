@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify', 'vee-validate'],
   },
+  devtools: true,
   buildModules: ['@nuxt/typescript-build'],
   modules: [
     "@pinia/nuxt",

@@ -16,7 +16,7 @@
     >
         <img
             id="product-image"
-            class="tw-border 2xl:tw-h-72 xl:tw-h-72 lg:tw-h-72 md:tw-h-56 sm:tw-h-48 xs:tw-h-48 xxs:tw-h-48  tw-rounded tw-drop-shadow-lg tw-transition tw-duration-500 tw-ease-in-out tw-transform tw-cursor-pointer lg:tw-ml-0 tw-w-full  tw-hover:tw-scale-95"
+            class="tw-border tw-h-2/3  tw-rounded tw-drop-shadow-lg tw-transition tw-duration-500 tw-ease-in-out tw-transform tw-cursor-pointer lg:tw-ml-0 tw-w-full  tw-hover:tw-scale-95"
             style="object-fit: cover; object-position: center;"
             :alt="product.name"
             :src="productImage(product)"
@@ -30,84 +30,48 @@
             <div v-if="product.stockStatus === 'OUT_OF_STOCK'" style="color:rgb(244, 67, 54);">
             Nicht vorrätig
             </div>
-            <div v-else style="color:rgb(76, 175, 80);">
+            <div v-else style="color:rgb(0, 255, 10);">
             Auf Lager
             </div>
         </div>
-        <div v-if="product.onSale" class="tw-flex tw-justify-start tw-m-2 tw-mb-0  lg:tw-text-sm  hover:tw-underline tw-decoration-purple-50  ">
-            <div class="tw-text-purple-50 tw-line-through">
-            <span v-if="product.variations" v-html="filteredVariantPrice(product.price, 'right')"></span>
-            <span v-else v-html="product.regularPrice"></span>
-            </div>
-            <div class="tw-ml-4 tw-text-xl tw-text-purple-50">
-            <span v-if="product.variations" v-html="filteredVariantPrice(product.price)"></span>
-            <span v-else v-html="product.salePrice"></span>
+        <div v-if="product.onSale" class="tw-flex tw-justify-start tw-m-2 tw-mb-0  lg:tw-text-sm  hover:tw-underline tw-decoration-purple-50">
+            <div class="tw-flex tw-flex-row tw-justify-between">
+                <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" @click="addToCart(product)" />
+
+                <div class="tw-text-purple-50 tw-line-through">
+                        <span v-if="product.variations" v-html="filteredVariantPrice(product.price, 'right')"></span>
+                        <span v-else v-html="product.regularPrice"></span>
+                    </div>
+                    <div class="tw-ml-4 tw-text-xl tw-text-purple-50">
+                        <span v-if="product.variations" v-html="filteredVariantPrice(product.price)"></span>
+                        <span v-else v-html="product.salePrice"></span>
+                </div>
+    
+                <div class="tw-flex tw-flex-col">
+                    <div class="tw-flex tw-justify-end">
+                        <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
+                            <v-btn style="color: color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cash-register"  />
+                        </NuxtLink>
+                    </div>
+                </div>
             </div>
         </div>
         <div v-else>
-            <p class="tw-mx-2 tw-mt-2  tw-text-xl tw-text-center tw-text-purple-50 hover:tw-underline tw-decoration-purple-50  " v-html="product.price"></p>
+            <div class="tw-flex tw-flex-row tw-justify-between">
+                <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" variant="plain" density="compact" @click="addToCart(product)" />
+    
+                <p class="tw-mx-2 tw-mt-2  tw-text-xl tw-text-center tw-text-purple-50 hover:tw-underline tw-decoration-purple-50  " v-html="product.price"></p>
+    
+                <div class="tw-flex tw-flex-col">
+                    <div class="tw-flex tw-justify-end">
+                        <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
+                            <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" variant="plain" density="compact" icon="mdi-cash-register"  />
+                        </NuxtLink>
+                    </div>
+                </div>
+            </div>
         </div>
     </NuxtLink>
-    <v-card-actions style="z-index: 10;" >
-        <div v-if="windowWidth.innerWidth > 1920" class="tw-w-full tw-justify-center">
-            <!-- <v-btn-toggle color="success" variant="outlined" rounded="xl" class="lg:tw-h-4 lg:tw-pt-2">
-                <v-btn style="border: 2px solid rgb(76, 175, 80); color: rgb(76, 175, 80); border-right: unset;" :disabled="product.stockStatus === 'OUT_OF_STOCK'" icon="mdi-cart-plus" @click="addToCart(product)" />
-                <v-btn style="border: 2px solid rgb(76, 175, 80); color: rgb(76, 175, 80); border-left: unset; margin-inline-start: unset;" :disabled="product.stockStatus === 'OUT_OF_STOCK'" icon="mdi-cash-register" @click="addToCart(product)" />
-            </v-btn-toggle> -->
-            <v-row>
-                <v-col>
-                    <div class="tw-flex tw-flex-col">
-                        <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" @click="addToCart(product)" />
-                    </div>
-                </v-col>
-                <v-col>
-                    <div class="tw-flex tw-flex-col">
-                        <div class="tw-flex tw-justify-end">
-                            <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
-                                <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cash-register" />
-                            </NuxtLink>
-                        </div>
-                    </div>
-                </v-col>
-            </v-row>
-        </div>
-        <div v-if="windowWidth.innerWidth > 960" class="tw-w-full tw-justify-center">
-            <v-row>
-                <v-col>
-                    <div class="tw-flex tw-flex-col">
-                        <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" @click="addToCart(product)" />
-                    </div>
-                </v-col>
-                <v-col>
-                    <div class="tw-flex tw-flex-col">
-                        <div class="tw-flex tw-justify-end">
-                            <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
-                                <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cash-register"  />
-                            </NuxtLink>
-                        </div>
-                    </div>
-                </v-col>
-            </v-row>
-        </div>
-        <div v-else class="md:tw-hidden tw-w-full tw-flex tw-flex-row">
-            <v-row>
-                <v-col>
-                    <div class="tw-flex tw-flex-col tw-bottom-0">
-                        <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="small" icon="mdi-cart-plus" @click="addToCart(product)" />
-                    </div>
-                </v-col>
-                <v-col>
-                    <div class="tw-flex tw-flex-col tw-mb-2">
-                        <div class="tw-flex tw-justify-end">
-                            <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
-                                <v-btn style="color: rgb(76, 175, 80);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="small" icon="mdi-cash-register" />
-                            </NuxtLink>
-                        </div>
-                    </div>
-                </v-col>
-            </v-row>
-        </div>
-    </v-card-actions>
 </v-card>
 </template>
 <script>
@@ -138,6 +102,7 @@ export default {
             await addProductToCart(product);
         },
         handleResize() {
+            debugger
             this.windowWidth = window.innerWidth;
         }
     }
