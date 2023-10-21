@@ -3,8 +3,7 @@
       role="banner"
     >
       <v-row>
-        <!-- <v-col cols="1"></v-col> -->
-        <v-col>  
+        <v-col> 
             <div class="navbar-width-lg tw-bg-violet-900 lg:tw-mt-0 lg:tw-text-right tw-px-6 lg:tw-px-0 lg:tw-pt-5 xl:tw-pt-5 tw-h-30">
               <nav id="block-main" role="navigation" aria-labelledby="block-main-menu">
                 <ul class="tw-items-center min-[960px]:tw-justify-end max-[960px]:tw-justify-center tw-flex-1 tw-pr-4 tw-mr-4 tw-list-reset tw-flex lg:tw-text-xl md:tw-text-xl sm:tw-text-xl">
@@ -39,7 +38,7 @@
                 </ul>
               </nav>
             </div>
-            <nav id="nav-content" :class="fixedNavBar ? 'sticky' : ''" class="max-[960px]:tw-h-26 min-[960px]:tw-h-24 tw-pt-4 tw-bg-violet-900 tw-shadow-2xl">
+            <nav id="nav-content" :class="fixedNavBar ? 'sticky tw-pt-6' : ''" class="max-[960px]:tw-h-26 min-[960px]:tw-h-24  tw-bg-violet-900 tw-shadow-2xl">
                 <v-row>
                   <v-col xl="3" lg="3" md="2" cols="1"></v-col>
                   <v-col xl="6" lg="6" md="8" sm="10" xs="10">

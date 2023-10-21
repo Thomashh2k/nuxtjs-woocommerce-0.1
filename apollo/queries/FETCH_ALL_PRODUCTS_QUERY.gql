@@ -7,7 +7,6 @@ query
       name
       onSale
       slug
-      status
       image {
         sourceUrl
       }

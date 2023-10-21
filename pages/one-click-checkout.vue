@@ -18,7 +18,6 @@
               />
               <v-radio-group v-model="paymentMethod" class="tw-text-purple-50" color="#4c1d95">
                 <v-radio label="Paypal" value="ppcp-gateway"></v-radio>
-                <v-radio label="TESTING" value="bacs"></v-radio>
                 <v-radio label="Sonstige Methoden (...)" :disabled="stripeClientSecret === null" value="stripe"></v-radio>
               </v-radio-group>
               <div v-show="paymentMethod === 'stripe'" ref="stripeEL" id="stripeEL" class="tw-w-full">
@@ -153,23 +152,39 @@ export default {
       async submitOrder() {
         await this.createOrderData()
         debugger
-        if(this.paymentMethod === 'stripe') {
-          const errors = await this.stripeElement.submit()
-          
-          const {error} = await this.stripe.confirmPayment({
-            elements: this.stripeElement,
-            clientSecret: this.stripeClientSecret,
-            confirmParams: {
-              return_url: 'http://localhost:3000/order-received',
-            },
-            // Uncomment below if you only want redirect for redirect-based payments
-            // redirect: "if_required",
-          });
-        }
         if(this.aggreed) {
           
-          await oneClickCheckout(Number(this.$route.query.id), this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod, this.stripe.id)
+          const { onError, onDone } = await oneClickCheckout(Number(this.$route.query.id), this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod, this.stripe.id)
+
+          onError((err) => {
+            const snackbar = useSnackbar()
+            snackbar.setMessage(err.message, 'error')
+          })
+          onDone(async (res) => {
+            debugger
+            
+            if(this.paymentMethod === 'stripe') {
+              const errors = await this.stripeElement.submit()
+              
+              const {error} = await this.stripe.confirmPayment({
+                elements: this.stripeElement,
+                clientSecret: this.stripeClientSecret,
+                confirmParams: {
+                  return_url: 'http://localhost:3000/order-received',
+                },
+                // Uncomment below if you only want redirect for redirect-based payments
+                // redirect: "if_required",
+              });
+            }
+            
+            const orderReceivedStore = useOrderReceived();
+            orderReceivedStore.setOrder(res.data.oneClickCheckout.order)
+
+
+            navigateTo('/order-received')
+          })
         }
+
       }
     }
 }

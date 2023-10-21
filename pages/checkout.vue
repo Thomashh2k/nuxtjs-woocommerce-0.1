@@ -128,7 +128,33 @@ export default {
       await this.createOrderData()
       if(this.aggreed) {
         
-        await checkout(this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod)
+       const {onError, onDone } = await checkout(this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod)
+        
+        onError((err) => {
+            const snackbar = useSnackbar()
+            snackbar.setMessage(err.message, 'error')
+        })
+        onDone(async (res) => {
+          debugger
+          
+          if(this.paymentMethod === 'stripe') {
+            const errors = await this.stripeElement.submit()
+            
+            const {error} = await this.stripe.confirmPayment({
+              elements: this.stripeElement,
+              clientSecret: this.stripeClientSecret,
+              confirmParams: {
+                return_url: 'http://localhost:3000/order-received',
+              },
+              // Uncomment below if you only want redirect for redirect-based payments
+              // redirect: "if_required",
+            });
+          }
+          
+          const orderReceivedStore = useOrderReceived();
+          orderReceivedStore.setOrder(res.data.oneClickCheckout.order)
+          navigateTo('/order-received')
+        })
       }
     },
   }

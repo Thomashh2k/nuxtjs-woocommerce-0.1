@@ -12,7 +12,6 @@ query MyQuery($search: String = "", $exclude: [Int] = 10 $first: Int = 10, $last
       onSale
       slug
       sku
-      status
       image {
         sourceUrl
       }

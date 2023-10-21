@@ -20,7 +20,6 @@ query DashboardQuery($customerId: Int = 10, $first: Int = 10, $last: Int = 10, $
     }
     orders(where: {customerId: $customerId}, first: $first, last: $last, after: "") {
       nodes {
-        status
         transactionId
       }
       pageInfo {

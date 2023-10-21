@@ -4,7 +4,7 @@ mutation ONECLICK_CHECKOUT($input: OneClickCheckoutInput = {}) {
   ) {
     order {
       needsPayment
-      status
+      # status
       orderNumber
     }
   }

@@ -12,7 +12,6 @@ query MyQuery($search: String = "", $categoryIn: [String] = "", $exclude: [Int] 
       onSale
       slug
       sku
-      status
       image {
         sourceUrl
       }
