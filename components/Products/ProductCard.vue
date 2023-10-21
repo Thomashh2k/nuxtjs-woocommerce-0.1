@@ -17,6 +17,7 @@
         <img
             id="product-image"
             class="tw-border 2xl:tw-h-72 xl:tw-h-72 lg:tw-h-72 md:tw-h-56 sm:tw-h-48 xs:tw-h-48 xxs:tw-h-48  tw-rounded tw-drop-shadow-lg tw-transition tw-duration-500 tw-ease-in-out tw-transform tw-cursor-pointer lg:tw-ml-0 tw-w-full  tw-hover:tw-scale-95"
+            style="object-fit: cover; object-position: center;"
             :alt="product.name"
             :src="productImage(product)"
         />
@@ -48,7 +49,7 @@
         </div>
     </NuxtLink>
     <v-card-actions style="z-index: 10;" >
-        <div class="tw-w-full xxxs:tw-hidden xxs:tw-hidden xs:tw-hidden md:tw-hidden lg:tw-flex tw-justify-center">
+        <div v-if="windowWidth.innerWidth > 1920" class="tw-w-full tw-justify-center">
             <!-- <v-btn-toggle color="success" variant="outlined" rounded="xl" class="lg:tw-h-4 lg:tw-pt-2">
                 <v-btn style="border: 2px solid rgb(76, 175, 80); color: rgb(76, 175, 80); border-right: unset;" :disabled="product.stockStatus === 'OUT_OF_STOCK'" icon="mdi-cart-plus" @click="addToCart(product)" />
                 <v-btn style="border: 2px solid rgb(76, 175, 80); color: rgb(76, 175, 80); border-left: unset; margin-inline-start: unset;" :disabled="product.stockStatus === 'OUT_OF_STOCK'" icon="mdi-cash-register" @click="addToCart(product)" />
@@ -70,7 +71,7 @@
                 </v-col>
             </v-row>
         </div>
-        <div class="xxxs:tw-hidden xxs:tw-hidden xs:tw-hidden tw-w-full md:tw-flex lg:tw-hidden">
+        <div v-if="windowWidth.innerWidth > 960" class="tw-w-full tw-justify-center">
             <v-row>
                 <v-col>
                     <div class="tw-flex tw-flex-col">
@@ -88,7 +89,7 @@
                 </v-col>
             </v-row>
         </div>
-        <div class="md:tw-hidden tw-w-full tw-flex tw-flex-row">
+        <div v-else class="md:tw-hidden tw-w-full tw-flex tw-flex-row">
             <v-row>
                 <v-col>
                     <div class="tw-flex tw-flex-col tw-bottom-0">
@@ -118,15 +119,28 @@ export default {
             required: true,
         },
     },
-    methods: {
-    productImage(product) {
-      const config = useRuntimeConfig();
-      return product.image ? product.image.sourceUrl : config.placeholderImage;
+    data() {
+        return {
+            windowWidth: 0,
+            windowHeight: 0,
+        }
     },
-    async addToCart (product) {
-      await addProductToCart(product);
+    mounted() {
+        this.windowWidth = window.innerWidth;
+        window.addEventListener('resize', this.handleResize);
+    },
+    methods: {
+        productImage(product) {
+            const config = useRuntimeConfig();
+            return product.image ? product.image.sourceUrl : config.placeholderImage;
+        },
+        async addToCart (product) {
+            await addProductToCart(product);
+        },
+        handleResize() {
+            this.windowWidth = window.innerWidth;
+        }
     }
-}
 }
 </script>
 <style scoped>
