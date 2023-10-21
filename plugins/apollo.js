@@ -34,7 +34,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   let tokenSetter;
   const config = useRuntimeConfig();
   const httpLink = createHttpLink({
-    uri: process.env.PUBLIC_GRAPHQL_URL,
+    uri: config.PUBLIC_GRAPHQL_URL,
   });
 
   async function getSessionToken(forceFetch = false) {
@@ -65,7 +65,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   
     try {
   
-      const graphQLClient = new GraphQLClient(process.env.PUBLIC_GRAPHQL_URL);
+      const graphQLClient = new GraphQLClient(config.PUBLIC_GRAPHQL_URL);
       const results = await graphQLClient.request(REFRESH_AUTH_TOKEN, {refreshToken: refreshToken});
       authToken = results?.refreshJwtAuthToken?.authToken;
   
@@ -101,7 +101,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   
     let sessionToken;
     try {
-      const graphQLClient = new GraphQLClient(process.env.PUBLIC_GRAPHQL_URL);
+      const graphQLClient = new GraphQLClient(config.PUBLIC_GRAPHQL_URL);
       debugger
   
       const cartData = await graphQLClient.request(GET_CART_DOCUMENT, {}, headers)
@@ -226,7 +226,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   provideApolloClient(apolloClient);
-  
+
   nuxtApp.hook("apollo:auth", ({ token }) => {
     token.value = woocommerceSession.value;
   });
@@ -249,6 +249,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       throw error;
     }
   };
+  debugger
   return {
     provide: {
       apolloClient: apolloClient,

@@ -39,10 +39,10 @@ export default defineNuxtConfig({
   // },
   plugins: ["~/plugins/apollo.js"],
   runtimeConfig: {
-    public: {
-      graphqlURL: process.env.PUBLIC_GRAPHQL_URL,
-      placeholderImage: process.env.PUBLIC_PLACEHOLDER_SMALL_IMAGE_URL,
-    },
+    PUBLIC_GRAPHQL_URL: 'https://api.og-gaming.store:8080/graphql',
+    STRIPE_PAYMENT_API: 'http://localhost:1337',
+    SERVER_DOMAIN: 'https://api.og-gaming.store'
+    
   },
   postcss: {
     plugins: {
@@ -75,7 +75,7 @@ export default defineNuxtConfig({
     tokenName: "woocommerce-session",
     clients: {
       default: {
-        httpEndpoint: process.env.PUBLIC_GRAPHQL_URL,
+        httpEndpoint: 'https://api.og-gaming.store:8080/graphql',
         httpLinkOptions: {
           credentials: "include",
         },
