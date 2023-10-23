@@ -22,7 +22,7 @@
                 :src="productImage(product)"
             />
             <div class="tw-flex tw-justify-center tw-pt-3 hover:tw-underline tw-decoration-purple-50">
-                <p class="lg:tw-text-lg  tw-font-bold tw-text-center tw-truncate tw-cursor-pointer tw-text-purple-50">
+                <p class="lg:tw-text-sm  tw-font-bold tw-text-center tw-truncate tw-cursor-pointer tw-text-purple-50">
                 {{ product.name }}
                 </p>
             </div>
