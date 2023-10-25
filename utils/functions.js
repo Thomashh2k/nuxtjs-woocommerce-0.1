@@ -176,11 +176,10 @@ export async function checkout(shipping, billing, paymentMethod) {
 
   const { mutate, onError, onDone } = useMutation(CHECKOUT_MUTATION, {
     variables: checkoutVariables,
-    // context: { 
-    //   headers: { 
-    //     'woocommerce-session': `${woocommerceSession.value}`,
-    //     'authorization': `Bearer ${authorization.value}`
-    //   }}
+    context: { 
+      headers: { 
+        'woocommerce-session': `${woocommerceSession.value}`,
+      }}
   });
 
   mutate(checkoutVariables);
