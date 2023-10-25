@@ -102,7 +102,7 @@ export default {
             await addProductToCart(product);
         },
         handleResize() {
-            debugger
+            
             this.windowWidth = window.innerWidth;
         }
     }

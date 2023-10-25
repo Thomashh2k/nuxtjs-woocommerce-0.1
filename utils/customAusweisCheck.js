@@ -57,7 +57,7 @@ export function persoChecksum(id) {
 
     // Überprüfung der Checksummen
     for (let i = 0; i < checksums.length; i++) {
-        if(i === 3) debugger
+        if(i === 3) 
         const checksum = checksums[i];
         if (!checkNumber(checksum[0], checksum[1])) {
         return false;
@@ -124,7 +124,7 @@ export function persoInfo(id) {
 }
 
 export function get_perso_data(persoInput) {
-  debugger
+  
   const perso_id = `${persoInput.ida} ${persoInput.idb} ${persoInput.idc} ${persoInput.idd}`;
 
   if (persoChecksum(perso_id)) {

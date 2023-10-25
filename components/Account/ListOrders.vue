@@ -175,7 +175,7 @@ export default {
         }
     },
     async created() {
-      debugger
+      
       this.loading = true
       const resp = await getOrders({search: '', first: 10})
       this.orders = resp.nodes

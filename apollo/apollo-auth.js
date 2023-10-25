@@ -20,7 +20,7 @@ export function createSessionLink() {
       }
   
       if (sessionToken) {
-        headers['woocommerce-session'] = `Session ${sessionToken}`;
+        headers['woocommerce-session'] = `${sessionToken}`;
       }
   
       if (authToken || sessionToken) {

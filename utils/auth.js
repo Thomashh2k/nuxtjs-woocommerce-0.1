@@ -18,7 +18,7 @@ export async function login (payload) {
       if(result.data.login.customer.billing.firstName === null) {
         result.data.login.customer.billing = result.data.login.customer.shipping
       }
-      debugger
+      
       authStore.setRefreshToken(result.data.login.refreshToken)
       authStore.setAuthToken(result.data.login.authToken)
 
@@ -29,7 +29,7 @@ export async function login (payload) {
       resolve()
     })
     const resultErr = onError((err) => {
-      debugger
+      
       const snackbar = useSnackbar()
       snackbar.setMessage("Login fehlgeschlagen. Stellen sie sicher das, die Anmeldedaten korrekt sind.", 'error')
       reject()
@@ -116,7 +116,7 @@ export async function refreshAuthToken(refreshToken) {
 }
 
 function parseJwt (token) {
-  debugger
+  
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
   var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {

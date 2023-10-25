@@ -47,7 +47,7 @@ export default {
             
         });
         const onSubmit = handleSubmit(async (values) => {
-            debugger
+            
             sendResetPasswordLink(values.email)
         })
         const email = useField('email')

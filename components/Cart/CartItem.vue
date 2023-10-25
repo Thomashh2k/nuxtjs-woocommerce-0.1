@@ -62,7 +62,7 @@ import { useCart } from "@/store/useCart";
 
 export default {
     data() {
-        debugger
+        
         const _cart = useCart()
         return {
             mdiCartOutline,

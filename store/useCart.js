@@ -8,7 +8,7 @@ export const useCart = defineStore("cartState", {
   actions: {
     addTemporary(product) {
       let _index = 0
-      debugger
+      
       const foundProductInCartIndex = this.items.findIndex(
         (cf) => product.slug === cf.slug
       );
@@ -35,7 +35,7 @@ export const useCart = defineStore("cartState", {
       return _index-1
     },
     addAfterSuccess(key, addTempRes) {
-      // debugger
+      // 
       // if(addTempRes.new) {
         this.items[addTempRes] = {
           key: key,

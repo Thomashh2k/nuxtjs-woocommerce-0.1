@@ -51,13 +51,13 @@ export default {
         }
     },
     created() {
-        debugger
+        
         this.unverified = this.modelValue
         console.log(this.needsVerification)
     },
     methods: {
         submitVerfication() {
-            debugger
+            
             const persoData = get_perso_data(this.persoFields)
             console.log(persoData)
             this.$emit('update:modelValue', false)

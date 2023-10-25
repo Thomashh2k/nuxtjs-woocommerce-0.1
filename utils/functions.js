@@ -144,7 +144,7 @@ export async function addProductToCart (product) {
 export function removeProductFromCart (product) {
   const cart = useCart();
   cart.removeItem(product);
-  debugger
+  
   
   const removeItemsVariables = {
     itemKey: product.key
@@ -163,7 +163,7 @@ export function removeProductFromCart (product) {
 
 export async function checkout(shipping, billing, paymentMethod) {
   // shipping.address1 = shipping.address
-  debugger
+  
   const checkoutVariables = {
     input: {
       shipping: shipping,
@@ -171,8 +171,16 @@ export async function checkout(shipping, billing, paymentMethod) {
       paymentMethod: paymentMethod,
     }
   };
+  const woocommerceSession = useCookie("woocommerce-session");
+  const authorization = useCookie("wp-auth");
+
   const { mutate, onError, onDone } = useMutation(CHECKOUT_MUTATION, {
-    variables: checkoutVariables
+    variables: checkoutVariables,
+    // context: { 
+    //   headers: { 
+    //     'woocommerce-session': `${woocommerceSession.value}`,
+    //     'authorization': `Bearer ${authorization.value}`
+    //   }}
   });
 
   mutate(checkoutVariables);
@@ -183,7 +191,7 @@ export async function checkout(shipping, billing, paymentMethod) {
 
 export async function oneClickCheckout(productID, shipping, billing, paymentMethod) {
   // shipping.address1 = shipping.address
-  debugger
+  
   const checkoutVariables = {
     input: {
       productId: productID,

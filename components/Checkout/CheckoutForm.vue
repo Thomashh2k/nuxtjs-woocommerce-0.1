@@ -103,7 +103,7 @@ export default {
     const customer = getCustomer
 
     const submit = handleSubmit(values => {
-      debugger
+      
       values.email = email.value.value
       return values
     })

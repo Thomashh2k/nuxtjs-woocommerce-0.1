@@ -26,7 +26,7 @@ export default {
     },
     async created() {
         const result = await getPage(this.$route.params.slug[0])
-        debugger
+        
         if(result.pageBy === null) {
             const snackbar = useSnackbar()
             snackbar.setMessage(`Die Seite ${this.$route.params.slug[0]} konnte nicht gefunden werden...`, 'error')

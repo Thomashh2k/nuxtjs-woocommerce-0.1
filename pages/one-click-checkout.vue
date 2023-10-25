@@ -88,7 +88,7 @@ export default {
       }
     },
     async created() {
-      debugger
+      
       await this.getProduct()
       console.log(this.product)
       this.stripe = await loadStripe('pk_test_51NTTvgHYY4qFsHLPlf5VaERvj70Le4ERHyXQiZAAoJdpPI9IIN4RfXoUXnfayI6bfXNToQLhRMBc57HqKrRCAsAm00Jb3rtCRF');
@@ -106,7 +106,7 @@ export default {
     },
     watch: {
       paymentMethod(newV, oldV) {
-        debugger
+        
         if(newV === 'stripe') {
           this.$nextTick(async () => {
             const appearance = {
@@ -143,7 +143,7 @@ export default {
 
       },
       async getProduct() {
-        debugger
+        
         const variables = { id: this.$route.query.id, slug: this.$route.query.slug };
         const result = await useAsyncQuery(GET_SINGLE_PRODUCT_QUERY, variables);
         await result.execute();
@@ -151,7 +151,7 @@ export default {
       },
       async submitOrder() {
         await this.createOrderData()
-        debugger
+        
         if(this.aggreed) {
           
           const { onError, onDone } = await oneClickCheckout(Number(this.$route.query.id), this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod, this.stripe.id)
@@ -161,7 +161,7 @@ export default {
             snackbar.setMessage(err.message, 'error')
           })
           onDone(async (res) => {
-            debugger
+            
             
             if(this.paymentMethod === 'stripe') {
               const errors = await this.stripeElement.submit()

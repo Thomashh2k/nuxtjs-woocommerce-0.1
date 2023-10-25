@@ -26,8 +26,6 @@
 #  }
 mutation checkout($input: CheckoutInput!){
   checkout(input: $input){
-    result
-    redirect
     order {
       needsPayment
       status

@@ -18,6 +18,7 @@
               <v-radio-group v-model="paymentMethod" class="tw-text-purple-50" color="#4c1d95">
                 <v-radio label="Paypal" value="ppcp-gateway"></v-radio>
                 <v-radio label="Sonstige Methoden (...)" :disabled="stripeClientSecret === null" value="stripe"></v-radio>
+                <v-radio label="Test Methoden" :disabled="stripeClientSecret === null" value="bacs"></v-radio>
               </v-radio-group>
               <div v-show="paymentMethod === 'stripe'" ref="stripeEL" id="stripeEL" class="tw-w-full">
                   <!-- Express Checkout Element will be inserted here -->
@@ -51,7 +52,8 @@ import CartContents from '@/components/Checkout/CartContents';
 import { checkout } from "@/utils/functions";
 import { useAuth } from '@/store/useAuth.js'
 import { useCart } from '@/store/useCart';
-import {loadStripe} from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { useSnackbar } from '@/store/snackbar';
 
 const checkoutForm = ref(null)
 export default {
@@ -98,7 +100,7 @@ export default {
     }
   },
   async created() {
-      debugger
+      
       const cartStore = useCart()
       const ammount = cartStore.getCartTotal
       this.stripe = await loadStripe('pk_test_51NTTvgHYY4qFsHLPlf5VaERvj70Le4ERHyXQiZAAoJdpPI9IIN4RfXoUXnfayI6bfXNToQLhRMBc57HqKrRCAsAm00Jb3rtCRF');
@@ -135,7 +137,7 @@ export default {
             snackbar.setMessage(err.message, 'error')
         })
         onDone(async (res) => {
-          debugger
+          
           
           if(this.paymentMethod === 'stripe') {
             const errors = await this.stripeElement.submit()

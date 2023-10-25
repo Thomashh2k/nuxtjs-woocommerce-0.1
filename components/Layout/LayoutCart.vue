@@ -73,7 +73,7 @@ const updateCartDisplay = () => {
   if (!data) {
     return;
   }
-  debugger
+  
   cartLength.value = cart.getCartQuantity;
 
   subTotal.value = cart.getCartTotal;

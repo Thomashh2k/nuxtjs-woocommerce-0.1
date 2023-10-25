@@ -26,6 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const targetErrors = [
     'The iss do not match with this server',
     'invalid-secret-key | Expired token',
+    'invalid-secret-key | Wrong number of segments',
     'invalid-secret-key | Signature verification failed',
     'Expired token',
     'Wrong number of segments',
@@ -46,7 +47,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   async function getAuthToken() {
-      debugger
+      
       let authToken = authorization.value;
       if (!authToken || checkExpired(authToken)) {
         authToken = await fetchAuthToken();
@@ -93,7 +94,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   async function fetchSessionToken() {
     const headers = {};
-    debugger
+    
     const authToken = await getAuthToken();
     if (authToken) {
       headers.Authorization = `Bearer ${authToken}`;
@@ -102,7 +103,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     let sessionToken;
     try {
       const graphQLClient = new GraphQLClient(config.public.PUBLIC_GRAPHQL_URL);
-      debugger
+      
   
       const cartData = await graphQLClient.request(GET_CART_DOCUMENT, {}, headers)
       // If user doesn't have an account return accountNeeded flag.
@@ -123,23 +124,28 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const middleware = new ApolloLink(async (operation, forward) => {
     operation.setContext(async ({ context: { headers: currentHeaders } = {} }) => {
+      debugger
       const headers = { ...currentHeaders };
       const authToken = await getAuthToken();
       const sessionToken = await getSessionToken();
       
-      debugger
+      
       if (authToken) {
         headers.Authorization = `Bearer ${authToken}`;
         const useAuthStore = useAuth();
         useAuthStore.setAuthToken(authToken);
         authorization.value = authToken;
 
+      } else {
+        delete headers.Authorization;
       }
   
       if (sessionToken) {
-        headers['woocommerce-session'] = `Session ${sessionToken}`;
+        headers['woocommerce-session'] = `${sessionToken}`;
         woocommerceSession.value = sessionToken;
 
+      } else {
+        delete headers['woocommerce-session'];
       }
   
       if (authToken || sessionToken) {
@@ -156,11 +162,17 @@ export default defineNuxtPlugin((nuxtApp) => {
       /**
        * Check for session header and update session in local storage accordingly. 
        */
+      debugger
 
       const context = operation.getContext();
       const { response: { headers } } = context;
+
       const oldSessionToken = woocommerceSession.value;
-      const sessionToken = headers.get('woocommerce-session');
+      const sessionToken = headers['woocommerce-session'];
+
+
+
+
       if (sessionToken) {
         if ( oldSessionToken !== sessionToken ) {
           woocommerceSession.value = sessionToken;
@@ -183,7 +195,7 @@ export default defineNuxtPlugin((nuxtApp) => {
                   const nextHeaders = headers;
 
                   if (sessionToken) {
-                    nextHeaders['woocommerce-session'] = `Session ${sessionToken}`;
+                    nextHeaders['woocommerce-session'] = `${sessionToken}`;
                   } else {
                     delete nextHeaders['woocommerce-session'];
                   }
@@ -228,7 +240,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   provideApolloClient(apolloClient);
 
   nuxtApp.hook("apollo:auth", ({ token }) => {
-    token.value = woocommerceSession.value;
+    token.value = authorization.value;
   });
   const useQuery = async (query, variables = {}) => {
     try {
@@ -249,7 +261,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       throw error;
     }
   };
-  debugger
+  
   return {
     provide: {
       apolloClient: apolloClient,
