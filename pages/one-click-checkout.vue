@@ -53,7 +53,7 @@ import PaypalButton from '@/components/Checkout/Payments/PaypalButton.vue'
 import Checkboxes from '@/components/Checkout/Checkboxes';
 import CartContents from '@/components/Checkout/CartContents';
 import SelectedProduct from '@/components/OneClickCheckout/SelectedProduct';
-import AgeVerificationDialog from '~/components/Checkout/AgeVerificationDialog.vue';
+// import AgeVerificationDialog from '~/components/Checkout/AgeVerificationDialog.vue';
 import { oneClickCheckout, priceToNumber } from "@/utils/functions";
 import { useAuth } from '@/store/useAuth.js'
 import GET_SINGLE_PRODUCT_QUERY from "@/apollo/queries/GET_SINGLE_PRODUCT_QUERY.gql";
@@ -65,7 +65,7 @@ export default {
     components: {
         Checkboxes,
         SelectedProduct,
-        AgeVerificationDialog,
+        // AgeVerificationDialog,
         PaypalButton,
         CartContents
     },

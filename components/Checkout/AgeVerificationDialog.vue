@@ -61,6 +61,9 @@ export default {
             const persoData = get_perso_data(this.persoFields)
             console.log(persoData)
             this.$emit('update:modelValue', false)
+        },
+        get_perso_data() {
+            return
         }
     }
 }
