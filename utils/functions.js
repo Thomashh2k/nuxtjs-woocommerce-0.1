@@ -5,8 +5,9 @@ import { useSnackbar } from "@/store/snackbar";
 
 import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
 import REMOVE_ITEM_FROM_CART from "@/apollo/mutations/REMOVE_ITEM_FROM_CART.gql";
-import CHECKOUT_MUTATION from "@/apollo/mutations/CHECKOUT_MUTATION.gql";
-import ONECLICK_CHECKOUT_MUTATION from "@/apollo/mutations/ONECLICK_CHECKOUT_MUTATION.gql";
+import CHECKOUT_MUTATION from "@/apollo/mutations/checkouts/CHECKOUT_MUTATION.gql";
+import ONECLICK_CHECKOUT_MUTATION from "@/apollo/mutations/checkouts/ONECLICK_CHECKOUT_MUTATION.gql";
+import GUEST_CHECKOUT_MUTATIONS from "@/apollo/mutations/checkouts/GUEST_CHECKOUT_MUTATIONS.gql";
 
 /**
  * Strips HTML from the inputted string
@@ -174,19 +175,67 @@ export async function checkout(shipping, billing, paymentMethod) {
   const woocommerceSession = useCookie("woocommerce-session");
   const authorization = useCookie("wp-auth");
 
+
+  let cookies = `woocommerce-session=${woocommerceSession.value};`;
+  const headers = {
+    'Cookie': cookies,
+    'woocommerce-session': `Session ${woocommerceSession.value}`,
+  }
+  if(authorization.value !== null && authorization.value !== undefined) {
+    cookies += `Authorization=Bearer ${authorization.value}`;
+    headers['Authorization'] = `Bearer ${authorization.value}`;
+  }
   const { mutate, onError, onDone } = useMutation(CHECKOUT_MUTATION, {
     variables: checkoutVariables,
     context: { 
-      headers: { 
-        'woocommerce-session': `${woocommerceSession.value}`,
-      }}
+      headers: headers
+    }
   });
-
   mutate(checkoutVariables);
 
   return { onDone, onError }
 
+
 }
+
+// export async function checkout(shipping, billing, paymentMethod) {
+//   // shipping.address1 = shipping.address
+  
+//   const checkoutVariables = {
+//     input: {
+//       shipping: shipping,
+//       billing: billing,
+//       paymentMethod: paymentMethod,
+//     }
+//   };
+//   const woocommerceSession = useCookie("woocommerce-session");
+//   const authorization = useCookie("wp-auth");
+
+//   if(authorization.value === null || authorization.value === undefined) {
+//     const { mutate, onError, onDone } = useMutation(GUEST_CHECKOUT_MUTATIONS, {
+//       variables: checkoutVariables,
+//     });
+//     mutate(checkoutVariables);
+
+//     return { onDone, onError }
+//   } else {
+//     const cookies = `woocommerce-session=${woocommerceSession.value}; Authorization=Bearer ${authorization.value}`;
+
+//     const { mutate, onError, onDone } = useMutation(CHECKOUT_MUTATION, {
+//       variables: checkoutVariables,
+//       context: { 
+//         headers: {
+//           'Cookie': cookies,
+//           'woocommerce-session': `Session ${woocommerceSession.value}`,
+//           'Authorization': `Bearer ${authorization.value}`
+//         }}
+//     });
+//     mutate(checkoutVariables);
+
+//     return { onDone, onError }
+//   }
+
+// }
 
 export async function oneClickCheckout(productID, shipping, billing, paymentMethod) {
   // shipping.address1 = shipping.address

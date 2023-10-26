@@ -124,12 +124,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const middleware = new ApolloLink(async (operation, forward) => {
     operation.setContext(async ({ context: { headers: currentHeaders } = {} }) => {
-      debugger
       const headers = { ...currentHeaders };
       const authToken = await getAuthToken();
       const sessionToken = await getSessionToken();
       
-      
+      debugger
       if (authToken) {
         headers.Authorization = `Bearer ${authToken}`;
         const useAuthStore = useAuth();
@@ -141,7 +140,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
   
       if (sessionToken) {
-        headers['woocommerce-session'] = `${sessionToken}`;
+        headers['woocommerce-session'] = `Session ${sessionToken}`;
         woocommerceSession.value = sessionToken;
 
       } else {
@@ -166,16 +165,17 @@ export default defineNuxtPlugin((nuxtApp) => {
 
       const context = operation.getContext();
       const { response: { headers } } = context;
-
+      console.log('------------------');
+      console.log(context.response);
       const oldSessionToken = woocommerceSession.value;
-      const sessionToken = headers['woocommerce-session'];
+      const sessionToken = context.response.headers.get('woocommerce-session')
+      console.log('sessionToken: ' + sessionToken);
 
-
-
-
-      if (sessionToken) {
-        if ( oldSessionToken !== sessionToken ) {
+      if (sessionToken !== undefined) {
+        if (oldSessionToken !== sessionToken) {
           woocommerceSession.value = sessionToken;
+          console.log('token set: ' + woocommerceSession.value);
+
         }
       }
 

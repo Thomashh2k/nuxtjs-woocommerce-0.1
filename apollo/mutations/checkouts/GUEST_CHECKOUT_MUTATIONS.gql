@@ -1,0 +1,11 @@
+mutation MyMutation($shipping: CustomerAddressInput, $shippingMethod: [String], $products: [ProductCheckoutInput], $paymentMethod: String, $billing: CustomerAddressInput)  {
+  guestCheckout(
+    input: {shippingMethod: $shippingMethod, paymentMethod: $paymentMethod, shipping: $shipping, billing: $billing, products: $products}
+  ) {
+    order {
+      needsPayment
+      status
+      orderNumber
+    }
+  }
+}

@@ -32,18 +32,15 @@ export async function getOrders({ search, first, after = null, before = null, la
   const orderVar = { search, first, after, before, last, exclude, order: 'ASC' };
 
   return new Promise((resolve, reject) => {
-    debugger
     const { $apolloClient, $wpAuth } = useNuxtApp()
     const result = useQuery(FETCH_ORDERS_QUERY, orderVar)
 
     result.onResult((result) => {
-      debugger
       const data = result?.data;
       resolve(data.orders);
     });
 
     result.onError((error) => {
-      debugger
       const snackbar = useSnackbar()
       snackbar.setMessage(error.message, 'error')
       reject(error)

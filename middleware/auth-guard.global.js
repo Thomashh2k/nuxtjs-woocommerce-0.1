@@ -1,6 +1,5 @@
 export default defineNuxtRouteMiddleware((to, from) => {  
   // Überprüfe, ob sich der Benutzer auf der Seite "/account" befindet
-    debugger
     if (to.path.includes('/account')) {
       // Überprüfe, ob die JWT-Cookies nicht null sind
       const authorization = useCookie("wp-auth");

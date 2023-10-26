@@ -54,6 +54,7 @@ import { useAuth } from '@/store/useAuth.js'
 import { useCart } from '@/store/useCart';
 import { loadStripe } from '@stripe/stripe-js';
 import { useSnackbar } from '@/store/snackbar';
+import { useOrderReceived } from '@/store/useOrderReceivedStore';
 
 const checkoutForm = ref(null)
 export default {
@@ -138,7 +139,7 @@ export default {
         })
         onDone(async (res) => {
           
-          
+          debugger
           if(this.paymentMethod === 'stripe') {
             const errors = await this.stripeElement.submit()
             
