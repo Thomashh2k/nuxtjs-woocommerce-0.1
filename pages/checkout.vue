@@ -54,7 +54,7 @@ import { useAuth } from '@/store/useAuth.js'
 import { useCart } from '@/store/useCart';
 import { loadStripe } from '@stripe/stripe-js';
 import { useSnackbar } from '@/store/snackbar';
-import { useOrderReceived } from '@/store/useOrderReceivedStore';
+import { useOrderReceived } from '@/store/useOrderReceived';
 
 const checkoutForm = ref(null)
 export default {
