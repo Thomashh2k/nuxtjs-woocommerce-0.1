@@ -1,5 +1,6 @@
 <template>
   <div class="tw-bg-violet-900 wrapper">
+    <CheckVersion />
     <LayoutNavbar />
     <article class="main-body-part content" style="height: 100%; background: #1a063a;">
       <v-row>
