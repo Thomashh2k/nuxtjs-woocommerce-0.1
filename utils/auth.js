@@ -11,25 +11,26 @@ export async function login (payload) {
     const loginVariables = { input: payload };
     const { mutate, onDone, onError} = useMutation(LOGIN_USER_MUTATION, { variables: loginVariables });
     mutate(payload);
-    const resultDone = onDone((result) => {
-      
+    onDone((result) => {
       const snackbar = useSnackbar()
 
       if(result.data.login.customer.billing.firstName === null) {
         result.data.login.customer.billing = result.data.login.customer.shipping
       }
-      
-      authStore.setRefreshToken(result.data.login.refreshToken)
-      authStore.setAuthToken(result.data.login.authToken)
+
+      const authorization = useCookie("wp-auth");
+      const jwtRefreshToken = useCookie("JWT-Refresh");
+
+      jwtRefreshToken.value = result.data.login.refreshToken
+      authorization.value = result.data.login.authToken
 
       authStore.setUser(result.data.login.user)
       authStore.setCustomer(result.data.login.customer)
-
+      authStore.setLoginStatus(true)
       snackbar.setMessage('Anmeldung erfolgreich', 'success')
       resolve()
     })
-    const resultErr = onError((err) => {
-      
+    onError((err) => {
       const snackbar = useSnackbar()
       snackbar.setMessage("Login fehlgeschlagen. Stellen sie sicher das, die Anmeldedaten korrekt sind.", 'error')
       reject()

@@ -2,9 +2,6 @@ mutation LoginUser ($input: LoginInput!) {
   login( input: $input ) {
     authToken
     refreshToken
-    customer {
-      jwtAuthToken
-    }
     user {
       id
       firstName

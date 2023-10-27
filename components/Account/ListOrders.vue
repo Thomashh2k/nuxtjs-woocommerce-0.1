@@ -23,34 +23,34 @@
     </template>
     <template v-slot:item="{ item, isExpanded, toggleExpand }">
       <tr class="tw-text-purple-50 elevation-10">
-        <td>{{ item.columns.databaseId }}</td>
+        <td>{{ item.databaseId }}</td>
         <td>
-          <v-chip v-if="item.columns.status === 'FAILED' || item.columns.status === 'CANCELLED'" color="error" variant="elevated">
+          <v-chip v-if="item.status === 'FAILED' || item.status === 'CANCELLED'" color="error" variant="elevated">
             <span class="tw-text-purple-50">
-              {{ _getOrderStatus(item.columns.status) }}
+              {{ _getOrderStatus(item.status) }}
             </span>
           </v-chip>
-          <v-chip v-else-if="item.columns.status === 'COMPLETED'" color="success" variant="elevated">
+          <v-chip v-else-if="item.status === 'COMPLETED'" color="success" variant="elevated">
             <span class="tw-text-purple-50">
-              {{ _getOrderStatus(item.columns.status) }}
+              {{ _getOrderStatus(item.status) }}
             </span>
           </v-chip>
-          <v-chip v-else-if="item.columns.status === 'PROCESSING' || item.columns.status === 'PENDING'" color="warning" variant="elevated">
+          <v-chip v-else-if="item.status === 'PROCESSING' || item.status === 'PENDING'" color="warning" variant="elevated">
             <span class="tw-text-purple-50">
-              {{ _getOrderStatus(item.columns.status) }}
+              {{ _getOrderStatus(item.status) }}
             </span>
           </v-chip>
-          <v-chip v-else-if="item.columns.status === 'REFUNDED' || item.columns.status === 'ON_HOLD'" variant="elevated">
+          <v-chip v-else-if="item.status === 'REFUNDED' || item.status === 'ON_HOLD'" variant="elevated">
             <span class="tw-text-purple-50">
-              {{ _getOrderStatus(item.columns.status) }}
+              {{ _getOrderStatus(item.status) }}
             </span>
           </v-chip>
         </td>
-        <td>{{ _moment(item.columns.date).format('DD.MM.yyyy HH:mm') }}</td>
-        <td>{{ item.columns.dateCompleted ?_moment(item.columns.dateCompleted).format('DD.MM.yyyy HH:mm') : '---' }}</td>
-        <td>{{ item.columns.paymentMethodTitle }}</td>
-        <td>{{ priceToNumber(item.columns.total) + ' €' }}</td>
-        <td>{{ priceToNumber(item.columns.shippingTotal) + ' €' }}</td>
+        <td>{{ _moment(item.date).format('DD.MM.yyyy HH:mm') }}</td>
+        <td>{{ item.dateCompleted ?_moment(item.dateCompleted).format('DD.MM.yyyy HH:mm') : '---' }}</td>
+        <td>{{ item.paymentMethodTitle }}</td>
+        <td>{{ priceToNumber(item.total) + ' €' }}</td>
+        <td>{{ priceToNumber(item.shippingTotal) + ' €' }}</td>
         <td> 
           
           <v-btn
@@ -175,7 +175,7 @@ export default {
         }
     },
     async created() {
-      
+      debugger
       this.loading = true
       const resp = await getOrders({search: '', first: 10})
       this.orders = resp.nodes
@@ -192,7 +192,7 @@ export default {
         } else {
           return 'Nicht verfügbar'
         }
-      }
+      },
     }
 }
 </script>

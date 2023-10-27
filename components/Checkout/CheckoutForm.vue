@@ -2,7 +2,7 @@
   <section class="tw-container tw-py-2 tw-mx-auto">
     <v-form @submit="submit">
       <div>
-        <div v-if="!authStore.isLoggedIn">
+        <div v-if="!authStore.isUserLoggedIn">
           <v-text-field
             v-model="email.value.value"
             label="E-Mail"
@@ -120,7 +120,7 @@ export default {
     async submitForm() {
       
       let billingAddress
-      if(this.authStore.isLoggedIn) {
+      if(this.authStore.isUserLoggedIn) {
         const shippingAddress = await this.$refs.shippingForm.submit()
         if(this.useDifferentBillingAddress) {
           billingAddress = await this.$refs.shippingForm.submit()

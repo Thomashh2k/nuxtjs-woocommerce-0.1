@@ -21,7 +21,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       //   return navigateTo('/', { redirectCode: 401 });
       // }
 
-      if(authorization.value === null || woocommerceSession.value === null) {
+      if(!authorization.value || !woocommerceSession.value) {
         return navigateTo('/', { redirectCode: 401 });
       }
 

@@ -189,7 +189,7 @@ export default {
         const city = useField('city')
         const country = useField('country')
         const authStore = useAuth()
-        if(authStore.isLoggedIn) {
+        if(authStore.isUserLoggedIn) {
             firstName.value.value = props.addressInfo.firstName
             lastName.value.value = props.addressInfo.lastName
     

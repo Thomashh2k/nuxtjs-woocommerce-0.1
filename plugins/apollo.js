@@ -6,15 +6,19 @@ import {
   ApolloClient,
 } from "@apollo/client/core";
 import { onError } from '@apollo/client/link/error';
-import { useAuth } from "~/store/useAuth";
 import { provideApolloClient } from "@vue/apollo-composable";
 import { checkExpired } from '@/utils/auth'
+import { useAuth } from '@/store/useAuth'
 import { GraphQLClient } from 'graphql-request'
 import REFRESH_AUTH_TOKEN from "@/apollo/mutations/REFRESH_AUTH_TOKEN.gql";
 import GET_CART_DOCUMENT from "@/apollo/queries/GET_CART_DOCUMENT.gql";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const authorization = useCookie("wp-auth", {
+    maxAge: 86_400,
+    sameSite: "lax",
+  });
+  const jwtRefreshToken = useCookie("JWT-Refresh", {
     maxAge: 86_400,
     sameSite: "lax",
   });
@@ -47,7 +51,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   async function getAuthToken() {
-      
       let authToken = authorization.value;
       if (!authToken || checkExpired(authToken)) {
         authToken = await fetchAuthToken();
@@ -56,11 +59,12 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   async function fetchAuthToken() {
-    const useAuthStore = useAuth();
-    const refreshToken = useAuthStore.refreshJwt;
+    const authStore = useAuth();
+    const refreshToken = jwtRefreshToken.value;
     let authToken;
     if (!refreshToken) {
       // No refresh token means the user is not authenticated.
+      authStore.setLoginStatus(false)
       return;
     }
   
@@ -82,8 +86,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   function hasCredentials() {
     const authToken = authorization.value;
-    const useAuthStore = useAuth();
-    const refreshToken = useAuthStore.refreshJwt;
+    const refreshToken = jwtRefreshToken.value;
   
     if (!!authToken && !!refreshToken) {
       return true;
@@ -99,7 +102,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (authToken) {
       headers.Authorization = `Bearer ${authToken}`;
     }
-  
     let sessionToken;
     try {
       const graphQLClient = new GraphQLClient(config.public.PUBLIC_GRAPHQL_URL);
@@ -127,30 +129,22 @@ export default defineNuxtPlugin((nuxtApp) => {
       const headers = { ...currentHeaders };
       const authToken = await getAuthToken();
       const sessionToken = await getSessionToken();
-      
-      debugger
+      const authStore = useAuth();
       if (authToken) {
         headers.Authorization = `Bearer ${authToken}`;
-        const useAuthStore = useAuth();
-        useAuthStore.setAuthToken(authToken);
         authorization.value = authToken;
-
-      } else {
-        delete headers.Authorization;
       }
   
       if (sessionToken) {
         headers['woocommerce-session'] = `Session ${sessionToken}`;
         woocommerceSession.value = sessionToken;
 
-      } else {
-        delete headers['woocommerce-session'];
       }
   
       if (authToken || sessionToken) {
         return { headers };
       }
-  
+      authStore.setLoginStatus(false)
       return {};
     });
     return forward(operation);
@@ -161,8 +155,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       /**
        * Check for session header and update session in local storage accordingly. 
        */
-      debugger
-
       const context = operation.getContext();
       const { response: { headers } } = context;
       console.log('------------------');

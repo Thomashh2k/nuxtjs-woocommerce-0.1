@@ -7,7 +7,8 @@ const state = {
     firstName: null,
     lastName: null,
     username: null,
-    freshlyRegistered: false
+    freshlyRegistered: false,
+    isLoggedIn: false
   },
   customer: {
     billing: {
@@ -33,7 +34,6 @@ const state = {
     }
   },
   refreshJwt: '',
-  jwt: ''
 };
 
 export const useAuth = defineStore("userState", {
@@ -42,9 +42,6 @@ export const useAuth = defineStore("userState", {
     setRefreshToken(token) {
       this.refreshJwt = token
     },
-    setAuthToken(token) {
-      this.jwt = token
-    },
     setUser(user) {
         this.user = user
     },
@@ -52,13 +49,16 @@ export const useAuth = defineStore("userState", {
       this.customer = customer
     },
     logout() {
+      this.user = {}
+      this.customer = {}
       Object.assign(state, {
         user: {
           email: null,
           firstName: null,
           lastName: null,
           username: null,
-          freshlyRegistered: false
+          freshlyRegistered: false,
+          isLoggedIn: false
         },
         customer: {
           billing: {
@@ -86,23 +86,15 @@ export const useAuth = defineStore("userState", {
           jwt: ''
         }
       })
-      this.jwt = ''
-      this.refreshJwt = ''
-      this.customerJwt = ''
-      this.user = {}
-      this.customer = {}
+    },
+    setLoginStatus(status) {
+      this.user.isLoggedIn = status
     }
   },
   watch: {
 
   },
   getters: {
-    getRefreshToken() {
-      return this.refreshJwt
-    },
-    getAuthToken() {
-      return this.jwt
-    },
     getUser() {
       return this.user
     },
@@ -118,9 +110,8 @@ export const useAuth = defineStore("userState", {
     getOrders() {
       return this.customer.orders
     },
-    isLoggedIn() {
-      const isLoggedIn = this.refreshJwt !== ''
-      return isLoggedIn
+    isUserLoggedIn() {
+      return this.user.isLoggedIn
     }
   },
   persist: true,
