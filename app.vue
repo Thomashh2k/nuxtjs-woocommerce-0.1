@@ -17,6 +17,7 @@
 import { ref, onBeforeMount, onUnmounted} from 'vue'
 onBeforeMount(() => {
   window.addEventListener('scroll', handleScollEvent());
+  console.log('og-gaming.store-version: 1.0.0b')
 });
 
 onUnmounted(() => {
@@ -24,17 +25,6 @@ onUnmounted(() => {
 });
 
 let fixedNavBar = ref(false)
-
-function handleScollEvent() {
-  console.log('app.vue!!!')
-  // var header = window.document.getElementById("nav-content");
-  // var sticky = header.offsetTop;
-  // if (window.pageYOffset > sticky) {
-  //   fixedNavBar = true;
-  // } else {
-  //   fixedNavBar = false;
-  // }
-}
 
 useHead({
   title: "Index",
