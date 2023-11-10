@@ -1,0 +1,7 @@
+  mutation CLEAR_CART {
+    emptyCart(input: {clearPersistentCart: true}) {
+        deletedCart {
+        isEmpty
+        }
+    }
+  }

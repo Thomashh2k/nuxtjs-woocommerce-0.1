@@ -1,16 +1,25 @@
 import { useAuth } from "@/store/useAuth";
+import { useCart } from "@/store/useCart";
 import { useSnackbar } from "@/store/snackbar";
+import { recreateCart } from "@/utils/functions";
 import LOGIN_USER_MUTATION from "@/apollo/mutations/LOGIN_USER_MUTATION.gql";
 import REFRESH_AUTH_TOKEN from "@/apollo/mutations/REFRESH_AUTH_TOKEN.gql";
 import REGISTER_CUSTOMER_MUTATION from '@/apollo/mutations/REGISTER_CUSTOMER_MUTATION.gql'
+import CLEAR_CART from "@/apollo/mutations/CLEAR_CART.gql";
 
 export async function login (payload) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const authStore = useAuth();
+    const cart = useCart()
+    const cartItems = cart.getItems
+    debugger
+
+    // await emptyCart()
 
     const loginVariables = { input: payload };
     const { mutate, onDone, onError} = useMutation(LOGIN_USER_MUTATION, { variables: loginVariables });
     mutate(payload);
+
     onDone((result) => {
       const snackbar = useSnackbar()
 
@@ -26,6 +35,10 @@ export async function login (payload) {
 
       authStore.setUser(result.data.login.user)
       authStore.setCustomer(result.data.login.customer)
+      debugger
+      if(cartItems.length > 0) {
+        recreateCart(cartItems)
+      }
       authStore.setLoginStatus(true)
       snackbar.setMessage('Anmeldung erfolgreich', 'success')
       resolve()
@@ -33,11 +46,35 @@ export async function login (payload) {
     onError((err) => {
       const snackbar = useSnackbar()
       snackbar.setMessage("Login fehlgeschlagen. Stellen sie sicher das, die Anmeldedaten korrekt sind.", 'error')
-      reject()
+      reject(err)
     })
   })
 };
+export async function emptyCart() {
+  return new Promise((resolve, reject) => {
+    debugger
+    const authorization = useCookie("wp-auth");
+    const woocommerceSession = useCookie("woocommerce-session");
 
+    const { mutate, onError, onDone } = useMutation(CLEAR_CART, {
+      context: { 
+        headers: { 
+          authorization: `Bearer ${authorization.value}`,
+          'woocommerce-session': `Session ${woocommerceSession.value}`,
+        }
+      }
+    });
+    mutate();
+    onDone(() => {
+      const cart = useCart();
+      cart.clear();
+      resolve()
+    })
+    onError((err) => {
+      reject()
+    })
+  })
+}
 export async function registerCustomer(payload, router) {
   const authStore = useAuth();
 

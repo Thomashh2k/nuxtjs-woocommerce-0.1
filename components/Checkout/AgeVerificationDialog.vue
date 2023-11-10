@@ -29,7 +29,9 @@
     </v-dialog>
 </template>
 <script>
-import { get_perso_data } from '@/utils/customAusweisCheck.js'
+const get_perso_data = () => {
+    return
+}
 export default {
     name: 'AgeVerificationDialog',
     props: {

@@ -34,10 +34,10 @@ export async function updateUserInfo(userInfo) {
     onDone((result) => {
       const authStore = useAuth();
       const snackbar = useSnackbar()
+      const jwtRefreshToken = useCookie("JWT-Refresh");
 
       authStore.setRefreshToken(result.data.updateCustomer.refreshToken);
-      authStore.setCustomerJwt(result.data.updateCustomer.customer.jwtAuthToken);
-      authStore.setToken(result.data.updateCustomer.authToken);
+      jwtRefreshToken.value = result.data.updateCustomer.customer.jwtAuthToken
 
       authStore.setUser(userInfo);
 
@@ -53,9 +53,17 @@ export async function updateUserShipping(customerInfo, userInfo) {
         shipping: customerInfo.shipping,
       },
     };
-    console.log(shippingVar)
+    const authorization = useCookie("wp-auth");
+    const woocommerceSession = useCookie("woocommerce-session");
+    
     const { mutate, onError, onDone } = useMutation(UPDATE_USER_SHIPPING, {
-      variables: shippingVar
+      variables: shippingVar,
+      context: { 
+        headers: { 
+          authorization: `Bearer ${authorization.value}`,
+          'woocommerce-session': `Session ${woocommerceSession.value}`,
+        }
+      }
     });
   
     mutate(shippingVar);
@@ -68,9 +76,10 @@ export async function updateUserShipping(customerInfo, userInfo) {
       const authStore = useAuth();
       const snackbar = useSnackbar()
 
-      authStore.setRefreshToken(result.data.updateCustomer.refreshToken)
-      authStore.setCustomerJwt(result.data.updateCustomer.customer.jwtAuthToken)
-      authStore.setToken(result.data.updateCustomer.authToken)
+      const jwtRefreshToken = useCookie("JWT-Refresh");
+
+      jwtRefreshToken.value = result.data.updateCustomer.customer.jwtAuthToken
+      authorization.value = result.data.updateCustomer.authToken
 
       authStore.setCustomer(customerInfo)
 
@@ -87,9 +96,18 @@ export async function updateUserBilling(customerInfo, userInfo) {
         billing: customerInfo.billing,
       },
     };
-    console.log(billingVar)
+
+    const authorization = useCookie("wp-auth");
+    const woocommerceSession = useCookie("woocommerce-session");
+
     const { mutate, onError, onDone } = useMutation(UPDATE_USER_BILLING, {
-      variables: billingVar
+      variables: billingVar,
+      context: { 
+        headers: { 
+          authorization: `Bearer ${authorization.value}`,
+          'woocommerce-session': `Session ${woocommerceSession.value}`,
+        }
+      }
     });
   
     mutate(billingVar);
@@ -102,9 +120,9 @@ export async function updateUserBilling(customerInfo, userInfo) {
       const authStore = useAuth();
       const snackbar = useSnackbar()
 
-      authStore.setRefreshToken(result.data.updateCustomer.refreshToken)
-      authStore.setCustomerJwt(result.data.updateCustomer.customer.jwtAuthToken)
-      authStore.setToken(result.data.updateCustomer.authToken)
+      const jwtRefreshToken = useCookie("JWT-Refresh");
+      jwtRefreshToken.value = result.data.updateCustomer.customer.jwtAuthToken
+      authorization.value = result.data.updateCustomer.authToken
 
       authStore.setCustomer(customerInfo)
 

@@ -64,7 +64,7 @@ const props = defineProps({
    searchQuery: { type: String, required: false, default: '' },
 });
 
-const variables = { limit: 99 };
+const variables = { limit: 150 };
 let mainCategory = categoriesStore.getAllCategories
 let currentCategory = ref(categoriesStore.getActiveCategory)
 
@@ -91,14 +91,14 @@ if(mainCategory.length === 0) {
   let sony = {}
   let xbox = {}
   let nintendo = {}
-  
-  sony = data.value.productCategories.nodes.find(el => el.name === 'Sony');
+  debugger
+  sony = data.value.sonyCategory.nodes[0];
   sony.iconClass = 'mdi-sony-playstation'
   sony.linkClass = 'link-sony-playstation'
-  xbox = data.value.productCategories.nodes.find(el => el.name === 'Xbox');
+  xbox = data.value.xboxCategory.nodes[0];
   xbox.iconClass = 'mdi-microsoft-xbox'
   xbox.linkClass = 'link-microsoft-xbox'
-  nintendo = data.value.productCategories.nodes.find(el => el.name === 'Nintendo');
+  nintendo = data.value.nintendoCategory.nodes[0];
   nintendo.iconClass = 'mdi-nintendo-switch'
   nintendo.linkClass = 'link-nintendo-switch'
   

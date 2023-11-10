@@ -64,6 +64,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     let authToken;
     if (!refreshToken) {
       // No refresh token means the user is not authenticated.
+      debugger
       authStore.setLoginStatus(false)
       return;
     }
@@ -143,9 +144,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   
       if (authToken || sessionToken) {
         return { headers };
+      } else {
+        debugger
+        authStore.setLoginStatus(false)
+        return {};
       }
-      authStore.setLoginStatus(false)
-      return {};
     });
     return forward(operation);
   });

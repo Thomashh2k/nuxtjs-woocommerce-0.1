@@ -57,7 +57,6 @@ import SelectedProduct from '@/components/OneClickCheckout/SelectedProduct';
 import { oneClickCheckout, priceToNumber } from "@/utils/functions";
 import { useAuth } from '@/store/useAuth.js'
 import GET_SINGLE_PRODUCT_QUERY from "@/apollo/queries/GET_SINGLE_PRODUCT_QUERY.gql";
-import axios from 'axios'
 import {loadStripe} from '@stripe/stripe-js';
 
 export default {

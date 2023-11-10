@@ -28,20 +28,13 @@ const state = {
       firstName: '',
       lastName: '',
       postcode: ''
-    },
-    orders: {
-
     }
   },
-  refreshJwt: '',
 };
 
 export const useAuth = defineStore("userState", {
   state: () => state,
   actions: {
-    setRefreshToken(token) {
-      this.refreshJwt = token
-    },
     setUser(user) {
         this.user = user
     },
@@ -78,12 +71,7 @@ export const useAuth = defineStore("userState", {
             firstName: '',
             lastName: '',
             postcode: ''
-          },
-          orders: {
-      
-          },
-          refreshJwt: '',
-          jwt: ''
+          }
         }
       })
     },
@@ -106,9 +94,6 @@ export const useAuth = defineStore("userState", {
     },
     getShipping() {
       return this.customer.shipping
-    },
-    getOrders() {
-      return this.customer.orders
     },
     isUserLoggedIn() {
       return this.user.isLoggedIn

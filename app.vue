@@ -15,14 +15,6 @@
 <script setup>
 
 import { ref, onBeforeMount, onUnmounted} from 'vue'
-onBeforeMount(() => {
-  window.addEventListener('scroll', handleScollEvent());
-  console.log('og-gaming.store-version: 1.0.0b')
-});
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScollEvent());
-});
 
 let fixedNavBar = ref(false)
 

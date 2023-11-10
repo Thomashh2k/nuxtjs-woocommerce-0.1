@@ -3,6 +3,7 @@ import { useCart } from "@/store/useCart";
 import { useOrderReceived } from "@/store/useOrderReceived";
 import { useSnackbar } from "@/store/snackbar";
 
+import CLEAR_CART from "@/apollo/mutations/CLEAR_CART.gql";
 import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
 import REMOVE_ITEM_FROM_CART from "@/apollo/mutations/REMOVE_ITEM_FROM_CART.gql";
 import CHECKOUT_MUTATION from "@/apollo/mutations/checkouts/CHECKOUT_MUTATION.gql";
@@ -198,44 +199,38 @@ export async function checkout(shipping, billing, paymentMethod) {
 
 }
 
-// export async function checkout(shipping, billing, paymentMethod) {
-//   // shipping.address1 = shipping.address
-  
-//   const checkoutVariables = {
-//     input: {
-//       shipping: shipping,
-//       billing: billing,
-//       paymentMethod: paymentMethod,
-//     }
-//   };
-//   const woocommerceSession = useCookie("woocommerce-session");
-//   const authorization = useCookie("wp-auth");
+export async function recreateCart(cartItems) {
+  const cart = useCart();
+  cart.clear();
+  debugger
 
-//   if(authorization.value === null || authorization.value === undefined) {
-//     const { mutate, onError, onDone } = useMutation(GUEST_CHECKOUT_MUTATIONS, {
-//       variables: checkoutVariables,
-//     });
-//     mutate(checkoutVariables);
+  for (let i = 0; i < cartItems.length; i++) {
+    const cartVariables = {
+      productId: cartItems[i].product.databaseId,
+      quantity: cartItems[i].quantity
+    }
 
-//     return { onDone, onError }
-//   } else {
-//     const cookies = `woocommerce-session=${woocommerceSession.value}; Authorization=Bearer ${authorization.value}`;
+    const { mutate, onError, onDone } = useMutation(ADD_TO_CART_MUTATION, {
+      variables: cartVariables
+    });
+    mutate(cartVariables);
 
-//     const { mutate, onError, onDone } = useMutation(CHECKOUT_MUTATION, {
-//       variables: checkoutVariables,
-//       context: { 
-//         headers: {
-//           'Cookie': cookies,
-//           'woocommerce-session': `Session ${woocommerceSession.value}`,
-//           'Authorization': `Bearer ${authorization.value}`
-//         }}
-//     });
-//     mutate(checkoutVariables);
+    onError((err) => {
+      const snackbar = useSnackbar()
+      cart.removeItem(product);
+      if(err.message.includes('<a href="http://localhost:8080" class="button wc-forward">Warenkorb anzeigen</a> Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
+        snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.', 'error')
+      } else {
+        snackbar.setMessage(err.message, 'error')
+      }
+    })
+    onDone((result) => {
+      cart.addDetails(result.data.addToCart.cart);
+      cart.addAfterSuccess(result.data.addToCart.cartItem.key, addTempRes);
+    })
 
-//     return { onDone, onError }
-//   }
-
-// }
+  }
+}
 
 export async function oneClickCheckout(productID, shipping, billing, paymentMethod) {
   // shipping.address1 = shipping.address

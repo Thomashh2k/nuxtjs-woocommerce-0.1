@@ -155,7 +155,7 @@ export default {
           }
           
           const orderReceivedStore = useOrderReceived();
-          orderReceivedStore.setOrder(res.data.oneClickCheckout.order)
+          orderReceivedStore.setOrder(res.data.checkout.order)
           navigateTo('/order-received')
         })
       }

@@ -6,7 +6,11 @@
 </template>
 
 <script setup>
+import { useCart } from "@/store/useCart";
+
 onBeforeMount(() => {
+  const cart = useCart();
+  cart.clear()
 });
 
 useHead({
@@ -22,6 +26,7 @@ useHead({
   ],
   link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
 });
+
 </script>
 
 <style scoped>

@@ -121,7 +121,13 @@ export default {
       await updateUserShipping(this.customer, this.userInfo)
     },
     async updateBillingInfo($event) {
-      this.customer.billing = $event
+      debugger
+      
+      if(this.customer.billing.sameAsShipping) {
+        this.customer.billing = this.customer.shipping
+      } else {
+        this.customer.billing = $event
+      }
       await updateUserBilling(this.customer, this.userInfo)
     },
     async updateUserInfo($event) {

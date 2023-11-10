@@ -16,30 +16,7 @@
       <h1 v-if="!pageInfo.hasNextPage" class="tw-text-center tw-text-2xl">Es gibt keine weiteren Produkte zum laden</h1>
       
       <div v-if="fetchingMore">
-        <div v-if="products.nodes.length === 0" class="tw-flex tw-flex-wrap tw-justify-center tw-items-center">
-          <v-skeleton-loader
-            class="card-bg-color card-height card-width tw-text-black lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mx-2 md:tw-mx-1.5 sm:tw-mx-1.5 max-[1280px]:tw-mx-1 hover:shadow-2xl card-bg-color"
-            type="image, article"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="card-bg-color card-height card-width tw-text-black lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mx-2 md:tw-mx-1.5 sm:tw-mx-1.5 max-[1280px]:tw-mx-1 hover:shadow-2xl card-bg-color"
-            type="image, article"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="card-bg-color card-height card-width tw-text-black lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mx-2 md:tw-mx-1.5 sm:tw-mx-1.5 max-[1280px]:tw-mx-1 hover:shadow-2xl card-bg-color"
-            type="image, article"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="card-bg-color card-height card-width tw-text-black lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mx-2 md:tw-mx-1.5 sm:tw-mx-1.5 max-[1280px]:tw-mx-1 hover:shadow-2xl card-bg-color"
-            type="image, article"
-          ></v-skeleton-loader>
-          <v-skeleton-loader
-            class="card-bg-color card-height card-width tw-text-black lg:tw-mt-6 md:tw-mt-5 sm:tw-mt-5 max-[1280px]:tw-mt-5 sm:tw-w1/2 md:tw-w-1/3 lg:tw-w-1/4 lg:tw-mx-2 md:tw-mx-1.5 sm:tw-mx-1.5 max-[1280px]:tw-mx-1 hover:shadow-2xl card-bg-color"
-            type="image, article"
-          ></v-skeleton-loader>
-        </div>
         <v-progress-linear
-          v-else
           indeterminate
           color="yellow-darken-2"
         ></v-progress-linear>

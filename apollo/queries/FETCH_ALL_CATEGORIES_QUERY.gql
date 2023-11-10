@@ -1,55 +1,77 @@
-{ 
-  productCategories(first: 50) {
+query MyQuery {
+  sonyCategory: productCategories(where: {slug: "sony"}) {
     nodes {
+      slug
+      name
+      id
       children {
         nodes {
           id
           databaseId
           name
           slug
-          ancestors {
-            nodes {
-              name
-              slug
-              id
-            }
-          }
           children {
-            nodes {
-              id
-              databaseId
-              name
-              slug
-              ancestors {
-                nodes {
-                  name
-                  slug
-                  id
-                }
-              }
-              children {
-                nodes {
-                  id
-                  databaseId
-                  name
-                  slug
-                  ancestors {
-                    nodes {
-                      name
-                      slug
-                      id
-                    }
-                  }
-                }
+            edges {
+              node {
+                id
+                databaseId
+                name
+                slug
               }
             }
           }
         }
       }
-      id
-      databaseId
-      name
+    }
+  }
+  xboxCategory: productCategories(where: {slug: "xbox"}) {
+    nodes {
       slug
+      name
+      id
+      children {
+        nodes {
+          id
+          databaseId
+          name
+          slug
+          children {
+            edges {
+              node {
+                id
+                databaseId
+                name
+                slug
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  nintendoCategory: productCategories(where: {slug: "nintendo"}) {
+    nodes {
+      slug
+      name
+      id
+      children {
+        nodes {
+          id
+          databaseId
+          name
+          slug
+          children {
+            edges {
+              node {
+                id
+                databaseId
+                name
+                slug
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
