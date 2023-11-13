@@ -14,7 +14,8 @@
                 path: '/product/' + item.product.slug,
                 query: { id: databaseId },
             }">
-                <v-img :src="item.product.image.sourceUrl"></v-img>
+                <v-img v-if="item.product.image !== null" :src="item.product.image.sourceUrl"></v-img>
+                <div class="tw-text-purple-50" v-else>Bild ist leider noch nicht vorhanden.</div>
             </NuxtLink>
             <NuxtLink id="prodInfo" class="tw-text-purple-50 tw-ml-4 hover:tw-underline" style="width: 86%;" 
               :to="{

@@ -16,11 +16,13 @@
         >
             <img
                 id="product-image"
-                class="tw-border tw-h-2/3  tw-rounded tw-drop-shadow-lg tw-transition tw-duration-500 tw-ease-in-out tw-transform tw-cursor-pointer lg:tw-ml-0 tw-w-full  tw-hover:tw-scale-95"
+                class="tw-border tw-rounded tw-drop-shadow-lg tw-transition tw-duration-500 tw-ease-in-out tw-transform tw-cursor-pointer lg:tw-ml-0 tw-w-full tw-hover:tw-scale-95"
+                :class="{'tw-h-3/4': windowWidth > 960, 'tw-h-2/3': windowWidth <= 960}"
                 style="object-fit: cover; object-position: center;"
                 :alt="product.name"
                 :src="productImage(product)"
             />
+
             <div class="tw-flex tw-justify-center tw-pt-3 hover:tw-underline tw-decoration-purple-50">
                 <p class="lg:tw-text-sm  tw-font-bold tw-text-center tw-truncate tw-cursor-pointer tw-text-purple-50">
                 {{ product.name }}
@@ -28,16 +30,24 @@
             </div>
             <div class="tw-flex tw-justify-center tw-text-sm">
                 <div v-if="product.stockStatus === 'OUT_OF_STOCK'" style="color:rgb(244, 67, 54);">
-                Nicht vorrätig
+                    Nicht vorrätig
                 </div>
                 <div v-else style="color:rgb(0, 255, 10);">
-                Auf Lager
+                    Auf Lager
                 </div>
             </div>
-            <div v-if="product.onSale" class="tw-flex tw-justify-start tw-m-2 tw-mb-0  lg:tw-text-sm  hover:tw-underline tw-decoration-purple-50">
-                <div class="tw-flex tw-flex-row tw-justify-between">
-                    <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" @click="addToCart(product)" />
-
+        </NuxtLink>
+        <div v-if="product.onSale" class="tw-flex tw-justify-start tw-m-2 tw-mb-0  lg:tw-text-sm  hover:tw-underline tw-decoration-purple-50">
+            <div class="tw-flex tw-flex-row tw-justify-between">
+                <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" @click="addToCart(product)" />
+                <NuxtLink
+                    v-if="product.slug"
+                    class="tw-cursor-pointer"
+                    :to="{
+                        path: '/product/' + product.slug,
+                        query: { id: product.databaseId },
+                    }"
+                >
                     <div class="tw-text-purple-50 tw-line-through">
                             <span v-if="product.variations" v-html="filteredVariantPrice(product.price, 'right')"></span>
                             <span v-else v-html="product.regularPrice"></span>
@@ -46,32 +56,39 @@
                             <span v-if="product.variations" v-html="filteredVariantPrice(product.price)"></span>
                             <span v-else v-html="product.salePrice"></span>
                     </div>
-        
-                    <div class="tw-flex tw-flex-col">
-                        <div class="tw-flex tw-justify-end">
-                            <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
-                                <v-btn style="color: color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cash-register"  />
-                            </NuxtLink>
-                        </div>
+                </NuxtLink>
+    
+                <div class="tw-flex tw-flex-col">
+                    <div class="tw-flex tw-justify-end">
+                        <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
+                            <v-btn style="color: color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cash-register"  />
+                        </NuxtLink>
                     </div>
                 </div>
             </div>
-            <div v-else>
-                <div class="tw-flex tw-flex-row tw-justify-between">
-                    <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" variant="plain" density="compact" @click="addToCart(product)" />
-        
+        </div>
+        <div v-else>
+            <div class="tw-flex tw-flex-row tw-justify-between">
+                <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" icon="mdi-cart-plus" variant="plain" density="compact" @click="addToCart(product)" />
+                <NuxtLink
+                    v-if="product.slug"
+                    class="tw-cursor-pointer"
+                    :to="{
+                        path: '/product/' + product.slug,
+                        query: { id: product.databaseId },
+                    }"
+                >
                     <p class="tw-mx-2 tw-mt-2  tw-text-xl tw-text-center tw-text-purple-50 hover:tw-underline tw-decoration-purple-50  " v-html="product.price"></p>
-        
-                    <div class="tw-flex tw-flex-col">
-                        <div class="tw-flex tw-justify-end">
-                            <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
-                                <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" variant="plain" density="compact" icon="mdi-cash-register"  />
-                            </NuxtLink>
-                        </div>
+                </NuxtLink>
+                <div class="tw-flex tw-flex-col">
+                    <div class="tw-flex tw-justify-end">
+                        <NuxtLink :to="{ path: '/one-click-checkout', query: { id: product.databaseId, slug: product.slug }}">
+                            <v-btn style="color: rgb(0, 255, 10);" :disabled="product.stockStatus === 'OUT_OF_STOCK'" size="large" variant="plain" density="compact" icon="mdi-cash-register"  />
+                        </NuxtLink>
                     </div>
                 </div>
             </div>
-        </NuxtLink>
+        </div>
     </v-card>
 </template>
 <script>

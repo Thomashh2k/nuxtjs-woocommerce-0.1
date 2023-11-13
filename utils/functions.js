@@ -151,8 +151,18 @@ export function removeProductFromCart (product) {
   const removeItemsVariables = {
     itemKey: product.key
   };
-  const { mutate, onError } = useMutation(REMOVE_ITEM_FROM_CART, {
-    variables: removeItemsVariables
+
+  const authorization = useCookie("wp-auth");
+  const woocommerceSession = useCookie("woocommerce-session");
+
+  const { mutate, onDone, onError } = useMutation(REMOVE_ITEM_FROM_CART, {
+    variables: removeItemsVariables.itemKey,
+    context: { 
+      headers: { 
+        authorization: `Bearer ${authorization.value}`,
+        'woocommerce-session': `Session ${woocommerceSession.value}`,
+      }
+    }
   });
 
   mutate(removeItemsVariables);
@@ -160,6 +170,11 @@ export function removeProductFromCart (product) {
   onError((err) => {
     const snackbar = useSnackbar()
     snackbar.setMessage(err.message, 'error')
+  })
+
+  onDone((result) => {
+    const snackbar = useSnackbar()
+    snackbar.setMessage('Produkt entfernt', 'success')
   })
 }
 
@@ -209,6 +224,7 @@ export async function recreateCart(cartItems) {
       productId: cartItems[i].product.databaseId,
       quantity: cartItems[i].quantity
     }
+    const addTempRes = cart.addTemporary(cartItems[i].product);
 
     const { mutate, onError, onDone } = useMutation(ADD_TO_CART_MUTATION, {
       variables: cartVariables
@@ -217,7 +233,6 @@ export async function recreateCart(cartItems) {
 
     onError((err) => {
       const snackbar = useSnackbar()
-      cart.removeItem(product);
       if(err.message.includes('<a href="http://localhost:8080" class="button wc-forward">Warenkorb anzeigen</a> Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
         snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.', 'error')
       } else {
@@ -225,6 +240,7 @@ export async function recreateCart(cartItems) {
       }
     })
     onDone((result) => {
+      debugger
       cart.addDetails(result.data.addToCart.cart);
       cart.addAfterSuccess(result.data.addToCart.cartItem.key, addTempRes);
     })

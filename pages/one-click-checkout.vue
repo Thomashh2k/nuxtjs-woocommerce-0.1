@@ -18,7 +18,7 @@
               />
               <v-radio-group v-model="paymentMethod" class="tw-text-purple-50" color="#4c1d95">
                 <v-radio label="Paypal" value="ppcp-gateway"></v-radio>
-                <v-radio label="Sonstige Methoden (...)" :disabled="stripeClientSecret === null" value="stripe"></v-radio>
+                <v-radio label="Andere Methoden" value="stripe"></v-radio>
               </v-radio-group>
               <div v-show="paymentMethod === 'stripe'" ref="stripeEL" id="stripeEL" class="tw-w-full">
                   <!-- Express Checkout Element will be inserted here -->
@@ -89,9 +89,10 @@ export default {
     async created() {
       
       await this.getProduct()
-      console.log(this.product)
+      const config = useRuntimeConfig();
       this.stripe = await loadStripe('pk_test_51NTTvgHYY4qFsHLPlf5VaERvj70Le4ERHyXQiZAAoJdpPI9IIN4RfXoUXnfayI6bfXNToQLhRMBc57HqKrRCAsAm00Jb3rtCRF');
-      this.stripeClientSecret = await fetch('http://localhost:1337/create-payment-intent?total='+ priceToNumber(this.product.price), {
+      debugger
+      this.stripeClientSecret = await fetch(`${config.public.STRIPE_PAYMENT_API}/create-payment-intent?total=${priceToNumber(this.product.price)}`, {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',

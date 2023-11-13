@@ -8,14 +8,14 @@
               v-if="data.product.image"
               id="product-image"
               class="tw-h-auto tw-p-8 tw-transition tw-duration-500 tw-ease-in-out tw-transform xl:tw-p-2 md:tw-p-2 lg:tw-p-2 hover:tw-shadow-lg hover:tw-scale-95"
-              :alt="data.product.name"
+              alt="Bild ist leider noch nicht vorhanden."
               :src="data.product.image.sourceUrl"
             />
             <img
               v-else
               id="product-image"
               class="tw-h-auto tw-p-8 tw-transition tw-duration-500 tw-ease-in-out tw-transform xl:tw-p-2 md:tw-p-2 lg:tw-p-2 hover:tw-shadow-lg hover:tw-scale-95"
-              :alt="data.product.name"
+              alt="Bild ist leider noch nicht vorhanden."
               :src="config.placeholderImage"
             />
           </v-col>
@@ -56,23 +56,22 @@
                   >
                   <div class="tw-normal-case tw-text-lg">
                       In den Warenkorb
-                    </div>
+                  </div>
                   </v-btn>
-                  <NuxtLink :to="{ path: '/one-click-checkout', query: { id: data.product.databaseId, slug: data.product.slug }}">
-                    <v-btn
+                  <v-btn
                     class="tw-border-2"
+                    :to="{ path: '/one-click-checkout', query: { id: data.product.databaseId, slug: data.product.slug }}"
                     :loading="isLoading"
                   >
-                  <div class="tw-normal-case tw-text-lg">
+                    <div class="tw-normal-case tw-text-lg">
                       Sofort Kaufen
                     </div>
                   </v-btn>
-                  </NuxtLink>
                 </v-btn-group>
               </div>
               <br />
               <p class="tw-pt-1 tw-mt-4 lg:tw-text-2xl">
-                {{ stripHTML(data.product.description) }}
+                {{data.product.description !== null ? stripHTML(data.product.description) : 'Beschreibung ist leider noch nicht vorhanden.' }}
               </p>
               <p
                 v-if="data.product.variations"
@@ -115,6 +114,7 @@ import {
   addProductToCart,
 } from "@/utils/functions";
 
+debugger
 const isLoading = useState("isLoading", () => false);
 
 const config = useRuntimeConfig();

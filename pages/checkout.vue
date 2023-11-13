@@ -17,8 +17,7 @@
               />
               <v-radio-group v-model="paymentMethod" class="tw-text-purple-50" color="#4c1d95">
                 <v-radio label="Paypal" value="ppcp-gateway"></v-radio>
-                <v-radio label="Sonstige Methoden (...)" :disabled="stripeClientSecret === null" value="stripe"></v-radio>
-                <v-radio label="Test Methoden" :disabled="stripeClientSecret === null" value="bacs"></v-radio>
+                <v-radio label="Andere Methoden" value="stripe"></v-radio>
               </v-radio-group>
               <div v-show="paymentMethod === 'stripe'" ref="stripeEL" id="stripeEL" class="tw-w-full">
                   <!-- Express Checkout Element will be inserted here -->
@@ -29,7 +28,7 @@
               <Checkboxes ref="checkboxForm" :order-data="orderData"/>
               <div class="tw-w-full tw-flex tw-justify-center">
                 <PaypalButton v-if="paymentMethod === 'ppcp-gateway'" :is-valid-to-click="checkoutIsValid" @onPay="submitOrder" @click="createOrderData"/>
-                <v-btn v-if="paymentMethod === 'bacs'" color="green" variant="outlined" @click="submitOrder()" >
+                <v-btn v-if="paymentMethod === 'stripe'" color="green" variant="outlined" @click="submitOrder()" >
                   <div class="tw-normal-case">Bezahlen</div>
                 </v-btn>
               </div>
@@ -100,12 +99,13 @@ export default {
       }
     }
   },
-  async created() {
-      
+  async mounted() {
       const cartStore = useCart()
       const ammount = cartStore.getCartTotal
+      debugger
       this.stripe = await loadStripe('pk_test_51NTTvgHYY4qFsHLPlf5VaERvj70Le4ERHyXQiZAAoJdpPI9IIN4RfXoUXnfayI6bfXNToQLhRMBc57HqKrRCAsAm00Jb3rtCRF');
-      this.stripeClientSecret = await fetch('http://localhost:1337/create-payment-intent?total='+ ammount, {
+      const config = useRuntimeConfig();
+      this.stripeClientSecret = await fetch(`${config.public.STRIPE_PAYMENT_API}/create-payment-intent?total=${ammount}`, {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
@@ -116,6 +116,37 @@ export default {
       }).catch((err) => {
         console.error(err)
       })
+  },
+  watch: {
+      paymentMethod(newV, oldV) {
+        
+        if(newV === 'stripe') {
+          this.$nextTick(async () => {
+            const appearance = {
+              theme: 'night',
+              type: 'accordion',
+              labels: 'floating',
+              variables: {
+                colorPrimary: '#0570de',
+                colorBackground: '#1A063A',
+                colorText: '#FAF5FF',
+                colorDanger: '#df1b41',
+                fontFamily: 'Ideal Sans, system-ui, sans-serif',
+                spacingUnit: '2px',
+                borderRadius: '4px',
+                // See all possible variables below
+              }
+            };
+            this.stripeElement = this.stripe.elements({clientSecret: this.stripeClientSecret, appearance});
+            const expressCheckoutElement = this.stripeElement.create('payment', {
+              // paymentRequest: paymentRequest
+            });
+            expressCheckoutElement.mount('#stripeEL');
+          })
+        } else {
+          // this.$refs.stripeEL.style.display = 'block'
+        }
+      }
     },
   methods: {
     updatedAddressInfo ($event) {
@@ -147,7 +178,7 @@ export default {
               elements: this.stripeElement,
               clientSecret: this.stripeClientSecret,
               confirmParams: {
-                return_url: 'http://localhost:3000/order-received',
+                return_url: 'https://og-gaming.store/order-received',
               },
               // Uncomment below if you only want redirect for redirect-based payments
               // redirect: "if_required",

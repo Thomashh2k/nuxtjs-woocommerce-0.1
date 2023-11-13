@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify', 'vee-validate'],
   },
-  devtools: true,
+  // devtools: true,
   buildModules: ['@nuxt/typescript-build'],
   modules: [
     "@pinia/nuxt",
@@ -42,8 +42,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       PUBLIC_GRAPHQL_URL: 'https://api.og-gaming.store:8080/graphql',
-      STRIPE_PAYMENT_API: 'http://localhost:1337',
-      SERVER_DOMAIN: 'https://api.og-gaming.store'
+      STRIPE_PAYMENT_API: 'https://og-gaming.store:1337',
+      SERVER_DOMAIN: 'http://localhost/'
     }
   },
   postcss: {

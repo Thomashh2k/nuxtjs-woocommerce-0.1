@@ -26,8 +26,9 @@
                         query: { id: item.product.databaseId },
                 }">
 
-                    <div >
-                        <v-img style="width:70px; height: 90px;" :src="item.product.image.sourceUrl"></v-img>
+                    <div>
+                        <v-img v-if="item.product.image !== null" style="width:70px; height: 90px;" :src="item.product.image.sourceUrl"></v-img>
+                        <h1 v-else style="width:70px; height: 90px;" class="border border-violet-400">No Image</h1>
                     </div>
                     <div id="prodInfo" class="tw-text-purple-50 tw-ml-4">
                         <h6>{{ item.product.name }}</h6>
