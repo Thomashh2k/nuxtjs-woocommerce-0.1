@@ -178,16 +178,24 @@ export function removeProductFromCart (product) {
   })
 }
 
-export async function checkout(shipping, billing, paymentMethod) {
+export async function checkout(orderData, paymentMethod) {
   // shipping.address1 = shipping.address
-  
+  debugger
   const checkoutVariables = {
     input: {
-      shipping: shipping,
-      billing: billing,
+      shipping: orderData.shippingAddress,
+      billing: orderData.billingAddress,
+      transactionId: orderData.transactionId,
       paymentMethod: paymentMethod,
+
     }
   };
+  if(paymentMethod.includes('stripe')) {
+    checkoutVariables.input.metaData = [
+      {key: "_stripe_intent_id", value: orderData.transactionId }
+    ]
+  }
+
   const woocommerceSession = useCookie("woocommerce-session");
   const authorization = useCookie("wp-auth");
 

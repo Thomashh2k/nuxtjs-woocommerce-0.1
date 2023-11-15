@@ -85,8 +85,9 @@ export default {
       orderData: null,
       aggreed: null,
       stripe: null,
+      stripePaymentTab: null,
       stripeElement: null,
-      stripeClientSecret: null,
+      stripePaymentIntent: null,
       authStore: useAuth(),
     }
   },
@@ -102,17 +103,16 @@ export default {
   async mounted() {
       const cartStore = useCart()
       const ammount = cartStore.getCartTotal
-      debugger
       this.stripe = await loadStripe('pk_test_51NTTvgHYY4qFsHLPlf5VaERvj70Le4ERHyXQiZAAoJdpPI9IIN4RfXoUXnfayI6bfXNToQLhRMBc57HqKrRCAsAm00Jb3rtCRF');
       const config = useRuntimeConfig();
-      this.stripeClientSecret = await fetch(`${config.public.STRIPE_PAYMENT_API}/create-payment-intent?total=${ammount}`, {
+      this.stripePaymentIntent = await fetch(`${config.public.STRIPE_PAYMENT_API}/create-payment-intent?total=${ammount}`, {
         method: 'get',
         headers: {
           'Content-Type': 'application/json',
         },
       }).then(async (res) => {
         const body = await res.json()
-        return body.clientSecret
+        return body
       }).catch((err) => {
         console.error(err)
       })
@@ -137,9 +137,18 @@ export default {
                 // See all possible variables below
               }
             };
-            this.stripeElement = this.stripe.elements({clientSecret: this.stripeClientSecret, appearance});
+            this.stripeElement = this.stripe.elements({clientSecret: this.stripePaymentIntent.clientSecret, appearance});
             const expressCheckoutElement = this.stripeElement.create('payment', {
               // paymentRequest: paymentRequest
+            });
+            expressCheckoutElement.on('change', (event) => {
+              this.stripePaymentTab = event.value.type;
+              if (event.error) {
+                // Display error message in your UI.
+                const displayError = document.getElementById('error-message');
+                displayError.textContent = event.error.message;
+              }
+              console.log(event)
             });
             expressCheckoutElement.mount('#stripeEL');
           })
@@ -154,15 +163,19 @@ export default {
     },
     async createOrderData() {
       this.orderData = await this.$refs.checkoutForm.submitForm()
-      
+      debugger
+      if(this.paymentMethod.includes('stripe')) {
+        this.orderData.transactionId = this.stripePaymentIntent.id
+      }
       this.aggreed = await this.$refs.checkboxForm.submitCheckboxes()
 
     },
     async submitOrder() {
       await this.createOrderData()
       if(this.aggreed) {
-        
-       const {onError, onDone } = await checkout(this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod)
+        debugger
+        this.setStripePaymentMethod()
+        const {onError, onDone } = await checkout(this.orderData, this.paymentMethod)
         
         onError((err) => {
             const snackbar = useSnackbar()
@@ -171,14 +184,15 @@ export default {
         onDone(async (res) => {
           
           debugger
-          if(this.paymentMethod === 'stripe') {
+          if(this.paymentMethod.includes('stripe')) {
             const errors = await this.stripeElement.submit()
+            const config = useRuntimeConfig();
             
             const {error} = await this.stripe.confirmPayment({
               elements: this.stripeElement,
-              clientSecret: this.stripeClientSecret,
+              clientSecret: this.stripePaymentIntent.clientSecret,
               confirmParams: {
-                return_url: 'https://og-gaming.store/order-received',
+                return_url: config.public.SERVER_DOMAIN + '/order-received',
               },
               // Uncomment below if you only want redirect for redirect-based payments
               // redirect: "if_required",
@@ -191,6 +205,16 @@ export default {
         })
       }
     },
+    setStripePaymentMethod() {
+      if(this.stripePaymentTab === 'sofort') {
+        this.paymentMethod = 'stripe_sofort'
+      } else if(this.stripePaymentTab === 'giropay') {
+        this.paymentMethod = 'stripe_giropay'
+      } else if (this.stripePaymentTab === 'card') {
+        this.paymentMethod = 'stripe_cc'
+      }
+    }
+    
   }
 }
 

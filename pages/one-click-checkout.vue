@@ -58,6 +58,7 @@ import { oneClickCheckout, priceToNumber } from "@/utils/functions";
 import { useAuth } from '@/store/useAuth.js'
 import GET_SINGLE_PRODUCT_QUERY from "@/apollo/queries/GET_SINGLE_PRODUCT_QUERY.gql";
 import {loadStripe} from '@stripe/stripe-js';
+import { useOrderReceived } from '@/store/useOrderReceived'
 
 export default {
     name: 'one-click-checkout',
@@ -77,6 +78,7 @@ export default {
         stripe: null,
         stripeElement: null,
         stripeClientSecret: null,
+        stripePaymentTab: null,
         // ageVerficationNeeded: true,
         product: {
           image: {
@@ -125,8 +127,19 @@ export default {
               }
             };
             this.stripeElement = this.stripe.elements({clientSecret: this.stripeClientSecret, appearance});
+
+
             const expressCheckoutElement = this.stripeElement.create('payment', {
               // paymentRequest: paymentRequest
+            });
+            expressCheckoutElement.on('change', (event) => {
+              this.stripePaymentTab = event.value.type;
+              if (event.error) {
+                // Display error message in your UI.
+                const displayError = document.getElementById('error-message');
+                displayError.textContent = event.error.message;
+              }
+              console.log(event)
             });
             expressCheckoutElement.mount('#stripeEL');
           })
@@ -153,7 +166,7 @@ export default {
         await this.createOrderData()
         
         if(this.aggreed) {
-          
+          this.setStripePaymentMethod()
           const { onError, onDone } = await oneClickCheckout(Number(this.$route.query.id), this.orderData.shippingAddress, this.orderData.billingAddress, this.paymentMethod, this.stripe.id)
 
           onError((err) => {
@@ -162,8 +175,8 @@ export default {
           })
           onDone(async (res) => {
             
-            
-            if(this.paymentMethod === 'stripe') {
+            debugger
+            if(this.paymentMethod.includes('stripe')) {
               const errors = await this.stripeElement.submit()
               
               const {error} = await this.stripe.confirmPayment({
@@ -185,6 +198,15 @@ export default {
           })
         }
 
+      },
+      setStripePaymentMethod() {
+        if(this.stripePaymentTab === 'sofort') {
+          this.paymentMethod = 'stripe_sofort'
+        } else if(this.stripePaymentTab === 'giropay') {
+          this.paymentMethod = 'stripe_giropay'
+        } else if (this.stripePaymentTab === 'card') {
+          this.paymentMethod = 'stripe_cc'
+        }
       }
     }
 }

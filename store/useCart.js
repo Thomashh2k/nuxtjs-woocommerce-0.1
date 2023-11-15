@@ -35,6 +35,8 @@ export const useCart = defineStore("cartState", {
       return _index-1
     },
     addAfterSuccess(key, addTempRes) {
+      debugger
+
       // 
       // if(addTempRes.new) {
         this.items[addTempRes] = {
@@ -51,6 +53,7 @@ export const useCart = defineStore("cartState", {
       // }
     },
     addDetails(details) {
+      debugger
       this.details = details
     },
     removeItem(product) {
