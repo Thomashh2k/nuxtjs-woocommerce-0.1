@@ -2,13 +2,14 @@ import { uid } from "uid";
 import { useCart } from "@/store/useCart";
 import { useOrderReceived } from "@/store/useOrderReceived";
 import { useSnackbar } from "@/store/snackbar";
-
-import CLEAR_CART from "@/apollo/mutations/CLEAR_CART.gql";
 import ADD_TO_CART_MUTATION from "@/apollo/mutations/ADD_TO_CART_MUTATION.gql";
+import CLEAR_CART from "@/apollo/mutations/CLEAR_CART.gql";
 import REMOVE_ITEM_FROM_CART from "@/apollo/mutations/REMOVE_ITEM_FROM_CART.gql";
 import CHECKOUT_MUTATION from "@/apollo/mutations/checkouts/CHECKOUT_MUTATION.gql";
 import ONECLICK_CHECKOUT_MUTATION from "@/apollo/mutations/checkouts/ONECLICK_CHECKOUT_MUTATION.gql";
 import GUEST_CHECKOUT_MUTATIONS from "@/apollo/mutations/checkouts/GUEST_CHECKOUT_MUTATIONS.gql";
+// import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
+
 
 /**
  * Strips HTML from the inputted string
@@ -129,13 +130,14 @@ export async function addProductToCart (product) {
   onError((err) => {
     const snackbar = useSnackbar()
     cart.removeItem(product);
-    if(err.message.includes('<a href="http://localhost:8080" class="button wc-forward">Warenkorb anzeigen</a> Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
+    if(err.message.includes('Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
       snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.', 'error')
     } else {
       snackbar.setMessage(err.message, 'error')
     }
   })
   onDone((result) => {
+    debugger
     cart.addDetails(result.data.addToCart.cart);
     cart.addAfterSuccess(result.data.addToCart.cartItem.key, addTempRes);
   })
@@ -178,6 +180,13 @@ export function removeProductFromCart (product) {
   })
 }
 
+// const api = new WooCommerceRestApi({
+//   url: "https://api.og-gaming.store",
+//   consumerKey: "ck_edb8770951a27a59f3b12938ee087d00d08f935f",
+//   consumerSecret: "cs_e04333cd3e0f91ea38e6fc8268f1a6d2dbc5f215",
+//   version: "wc/v3",
+// });
+
 export async function checkout(orderData, paymentMethod) {
   // shipping.address1 = shipping.address
   debugger
@@ -215,8 +224,10 @@ export async function checkout(orderData, paymentMethod) {
       headers: headers
     }
   });
+  // debugger
+  // const resp = await api.post("orders", checkoutVariables)
   mutate(checkoutVariables);
-
+  // return resp
   return { onDone, onError }
 
 
@@ -241,7 +252,7 @@ export async function recreateCart(cartItems) {
 
     onError((err) => {
       const snackbar = useSnackbar()
-      if(err.message.includes('<a href="http://localhost:8080" class="button wc-forward">Warenkorb anzeigen</a> Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
+      if(err.message.includes('Du kannst diese Menge nicht deinem Warenkorb hinzufügen.')) {
         snackbar.setMessage(' Du kannst diese Menge nicht deinem Warenkorb hinzufügen, da wir ein weiteres Examplar von der Ware noch vorrätig haben.', 'error')
       } else {
         snackbar.setMessage(err.message, 'error')
@@ -294,3 +305,76 @@ export function getOrderStatus (status) {
     return 'In Wartestellung'
   }
 }
+
+
+// const api = new WooCommerceRestApi({
+//   url: "https://your-woocommerce-site.com",
+//   consumerKey: "your-consumer-key",
+//   consumerSecret: "your-consumer-secret",
+//   version: "wc/v3",
+// });
+
+// // Clear cart
+// const clearCart = async () => {
+//   try {
+//     const response = await api.post("clear_cart", {});
+//     console.log(response.data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+// // Add to cart
+// const addToCart = async (productId, quantity) => {
+//   try {
+//     const response = await api.post("add_to_cart", {
+//       product_id: productId,
+//       quantity: quantity,
+//     });
+//     console.log(response.data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+// // Remove item from cart
+// const removeItemFromCart = async (itemId) => {
+//   try {
+//     const response = await api.delete(`remove_item_from_cart/${itemId}`);
+//     console.log(response.data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+// // Checkout
+// const checkout = async (checkoutData) => {
+//   try {
+//     const response = await api.post("checkout", checkoutData);
+//     console.log(response.data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+// // One-click checkout
+// const oneClickCheckout = async (productId) => {
+//   try {
+//     const response = await api.post("one_click_checkout", {
+//       product_id: productId,
+//     });
+//     console.log(response.data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+// // Guest checkout
+// const guestCheckout = async (checkoutData) => {
+//   try {
+//     const response = await api.post("guest_checkout", checkoutData);
+//     console.log(response.data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };

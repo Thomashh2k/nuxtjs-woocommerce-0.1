@@ -183,7 +183,7 @@ export default {
                 elements: this.stripeElement,
                 clientSecret: this.stripeClientSecret,
                 confirmParams: {
-                  return_url: 'http://localhost:3000/order-received',
+                  return_url: config.public.SERVER_DOMAIN + '/order-received',
                 },
                 // Uncomment below if you only want redirect for redirect-based payments
                 // redirect: "if_required",

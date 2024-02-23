@@ -43,7 +43,7 @@ export default defineNuxtConfig({
     public: {
       PUBLIC_GRAPHQL_URL: 'https://api.og-gaming.store/graphql',
       STRIPE_PAYMENT_API: 'https://og-gaming.store:1337',
-      SERVER_DOMAIN: 'http://localhost:3000'
+      SERVER_DOMAIN: 'https://og-gaming.store'
     }
   },
   postcss: {
