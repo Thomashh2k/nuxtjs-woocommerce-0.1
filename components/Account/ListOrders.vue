@@ -125,7 +125,6 @@
     </v-data-table-server>
 </template>
 <script>
-import * as labsComponents from 'vuetify/labs/components';
 import {mdiChevronUp, mdiChevronDown} from '@mdi/js';
 import { getOrders } from '@/utils/order'
 import { getOrderStatus } from '@/utils/functions'
@@ -133,9 +132,6 @@ import moment from 'moment';
 
 export default {
     name: 'ListOrders',
-    components: {
-    ...labsComponents,
-    },
     data() {
         return {
             itemsPerPage: 5,
