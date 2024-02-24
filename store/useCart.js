@@ -90,5 +90,7 @@ export const useCart = defineStore("cartState", {
       return total;
     },
   },
-  persist: true,
+  persist: {
+    storage: persistedState.sessionStorage,
+  },
 });

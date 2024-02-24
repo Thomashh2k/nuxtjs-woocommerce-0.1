@@ -4,7 +4,6 @@ import UPDATE_USER_INFO from '@/apollo/mutations/user/UPDATE_USER_INFO.gql'
 import UPDATE_USER_BILLING from '@/apollo/mutations/user/UPDATE_USER_BILLING.gql'
 import UPDATE_USER_SHIPPING from '@/apollo/mutations/user/UPDATE_USER_SHIPPING.gql'
 
-import SEND_CHANGE_USER_PASSWORD from '@/apollo/mutations/user/resetPassword/SEND_CHANGE_USER_PASSWORD.gql'
 import SEND_RESET_PASSWORD_EMAIL from '@/apollo/mutations/user/resetPassword/SEND_RESET_PASSWORD_EMAIL.gql'
 
 import CHANGE_USER_PASSWORD from '@/apollo/mutations/user/CHANGE_USER_PASSWORD.gql'
@@ -176,10 +175,9 @@ export async function updatePassword(id, password) {
 }
 
 export async function sendResetPasswordLink(username) {
+  debugger
   const resetPasswordVar = {
-    input: {
       username: username,
-    }
   };
   const { mutate, onError, onDone } = useMutation(SEND_RESET_PASSWORD_EMAIL, {
     variables: resetPasswordVar

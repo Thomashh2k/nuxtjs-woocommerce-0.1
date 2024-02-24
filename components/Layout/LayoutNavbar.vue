@@ -76,7 +76,7 @@
                             @click:append-inner="showPassword = !showPassword"
                           ></v-text-field>
                           <div class="tw-flex tw-flex-col">
-                            <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
+                            <p><nuxt-link to="/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
                             <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
                           </div>
                         </v-card-text>
@@ -193,7 +193,7 @@
                             @click:append-inner="showPassword = !showPassword"
                           ></v-text-field>
                           <div class="tw-flex tw-flex-col">
-                            <p><nuxt-link to="/account/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
+                            <p><nuxt-link to="/forgot-password"  class="tw-text-purple-50">Passwort vergessen</nuxt-link></p>
                             <p><nuxt-link to="/account/register"  class="tw-text-purple-50">Registrieren</nuxt-link></p>
                           </div>
                         </v-card-text>

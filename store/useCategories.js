@@ -26,5 +26,7 @@ export const useCategories = defineStore("categoriesState", {
       return this.categories
     }
   },
-  persist: true,
+  persist: {
+    storage: persistedState.sessionStorage,
+  },
 });

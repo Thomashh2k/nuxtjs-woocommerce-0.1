@@ -65,7 +65,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     if (!refreshToken) {
       // No refresh token means the user is not authenticated.
       debugger
-      authStore.setLoginStatus(false)
+      // causes bug needs to be fixed
+      // authStore.setLoginStatus(false)
       return;
     }
   

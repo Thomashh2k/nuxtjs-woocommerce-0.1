@@ -99,5 +99,7 @@ export const useAuth = defineStore("userState", {
       return this.user.isLoggedIn
     }
   },
-  persist: true,
+  persist: {
+    storage: persistedState.sessionStorage,
+  },
 });

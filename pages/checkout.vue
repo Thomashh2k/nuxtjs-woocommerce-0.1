@@ -17,6 +17,7 @@
               />
               <v-radio-group v-model="paymentMethod" class="tw-text-purple-50" color="#4c1d95">
                 <v-radio label="Paypal" value="ppcp-gateway"></v-radio>
+                <v-radio label="bacs" value="bacs"></v-radio>
                 <v-radio label="Andere Methoden" value="stripe"></v-radio>
               </v-radio-group>
               <div v-show="paymentMethod === 'stripe'" ref="stripeEL" id="stripeEL" class="tw-w-full">
@@ -28,7 +29,7 @@
               <Checkboxes ref="checkboxForm" :order-data="orderData"/>
               <div class="tw-w-full tw-flex tw-justify-center">
                 <PaypalButton v-if="paymentMethod === 'ppcp-gateway'" :is-valid-to-click="checkoutIsValid" @onPay="submitOrder" @click="createOrderData"/>
-                <v-btn v-if="paymentMethod === 'stripe'" color="green" variant="outlined" @click="submitOrder()" >
+                <v-btn v-if="paymentMethod === 'bacs' || paymentMethod === 'stripe'" color="green" variant="outlined" @click="submitOrder()" >
                   <div class="tw-normal-case">Bezahlen</div>
                 </v-btn>
               </div>
