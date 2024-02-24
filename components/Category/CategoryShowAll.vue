@@ -88,9 +88,16 @@ if(mainCategory.length === 0) {
   await execute();
   console.log(data);
   
-  let sony = {}
-  let xbox = {}
-  let nintendo = {}
+  let sony = {
+    iconClass: ''
+  }
+  let xbox = {
+    iconClass: ''
+
+  }
+  let nintendo = {
+    iconClass: ''
+  }
   debugger
   sony = data.value.sonyCategory.nodes[0];
   sony.iconClass = 'mdi-sony-playstation'
