@@ -36,6 +36,7 @@
     "@pinia/nuxt": "0.4.11",
     "@stripe/stripe-js": "^1.54.1",
     "@vee-validate/rules": "^4.7.4",
+    "@vue/apollo-composable": "^4.0.1",
     "@woocommerce/woocommerce-rest-api": "^1.0.1",
     "apollo-boost": "^0.4.9",
     "autoprefixer": "^10.4.13",
