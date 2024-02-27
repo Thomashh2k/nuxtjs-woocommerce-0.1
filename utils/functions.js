@@ -288,7 +288,7 @@ export async function oneClickCheckout(productID, shipping, billing, paymentMeth
   return { onDone, onError }
 } 
 
-export function getOrderStatus (status) {
+export function getOrderStatus (status, obj) {
   if(status === 'FAILED') {
     return 'Fehlgeschlagen'
   } else if(status === 'COMPLETED') {

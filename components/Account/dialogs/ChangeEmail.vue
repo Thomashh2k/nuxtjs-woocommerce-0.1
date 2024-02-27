@@ -49,7 +49,7 @@ import { updateEmail } from '@/utils/user.js'
 import { useAuth } from '@/store/useAuth.js'
 
 export default {
-    name: 'ChangePassword',
+    name: 'ChangeEmail',
     emits: ['close'],
     setup(props, context) {
         const { handleSubmit } = useForm({

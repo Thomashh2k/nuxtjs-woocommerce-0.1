@@ -1,16 +1,12 @@
 <template>
-    <v-data-table-server
-        v-model:expanded="expanded"
+    <v-data-table
         v-model:items-per-page="itemsPerPage"
         :headers="headers"
         :items="orders"
         :itemsLength="1"
         :loading="loading"
-        show-expand
         color="primary"
         class="table-bg tw-px-4"
-        expand-on-click
-        item-value="databaseId"
         style="background-color: rgb(50, 17, 102);"
         >
     <!-- @update:options="loadItems" -->
@@ -21,8 +17,8 @@
         </th>
       </tr>
     </template>
-    <template v-slot:item="{ item, isExpanded, toggleExpand }">
-      <tr class="tw-text-purple-50 elevation-10">
+    <template v-slot:item="{ item }">
+      <tr class="tw-text-purple-50 elevation-10" @click="openOrderViewDialog(item)">
         <td>{{ item.databaseId }}</td>
         <td>
           <v-chip v-if="item.status === 'FAILED' || item.status === 'CANCELLED'" color="error" variant="elevated">
@@ -51,14 +47,6 @@
         <td>{{ item.paymentMethodTitle }}</td>
         <td>{{ priceToNumber(item.total) + ' €' }}</td>
         <td>{{ priceToNumber(item.shippingTotal) + ' €' }}</td>
-        <td> 
-          
-          <v-btn
-            variant="text"
-            :icon="isExpanded ? 'mdi-chevron-down' : 'mdi-chevron-up'"
-            @click="toggleExpand(item)"
-          ></v-btn>
-      </td>
       </tr>
     </template>
     <template v-slot:expanded-row="{ columns, item }">
@@ -122,22 +110,30 @@
         </td>
       </tr>
     </template> -->
-    </v-data-table-server>
+    </v-data-table>
+    <OrderViewDialog :show="showOrderView" :order="selectedOrder" @close="showOrderView = false" />
 </template>
 <script>
-import {mdiChevronUp, mdiChevronDown} from '@mdi/js';
+import OrderViewDialog from './dialogs/OrderViewDialog.vue'
+import { mdiChevronUp, mdiChevronDown } from '@mdi/js';
 import { getOrders } from '@/utils/order'
 import { getOrderStatus } from '@/utils/functions'
+
 import moment from 'moment';
 
 export default {
     name: 'ListOrders',
+    components: {
+      OrderViewDialog
+    },
     data() {
         return {
             itemsPerPage: 5,
             mdiChevronDown,
             mdiChevronUp,
             _getOrderStatus: getOrderStatus,
+            showOrderView: false,
+            selectedOrder: null, 
             expanded: [],
             headers: [
                 {
@@ -163,7 +159,6 @@ export default {
                 { title: 'Zahlungsmethode', key: 'paymentMethodTitle', align: 'end' },
                 { title: 'Kosten insgesammt', key: 'total', align: 'end' },
                 { title: 'Versandkosten insgesammt', key: 'shippingTotal', align: 'end' },
-                { title: '', key: 'data-table-expand' }
             ],
             orders: [],
             _moment: moment,
@@ -189,6 +184,10 @@ export default {
           return 'Nicht verfügbar'
         }
       },
+      openOrderViewDialog(order) {
+        this.selectedOrder = order
+        this.showOrderView = true
+      }
     }
 }
 </script>

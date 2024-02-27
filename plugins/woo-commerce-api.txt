@@ -1,0 +1,39 @@
+// import WooCommerceRestApi from "@woocommerce/woocommerce-rest-api";
+
+// export default defineNuxtPlugin((nuxtApp) => {
+//   const authorization = useCookie("wp-auth", {
+//     maxAge: 86_400,
+//     sameSite: "lax",
+//   });
+//   const jwtRefreshToken = useCookie("JWT-Refresh", {
+//     maxAge: 86_400,
+//     sameSite: "lax",
+//   });
+//   const woocommerceSession = useCookie("woocommerce-session", {
+//     maxAge: 86_400,
+//     sameSite: "lax",
+//   });
+
+
+
+//   const api = new WooCommerceRestApi({
+//     url: "https://your-woocommerce-site.com",
+//     consumerKey: "your-consumer-key",
+//     consumerSecret: "your-consumer-secret",
+//     version: "wc/v3",
+//   });
+
+
+//   nuxtApp.hook("apollo:auth", ({ token }) => {
+//     token.value = authorization.value;
+//   });
+
+  
+//   return {
+//     provide: {
+//       wooFetch: api,
+//     }
+//   }
+// });
+
+

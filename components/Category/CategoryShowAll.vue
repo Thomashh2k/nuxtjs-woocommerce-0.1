@@ -89,25 +89,34 @@ if(mainCategory.length === 0) {
   console.log(data);
   
   let sony = {
-    iconClass: ''
+    iconClass: 'mdi-sony-playstation',
+    linkClass: 'link-sony-playstation'
   }
-  let xbox = {
-    iconClass: ''
-
+  let xbox ={
+    iconClass: 'mdi-microsoft-xbox',
+    linkClass: 'link-microsoft-xbox'
   }
   let nintendo = {
-    iconClass: ''
+    iconClass: 'mdi-nintendo-switch',
+    linkClass: 'link-nintendo-switch'
   }
   debugger
-  sony = data.value.sonyCategory.nodes[0];
-  sony.iconClass = 'mdi-sony-playstation'
-  sony.linkClass = 'link-sony-playstation'
-  xbox = data.value.xboxCategory.nodes[0];
-  xbox.iconClass = 'mdi-microsoft-xbox'
-  xbox.linkClass = 'link-microsoft-xbox'
-  nintendo = data.value.nintendoCategory.nodes[0];
-  nintendo.iconClass = 'mdi-nintendo-switch'
-  nintendo.linkClass = 'link-nintendo-switch'
+  sony.id = data.value.sonyCategory.nodes[0].id;
+  sony.name = data.value.sonyCategory.nodes[0].name;
+  sony.slug = data.value.sonyCategory.nodes[0].slug;
+  sony.children = data.value.sonyCategory.nodes[0].children;
+
+
+  xbox.id = data.value.xboxCategory.nodes[0].id;
+  xbox.name = data.value.xboxCategory.nodes[0].name;
+  xbox.slug = data.value.xboxCategory.nodes[0].slug;
+  xbox.children = data.value.xboxCategory.nodes[0].children;
+
+  nintendo.id = data.value.nintendoCategory.nodes[0].id;
+  nintendo.name = data.value.nintendoCategory.nodes[0].name;
+  nintendo.slug = data.value.nintendoCategory.nodes[0].slug;
+  nintendo.children = data.value.nintendoCategory.nodes[0].children;
+
   
   mainCategory = [sony, xbox, nintendo];
   
